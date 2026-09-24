@@ -1,0 +1,200 @@
+[
+  {
+    "id": "principles",
+    "title": "Security goals and trust boundaries",
+    "level": "Beginner",
+    "basic": "Confidentiality limits disclosure, integrity protects against unauthorized changes, and availability concerns usable service when needed. Security goals depend on the asset and business function.",
+    "advanced": "A trust boundary separates components with different authority or assumptions. Identify who supplies data, who verifies it and which operation uses it. Defense in depth combines controls whose failure modes are understood.",
+    "practice": "For a fictional student portal, mark private grades, authorized grade changes and required availability. Draw browser, application and database boundaries.",
+    "question": "Which control protects a grade from an unauthorized edit?",
+    "answer": "Server-side authorization and validated update logic protect integrity; encryption alone does not decide who may edit a grade.",
+    "number": "01"
+  },
+  {
+    "id": "risk",
+    "title": "Assets, threats, vulnerabilities and risk",
+    "level": "Beginner",
+    "basic": "An asset has value; a threat can cause harm; a vulnerability can enable that harm. Risk combines the scenario likelihood and consequence under stated assumptions.",
+    "advanced": "Distinguish technical severity from business priority. Include exposure, affected users, existing controls, detectability and recovery capability; avoid false precision in an unexplained numeric score.",
+    "practice": "Write one scenario with asset, threat action, weakness, impact, control and residual uncertainty. Compare an internal test page with a customer-facing payment service.",
+    "question": "Does a high scanner severity always determine first priority?",
+    "answer": "No. Validate the issue and its applicability, then consider actual exposure and consequence alongside other risks.",
+    "number": "02"
+  },
+  {
+    "id": "model",
+    "title": "Threat modeling and misuse cases",
+    "level": "Beginner",
+    "basic": "A threat model explains how a system can violate its intended security properties. Start with data flows, actors and trust boundaries.",
+    "advanced": "For each important workflow, ask what happens if an input is forged, an account has too much authority, a dependency fails or sensitive output reaches the wrong party. Keep assumptions explicit.",
+    "practice": "Draw a synthetic invoice download flow. Add an unauthorized reader and identify where ownership should be enforced. Link the model to the two-account API case study.",
+    "question": "How is a threat model different from a scan?",
+    "answer": "A model reasons about design and business rules; a scan observes selected implementation behavior. Each can reveal gaps the other misses.",
+    "number": "03"
+  },
+  {
+    "id": "crypto",
+    "title": "Hashing, encryption, signatures and password storage",
+    "level": "Beginner to intermediate",
+    "basic": "Encoding changes representation; hashing produces a digest; encryption protects confidentiality with a key; signatures help verify integrity and signer identity under a trust model.",
+    "advanced": "Use established libraries and protocols. Password storage needs an appropriate password-hashing design, not a fast general-purpose hash alone. Key handling is part of the security design.",
+    "practice": "Classify four tasks: compare file copies, protect stored records, verify a software publisher and check a password. Explain why each needs a different mechanism.",
+    "question": "Does a matching downloaded checksum prove the publisher is genuine?",
+    "answer": "Only if the expected digest has a trustworthy origin. A checksum downloaded with a tampered file can be tampered with too.",
+    "number": "04"
+  },
+  {
+    "id": "pki",
+    "title": "Certificates, PKI and secure transport",
+    "level": "Intermediate",
+    "basic": "A certificate binds a public key to an identity under an issuer and validation policy. A secure connection requires appropriate trust and identity checks.",
+    "advanced": "Distinguish certificate chain validation, hostname validation, validity periods and intended usage. Account for renewal and revocation behavior in the actual client.",
+    "practice": "Use the existing TLS worksheet to record expected hostname, trust roots and failure behavior. Explain why disabling certificate validation hides a problem.",
+    "question": "Does an encrypted connection always reach the intended server?",
+    "answer": "No. Encryption without correct peer authentication can protect traffic to the wrong endpoint.",
+    "number": "05"
+  },
+  {
+    "id": "identity",
+    "title": "Identity, authorization and least privilege",
+    "level": "Intermediate",
+    "basic": "Authentication establishes an identity; authorization decides permitted operations. Separate human, service and device identities.",
+    "advanced": "Use individual accounts and narrowly scoped roles. Review inherited permissions, joiner/mover/leaver changes, temporary privilege and emergency access. MFA does not repair excessive authorization.",
+    "practice": "Create a role-by-resource matrix with owner, another user and administrator. Include an allowed action and a denied action for each supported role.",
+    "question": "Does a successful login justify access to every record?",
+    "answer": "No. Each operation and object still needs a suitable authorization decision.",
+    "number": "06"
+  },
+  {
+    "id": "secrets",
+    "title": "Secrets lifecycle and credential exposure",
+    "level": "Intermediate",
+    "basic": "Secrets include private keys, tokens and passwords. Their lifecycle includes creation, delivery, use, rotation, revocation and deletion.",
+    "advanced": "Prefer appropriately scoped short-lived credentials where supported. Limit who can retrieve secrets, keep them out of source and logs, and design rotation without creating an outage.",
+    "practice": "Write a fictional leaked-token response plan: revoke it, determine exposure, replace dependent configuration, validate access and investigate the leak source.",
+    "question": "Is deleting a secret from the latest Git file enough?",
+    "answer": "No. It may remain in history or copies. Revoke or rotate exposed credentials first and then address retained copies according to the environment.",
+    "number": "07"
+  },
+  {
+    "id": "hardening",
+    "title": "Endpoint hardening and patch management",
+    "level": "Intermediate",
+    "basic": "Hardening removes unnecessary exposure and configures necessary components to enforce intended policy. Patching addresses known defects but is not a complete security program.",
+    "advanced": "Inventory software and supported versions, prioritize applicable fixes, test critical changes and retain a recovery plan. Protect administrator accounts and review services, permissions and logging.",
+    "practice": "Create a baseline for a disposable VM: required services, account privileges, update state, firewall policy and rollback method. Compare intended with observed settings.",
+    "question": "Why test required functionality after hardening?",
+    "answer": "A control that breaks essential service may be rolled back or bypassed. Confirm the security property and legitimate use both work.",
+    "number": "08"
+  },
+  {
+    "id": "recovery",
+    "title": "Backups, resilience and restoration",
+    "level": "Intermediate",
+    "basic": "A backup is useful only if it can restore the needed state. Recovery point objectives concern tolerable data loss; recovery time objectives concern tolerable recovery duration.",
+    "advanced": "Separate backup access from production credentials where appropriate, preserve protected copies and test restoration. Snapshots, replication and backups have different failure coverage.",
+    "practice": "Use synthetic files to document a backup and restore exercise. Verify contents, permissions and the recovery steps rather than only checking that a backup file exists.",
+    "question": "Does replication protect against every destructive change?",
+    "answer": "No. It can replicate deletion or corruption. Retention and independently protected recovery copies address different scenarios.",
+    "number": "09"
+  },
+  {
+    "id": "data",
+    "title": "Data classification, minimization and retention",
+    "level": "Intermediate",
+    "basic": "Classify data according to sensitivity and required use. Collecting less data and retaining it only as needed can reduce exposure.",
+    "advanced": "Map copies in logs, exports, analytics, backups and test environments. Separate access, encryption, retention and deletion controls; each solves a different problem.",
+    "practice": "Inventory synthetic customer fields and decide which are needed for a feature. Create a redacted report that preserves evidence without exposing reusable credentials.",
+    "question": "Does encrypting a log eliminate overcollection risk?",
+    "answer": "No. Authorized readers or a compromised key can still expose unnecessary content. Minimize collection and restrict access as well.",
+    "number": "10"
+  },
+  {
+    "id": "cloud",
+    "title": "Cloud shared responsibility and IAM",
+    "level": "Intermediate to advanced",
+    "basic": "Cloud responsibility varies by service model. A provider operating infrastructure does not automatically configure customer identities, data permissions or workloads securely.",
+    "advanced": "Inventory public exposure, resource policies, roles and logging. Understand identity scope and inheritance across projects/accounts. Review deployment configuration as well as the running resource.",
+    "practice": "For a fictional storage service, map who manages the platform, who grants access and who controls the data. Test one intended reader and one denied reader in a separately configured lab.",
+    "question": "Does a private network endpoint guarantee private data?",
+    "answer": "No. Resource policy, identities, alternate access paths and application behavior still matter.",
+    "number": "11"
+  },
+  {
+    "id": "containers",
+    "title": "Container isolation and workload security",
+    "level": "Intermediate to advanced",
+    "basic": "Containers package processes and dependencies while sharing host-kernel facilities. An image, a running container and its orchestrator each have different controls.",
+    "advanced": "Review runtime privileges, host mounts, exposed sockets, image provenance, secrets and network policy. A non-root process is useful but does not eliminate every escape or authorization risk.",
+    "practice": "Review a fictional deployment manifest for unnecessary privileges and secret placement. Explain which settings affect the host and which affect only the application.",
+    "question": "Does a clean image scan prove a workload is secure?",
+    "answer": "No. Runtime configuration, application logic, credentials and host exposure can create risks unrelated to listed packages.",
+    "number": "12"
+  },
+  {
+    "id": "supply-chain",
+    "title": "Software supply chain and secure delivery",
+    "level": "Advanced",
+    "basic": "Applications depend on source, packages, build systems, artifacts and deployment identities. Compromise at any of these boundaries can affect the delivered product.",
+    "advanced": "Review dependency provenance, lockfiles, artifact verification, build permissions and approval paths. An SBOM is an inventory aid, not proof that components are safe or exploitable.",
+    "practice": "Trace a fictional commit through build and deployment. Mark who may change code, read secrets, approve a release and publish an artifact.",
+    "question": "Does a signed artifact guarantee safe behavior?",
+    "answer": "It supports identity and integrity claims under a trust model. It does not establish that the signed software is free from flaws or malicious behavior.",
+    "number": "13"
+  },
+  {
+    "id": "logging",
+    "title": "Security logging and observability",
+    "level": "Advanced",
+    "basic": "Logs should support specific questions about identities, actions, outcomes and system health. Collecting more data is not automatically better visibility.",
+    "advanced": "Define fields, time handling, retention, access controls and failure alerts. Use correlation identifiers without logging passwords or bearer tokens. Verify that records actually arrive.",
+    "practice": "Create an event schema for a denied profile update: time, synthetic actor ID, operation, resource label, result and correlation ID. Explain what must be redacted.",
+    "question": "What does no alert mean when log collection failed?",
+    "answer": "The detection test is inconclusive. Restore telemetry and verify collection before evaluating the rule.",
+    "number": "14"
+  },
+  {
+    "id": "detection",
+    "title": "Detection validation and security metrics",
+    "level": "Advanced",
+    "basic": "A detection is a hypothesis about observations. It needs positive examples, benign alternatives and a statement of required telemetry.",
+    "advanced": "Use controlled fixtures to measure coverage and false positives. Explain alert handling, expected delay and blind spots. Avoid treating alert count as an isolated measure of protection.",
+    "practice": "Use the network attack scenarios to compare gateway failover with suspicious mapping changes. State the extra evidence needed before escalation.",
+    "question": "Can a passing positive test prove complete coverage?",
+    "answer": "No. It establishes one observed case. Test negative controls and document variants and sources outside coverage.",
+    "number": "15"
+  },
+  {
+    "id": "response",
+    "title": "Incident response and recovery decisions",
+    "level": "Advanced",
+    "basic": "Response coordinates investigation, containment, eradication and recovery while preserving useful evidence and maintaining needed operations.",
+    "advanced": "Define roles, escalation, communication and decision authority before an incident. Evaluate containment tradeoffs such as lost volatile evidence or disrupted service.",
+    "practice": "Run a tabletop for a synthetic exposed service token. Record who revokes it, checks affected actions, repairs the leak and verifies restored operation.",
+    "question": "Why preserve a decision log?",
+    "answer": "It makes actions, timing, assumptions and consequences reviewable and supports coordination and later improvement.",
+    "number": "16"
+  },
+  {
+    "id": "governance",
+    "title": "Governance, risk ownership and control evidence",
+    "level": "Advanced",
+    "basic": "Governance assigns responsibility for security decisions and aligns controls with organizational needs. A control owner and a risk owner may have different duties.",
+    "advanced": "Use frameworks to organize outcomes while selecting evidence appropriate to the system. NIST CSF 2.0 groups outcomes under Govern, Identify, Protect, Detect, Respond and Recover; these are related functions, not a one-time checklist.",
+    "practice": "Assign an owner, objective, validation method and review date to three fictional controls. Record who accepts a residual risk and why.",
+    "question": "Does completing a checklist prove the system is secure?",
+    "answer": "No. Scope, implementation quality, changing threats and effectiveness evidence still determine what the checklist establishes.",
+    "number": "17"
+  },
+  {
+    "id": "capstone",
+    "title": "Integrated security assessment and retest",
+    "level": "Advanced capstone",
+    "basic": "Combine a clear security objective with a threat model, test matrix, evidence, repair and recovery plan. Keep conclusions proportional to what was observed.",
+    "advanced": "Choose a supplied synthetic case, list assumptions and complete allowed and denied tests. Include operational concerns such as logs, secrets and restoration, not just vulnerability names.",
+    "practice": "Produce a short report with confirmed finding, root cause, remediation, retest and remaining limitations. Link each assertion to a specific fixture or observation.",
+    "question": "What demonstrates readiness to finish this curriculum?",
+    "answer": "You can explain a trust boundary, reproduce a scoped failure, validate a repair without breaking legitimate use, preserve evidence and state what remains unknown.",
+    "number": "18"
+  }
+]

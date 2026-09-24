@@ -157,6 +157,25 @@ def network_attack_guides(cid):
         out+='<article class="attack-study" data-chapter="netwire" id="attack-workbook-'+str(i)+'"><span class="eyebrow">NETWORK ATTACK CONCEPTS / TOOL WORKBOOK</span><h3>'+e(title)+'</h3>'+workbook_html(body)+'</article>'
     return out
 
+
+SECURITY_CURRICULUM=json.loads((R/'_source'/'security_curriculum.json').read_text(encoding='utf-8'))
+def security_curriculum_guides(cid):
+    if cid!='audit':return ''
+    out=''
+    for i,p in enumerate(SECURITY_CURRICULUM):
+        out+='<article class="security-guide" data-chapter="audit" id="security-'+p['id']+'"><span class="eyebrow">SECURITY CURRICULUM / '+p['number']+' OF 18 / '+e(p['level'])+'</span><h3>'+p['number']+'. '+e(p['title'])+'</h3>'
+        for label,key in [('Understand the concept','basic'),('Go deeper','advanced'),('Practice before continuing','practice')]:out+='<h4>'+label+'</h4><p>'+e(p[key])+'</p>'
+        out+='<h4>Check your understanding</h4><p>'+e(p['question'])+'</p><details><summary>Reveal answer</summary><p>'+e(p['answer'])+'</p></details><div class="security-step-nav">'
+        for j,label in [(i-1,'Previous concept'),(i+1,'Next concept')]:
+            if 0<=j<len(SECURITY_CURRICULUM):out+='<button class="btn" type="button" data-view="audit" data-study-target="security-'+SECURITY_CURRICULUM[j]['id']+'">'+label+' / '+SECURITY_CURRICULUM[j]['number']+'</button>'
+        out+='</div></article>'
+    return out
+
+def security_curriculum_index():
+    out='<div class="callout" id="security-curriculum-index"><span class="eyebrow">NUMBERED SECURITY CURRICULUM / 01–18</span><h2>More security concepts, in learning order</h2><p>New to computers or networking? Begin with Chapters 01–06 in the chapter plan below. Then use this security track from basic principles through advanced operations and the capstone. Each link opens the exact concept in Chapter 34; Previous/Next follows this numbered track. Existing chapters and labs retain their reference numbers.</p><ol class="security-index">'
+    for p in SECURITY_CURRICULUM:out+='<li><button type="button" class="roadlink" data-view="audit" data-study-target="security-'+p['id']+'">'+p['number']+'. '+e(p['title'])+'</button><span> / '+e(p['level'])+'</span></li>'
+    return out+'</ol><p>Complete the practice and self-check before advancing. A printable checklist is included in examples/security-curriculum in the lab download.</p></div>'
+
 def depth_guide(cid):
     d = CHAPTER_DEPTH[cid]
     tiers = ''.join(('<section class="depth-tier"><span class="eyebrow">' + e(label) + '</span><h4>' + e(heading) + '</h4><p>' + e(d[key]) + '</p></section>' for label, heading, key in [('01 / BASIC', 'Understand the model', 'basic'), ('02 / INTERMEDIATE', 'Connect the moving parts', 'intermediate'), ('03 / ADVANCED', 'Reason about boundaries and failure', 'advanced')]))
@@ -312,7 +331,7 @@ for cid, num, title, desc in chapters:
     if cid in foundation_flows:
         intro_extra = '<div class="callout"><strong>PART 1 / BEGINNER FOUNDATIONS</strong><p>Follow Chapters 01-06 in order, then Labs 01-03. Continue to Linux foundations after completing this part. Concept diagrams are for reading; only blocks labeled Kali terminal are shell commands.</p></div>'
         intro_extra += '<div class="flow" aria-label="Foundation concept diagram">' + '<i aria-hidden="true">&#8594;</i>'.join(('<span><b>' + e(label) + '</b></span>' for label in foundation_flows[cid])) + '</div>'
-    intro_extra += network_attack_guides(cid) + remote_access_guides(cid) + forensic_guides(cid) + network_deep_guides(cid) + web_deep_guides(cid) + api_security_guides(cid) + session_guides(cid) + topology_guides(cid) + iot_guides(cid) + anatomy_figures(cid) + chapter_visual(cid) + depth_guide(cid) + protocol_guides(cid) + network_layer_guides(cid)
+    intro_extra += security_curriculum_guides(cid) + network_attack_guides(cid) + remote_access_guides(cid) + forensic_guides(cid) + network_deep_guides(cid) + web_deep_guides(cid) + api_security_guides(cid) + session_guides(cid) + topology_guides(cid) + iot_guides(cid) + anatomy_figures(cid) + chapter_visual(cid) + depth_guide(cid) + protocol_guides(cid) + network_layer_guides(cid)
     position = [c[0] for c in chapters].index(cid)
     chapter_steps = '<div class="chaptersteps">'
     if position:
@@ -358,6 +377,9 @@ for part_no, part in enumerate(LEARNING_PATH, 1):
     roadmap += f"</p><p><strong>Ready to continue when:</strong> {e(part['milestone'])}</p></article>"
     roadmap_md += ['', 'Ready to continue when: ' + part['milestone'], '']
 roadmap += '</div>'
+roadmap = security_curriculum_index() + roadmap
+roadmap_md += ['## Security curriculum: read steps 01–18 in order', '', 'Read Chapters 01–06 first if computer/network foundations are new. The security concepts are collected in Chapter 34 and directly linked from Start here.', '']
+for item in SECURITY_CURRICULUM:roadmap_md += [item['number']+'. '+item['title']+' — '+item['level'], '']
 intro = intro.replace('<section class="bookpanel" id="guide">', '<section class="bookpanel" id="guide">' + roadmap, 1)
 intro = intro.replace('FIELD GUIDE / START HERE', 'HOW TO USE THE BOOK')
 intro = intro.replace('Understand it. Then run it.', 'Read, practise and explain the result.')
@@ -371,6 +393,10 @@ md += [f'- {num}. {title}' for _, num, title, _ in chapters]
 md += ['- Guided labs', '- Troubleshooting', '- Glossary', '- Official references', '']
 for cid, num, title, desc in chapters:
     md += [f'## {num}. {title}', '', desc, '']
+    if cid=='audit':
+        for item in SECURITY_CURRICULUM:
+            md += ['### Security curriculum '+item['number']+': '+item['title'], '', 'Level: '+item['level'], '']
+            for key in ('basic','advanced','practice','question','answer'):md += ['**'+key.title()+':** '+item[key], '']
     if cid=='netwire':
         for item in NETWORK_ATTACK_CONCEPTS:
             md += ['### Advanced network attack concepts: '+item['title'], '']
