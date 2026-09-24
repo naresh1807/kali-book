@@ -1,0 +1,16 @@
+id: fieldbook-local-header
+info:
+  name: Fieldbook local nosniff observation
+  author: fieldbook
+  severity: info
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/strong"
+    redirects: false
+    matchers:
+      - type: word
+        part: header
+        words:
+          - "X-Content-Type-Options: nosniff"
+        case-insensitive: true

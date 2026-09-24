@@ -1,0 +1,93 @@
+{
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "predeploy": [
+      "python build.py"
+    ],
+    "headers": [
+      {
+        "source": "/**",
+        "headers": [
+          {
+            "key": "X-Content-Type-Options",
+            "value": "nosniff"
+          },
+          {
+            "key": "Referrer-Policy",
+            "value": "strict-origin-when-cross-origin"
+          },
+          {
+            "key": "X-Frame-Options",
+            "value": "SAMEORIGIN"
+          }
+        ]
+      },
+      {
+        "source": "**/*.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/downloads/**",
+        "headers": [
+          {
+            "key": "Content-Disposition",
+            "value": "attachment"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "**/*.md",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "text/plain; charset=utf-8"
+          }
+        ]
+      },
+      {
+        "source": "/",
+        "headers": [
+          {
+            "key": "X-Content-Type-Options",
+            "value": "nosniff"
+          },
+          {
+            "key": "Referrer-Policy",
+            "value": "strict-origin-when-cross-origin"
+          },
+          {
+            "key": "X-Frame-Options",
+            "value": "SAMEORIGIN"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0, must-revalidate"
+          }
+        ]
+      }
+    ]
+  },
+  "emulators": {
+    "hosting": {
+      "host": "127.0.0.1",
+      "port": 5000
+    },
+    "ui": {
+      "enabled": false
+    }
+  }
+}

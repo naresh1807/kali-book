@@ -1,0 +1,6 @@
+rules:
+  - id: fieldbook-python-eval
+    languages: [python]
+    message: Review dynamic eval; prefer a constrained parser for untrusted data.
+    severity: WARNING
+    pattern: eval($EXPR)

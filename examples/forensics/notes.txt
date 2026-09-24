@@ -1,0 +1,1 @@
+Synthetic evidence only. Training case F-001. No real user data.

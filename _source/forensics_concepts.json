@@ -1,0 +1,110 @@
+[
+  {
+    "id": "process",
+    "title": "Digital forensics and investigative questions",
+    "concept": "Forensics reconstructs activity from digital artifacts while preserving provenance and uncertainty. Incident response also prioritizes containment and recovery; these goals can require different actions.",
+    "prepare": "Define the question, authorized evidence sources, time window, retention needs and who may access the evidence. Assign a case identifier and record each action.",
+    "workflow": "Start with an evidence inventory, document the original state, preserve acquired material and examine working copies. Tie every conclusion to an artifact and its interpretation.",
+    "limits": "A tool finding is not automatically proof of an actor, intent or exact event sequence. Absence of an artifact may reflect incomplete acquisition or retention.",
+    "tools": "Use a case notebook and evidence worksheet before selecting Autopsy, Volatility or a packet analyzer."
+  },
+  {
+    "id": "custody",
+    "title": "Evidence handling and chain of custody",
+    "concept": "Chain of custody records who handled an item, when, why and how its identity and storage were controlled. A hash is one integrity aid, not a complete custody record.",
+    "prepare": "Record the source description, acquisition method, operator, start/end times, clock assumptions, storage location, transfers and tool versions. Keep secrets and personal data out of public reports.",
+    "workflow": "Label original acquisitions, working copies and derived exports separately. Verify hashes at meaningful transfer points and record discrepancies without overwriting the prior record.",
+    "limits": "A matching digest establishes byte equality relative to the compared digest; it does not authenticate the original source, prove lawful collection or establish what happened before acquisition.",
+    "tools": "Use SHA-256 manifests, controlled storage and access records. The supplied manifest is a teaching baseline, not a signed provenance statement."
+  },
+  {
+    "id": "acquisition",
+    "title": "Live, logical and physical acquisition",
+    "concept": "A logical acquisition collects selected accessible objects; a physical image can capture addressable storage sectors. Live collection can preserve volatile state but changes the running system.",
+    "prepare": "Choose the acquisition method based on the question, encryption state, volatility and operational constraints. Use appropriately validated write protection for offline media where applicable.",
+    "workflow": "Document the chosen method and unavoidable effects. Preserve the acquisition output and examine a copy using an appropriate parser. Record unreadable areas and acquisition errors.",
+    "limits": "Do not assume powering off is always best: volatile state and decrypted access can be lost. Conversely, live collection cannot promise zero system changes. SSD TRIM and encryption can limit recovery.",
+    "tools": "Acquisition utilities and write blockers need separate hardware/media and tested procedures. This handbook does not image the user disk or collect live memory."
+  },
+  {
+    "id": "filesystems",
+    "title": "Disk structures and file-system artifacts",
+    "concept": "A disk image may contain a partition table; a file-system image may begin directly with a file system. File names, metadata records and file content are different evidence objects.",
+    "prepare": "Identify image format, sector size and partition layout before selecting an offset. Record the exact parser and options used.",
+    "workflow": "Use a partition listing, inspect the intended file system, list names and metadata, then export a selected artifact to a separate analysis directory. Preserve the source image unchanged.",
+    "limits": "An offset copied from another image can produce false errors or wrong interpretation. Sector offsets and byte offsets are not interchangeable. A parser failure does not prove encryption or corruption.",
+    "tools": "The Sleuth Kit mmls, fsstat, fls and icat support these steps on compatible images. Autopsy provides a graphical case workflow."
+  },
+  {
+    "id": "recovery",
+    "title": "Deleted files, carving and recovery limits",
+    "concept": "Deletion often changes allocation or name metadata; content may remain until overwritten or discarded. Carving searches content patterns without relying on the original directory structure.",
+    "prepare": "Work on a verified image copy and use a separate output directory. Record what the chosen method can reconstruct and whether fragments are expected.",
+    "workflow": "Compare metadata-based recovery with carved results. Validate file structure and correlate any recovered content with other artifacts. Treat extracted files as untrusted.",
+    "limits": "A carved file may lack its original name, path or timestamps. Signature matches can be false positives, and absence of recovered data is not proof that a file never existed.",
+    "tools": "Autopsy, Sleuth Kit and PhotoRec serve different recovery workflows. Recovered objects should be hashed and examined without executing them."
+  },
+  {
+    "id": "metadata",
+    "title": "File identification and metadata",
+    "concept": "Extensions, embedded metadata and file-system timestamps describe different aspects of a file. Metadata can be changed, omitted or inherited during copying.",
+    "prepare": "Record the original source, acquisition context and timezone assumptions. Inspect bytes and format before trusting the filename.",
+    "workflow": "Compare file identification with parsed metadata. Preserve the raw value and the interpreted value when creating a report. Correlate a timestamp with a second independent artifact.",
+    "limits": "An image date is not necessarily the time of an observed event. A string match does not prove that text was executed or displayed. File access times can change during handling depending on the environment.",
+    "tools": "file, strings and ExifTool help triage copies. Use ExifTool read commands; writing metadata would change evidence."
+  },
+  {
+    "id": "logs",
+    "title": "Operating-system, browser and application artifacts",
+    "concept": "Logs, registry data, browser databases and application records describe different layers of activity and may have different retention or clock behavior.",
+    "prepare": "Identify the source application/version and acquisition completeness. Preserve related SQLite WAL and SHM files when relevant rather than assuming the main database is the complete state.",
+    "workflow": "Parse a working copy, preserve original event fields and record parser errors. Correlate a browser download record with file-system and network evidence where available.",
+    "limits": "A history entry does not necessarily establish who physically used the device. Missing records may reflect retention, synchronization, private browsing or an incomplete collection.",
+    "tools": "Autopsy and platform-specific parsers can extract artifacts; raw source inspection and a second parser help validate critical findings."
+  },
+  {
+    "id": "memory",
+    "title": "Memory forensics",
+    "concept": "Memory can contain process state, loaded modules, network structures and other transient artifacts. A memory image is a time-bound acquisition, not a complete history.",
+    "prepare": "Record operating system/build, acquisition tool, time and known collection effects. Preserve the dump and prepare required symbols in the analysis environment.",
+    "workflow": "Begin with image information and a process listing. Correlate suspicious entries with parent relationships, executable metadata, mappings and other evidence before assigning meaning.",
+    "limits": "A process name alone is not proof of malware. Different enumeration methods can disagree for legitimate or malicious reasons. Missing symbols or unsupported images can invalidate output.",
+    "tools": "Volatility 3 analyzes supported images. The workbook offers information and process-list commands only; no memory acquisition or credential extraction is performed."
+  },
+  {
+    "id": "network",
+    "title": "Network forensics",
+    "concept": "A capture contains packets visible at one observation point. Logs from DNS, proxies and firewalls add context but may summarize rather than preserve full traffic.",
+    "prepare": "Record capture location, clock, filter, start/end times and loss indicators. Protect real captures because they may contain private content and credentials.",
+    "workflow": "Work from a saved trace, reconstruct relevant conversations and correlate timestamps with host/application records. Record whether payloads are actually visible or inferred from metadata.",
+    "limits": "Encryption limits plaintext visibility; asymmetric capture and packet loss limit reconstruction. An address alone does not reliably identify a person or physical device.",
+    "tools": "Wireshark and TShark review saved captures. Refer to the network workbook for creating a synthetic loopback trace."
+  },
+  {
+    "id": "timeline",
+    "title": "Timeline construction and clock uncertainty",
+    "concept": "A timeline orders interpreted timestamps, not necessarily causal events. Sources may use UTC, explicit offsets, local time without a zone or monotonic counters.",
+    "prepare": "Preserve original timestamps, source and record identifiers. Decide how to handle missing zones, precision, daylight-saving ambiguity and suspected clock skew.",
+    "workflow": "Normalize only timestamps with justified timezone information. Sort by normalized time while keeping original values. Correlate independent sources and annotate uncertainty.",
+    "limits": "Equal timestamps do not establish simultaneous activity or order. A correct timezone conversion does not correct an inaccurate source clock. Never silently assign a zone to ambiguous evidence.",
+    "tools": "The supplied Python exercise rejects timestamps without an offset and preserves original record order for ties. Plaso/Timesketch support larger workflows when configured and validated."
+  },
+  {
+    "id": "triage",
+    "title": "Triage, searching and indicator interpretation",
+    "concept": "Triage prioritizes evidence relevant to a question. Hash matches, keyword hits and pattern rules are leads whose meaning depends on the source and context.",
+    "prepare": "Choose a small question-driven search set and document rule versions. Do not upload private evidence to public analysis services merely to obtain a verdict.",
+    "workflow": "Compare a match with surrounding data, file format and provenance. Preserve both matched content and the reasoning used to classify it. Use a known sample as a negative or positive control.",
+    "limits": "A YARA match identifies a rule condition, not automatically maliciousness. A known-good hash set may reduce workload but cannot prove every remaining file is harmful.",
+    "tools": "Hash tools, strings, YARA and Autopsy search modules support triage; use reviewed local rules and record coverage limits."
+  },
+  {
+    "id": "report",
+    "title": "Forensic reporting and reproducibility",
+    "concept": "Separate observations, interpretations and conclusions. A reader should be able to trace a claim to a source artifact and repeat the analysis on the same evidence.",
+    "prepare": "Record evidence identifiers, hashes, tool versions, commands, timezone assumptions, parser failures and derived-output locations. Include alternative explanations.",
+    "workflow": "Report the smallest evidence necessary, preserve sensitive full records separately and state confidence qualitatively with its basis. Have critical steps independently reviewed where appropriate.",
+    "limits": "Do not overstate attribution, intent, recovery completeness or timestamp precision. A reproducible result can still be based on incomplete evidence or a wrong assumption.",
+    "tools": "Use the supplied worksheet and offline lab report. Recheck original hashes after analysis and preserve derived files separately."
+  }
+]

@@ -1,0 +1,122 @@
+[
+  {
+    "id": "physical-logical",
+    "title": "Physical and logical topology",
+    "basic": "Physical topology describes actual cables, radios and devices. Logical topology describes how traffic is organized and forwarded.",
+    "intermediate": "Draw separate maps for physical links, VLAN membership and routed subnets. One physical switch can carry several logically separate networks.",
+    "advanced": "An overlay can create logical connections across an underlay. Reachability depends on forwarding state and policy, not just a line in a diagram.",
+    "example": "A Wi-Fi access point and wired switch can share one VLAN while using different physical media.",
+    "question": "Does a cable between two devices guarantee application access?",
+    "answer": "No. Link state, addressing, forwarding, firewall policy and application authorization all matter."
+  },
+  {
+    "id": "point-to-point",
+    "title": "Point-to-point topology",
+    "basic": "A single link connects two endpoints. It is easy to understand and troubleshoot.",
+    "intermediate": "A routed connection between two routers is a common example. Distinguish a physical cable from a logical tunnel crossing several links.",
+    "advanced": "One link has no alternate path on its own. Two parallel links may still share a cable duct, power supply or provider.",
+    "example": "Remove the only link in the drawing: both endpoints lose that direct path.",
+    "question": "Are two tunnels always independent?",
+    "answer": "No. They can share the same underlying path and failure domain."
+  },
+  {
+    "id": "bus",
+    "title": "Bus topology",
+    "basic": "Devices attach to one shared backbone. Classic coaxial Ethernet is a historical example.",
+    "intermediate": "Attached stations share the medium. Cable termination and shared-medium access behavior matter in the relevant technology.",
+    "advanced": "A backbone fault can affect many stations; outcome depends on the physical implementation. Modern switched Ethernet should not be described as a shared coaxial bus.",
+    "example": "Draw four stations attached to one backbone and mark the backbone as a shared dependency.",
+    "question": "Does every Ethernet network use bus topology?",
+    "answer": "No. Switched Ethernet commonly uses point-to-point links in a physical star or tree."
+  },
+  {
+    "id": "star",
+    "title": "Star topology",
+    "basic": "Each endpoint connects to a central device, often an Ethernet switch or wireless access point.",
+    "intermediate": "Failure of one endpoint cable typically isolates that endpoint. Failure of the central device can disconnect all attached endpoints.",
+    "advanced": "A central hub and a switch can have the same physical star shape but different forwarding behavior. A switch does not inherently provide redundant power or paths.",
+    "example": "For four computers attached to one switch, mark one cable failure and then a switch failure. Compare affected computers.",
+    "question": "Does a star remove all single points of failure?",
+    "answer": "No. The central device and its shared power or uplink may remain single points of failure."
+  },
+  {
+    "id": "ring",
+    "title": "Ring topology",
+    "basic": "Each node has two neighbors in a closed loop. The physical ring does not define its forwarding protocol.",
+    "intermediate": "Some ring technologies use token passing or protection mechanisms; ordinary Ethernet links arranged in a ring do not automatically provide either.",
+    "advanced": "Redundant Layer 2 paths need loop prevention or a suitable protection design. An uncontrolled forwarding loop can circulate frames and disrupt the network.",
+    "example": "Break one drawn edge: an undirected ring remains connected as a path, but real recovery depends on the protocol and configuration.",
+    "question": "Will every ring survive any fault without interruption?",
+    "answer": "No. Link direction, protection protocol, fault count and convergence behavior determine actual service continuity."
+  },
+  {
+    "id": "mesh",
+    "title": "Full and partial mesh",
+    "basic": "In a full mesh, every node connects directly to every other node. A partial mesh connects only selected pairs.",
+    "intermediate": "A full mesh of n nodes needs n(n-1)/2 undirected point-to-point links. Five nodes need ten links; each node has four neighbors.",
+    "advanced": "Extra paths increase redundancy and operational complexity. Routing or bridging rules must choose usable paths; connectivity alone is not a security policy.",
+    "example": "Compare a four-node full mesh with six links against a partial mesh with five. Identify failures that disconnect each graph.",
+    "question": "Does the formula count ports or cables?",
+    "answer": "It counts pairwise links under the stated model. With one port per end, those links consume n(n-1) ports in total."
+  },
+  {
+    "id": "tree",
+    "title": "Tree and hierarchical topology",
+    "basic": "A tree branches from a root through intermediate nodes to leaves. A simple tree has no cycles.",
+    "intermediate": "Access switches can connect endpoints to distribution devices. An upstream failure affects the subtree that depends on it.",
+    "advanced": "Real campus designs often add redundant uplinks and are no longer strict graph-theory trees. Document the actual active paths and failure domains.",
+    "example": "Mark a failed distribution device and count only the leaves dependent on it.",
+    "question": "Is every three-tier network a strict tree?",
+    "answer": "No. Three-tier describes roles; redundant cross-links can make the physical graph cyclic."
+  },
+  {
+    "id": "hybrid",
+    "title": "Hybrid topology",
+    "basic": "A hybrid combines patterns, such as stars joined through a partial mesh.",
+    "intermediate": "Describe each region separately: endpoint access, building uplinks and inter-site connections. A single label can hide important dependencies.",
+    "advanced": "Review shared power, upstream providers, control planes and security boundaries across regions. A visually redundant layout may share a hidden dependency.",
+    "example": "Two office stars connect to a pair of routed backbone devices. Mark the endpoint, building and backbone failure domains.",
+    "question": "How do you assess a hybrid network?",
+    "answer": "Break it into regions, trace required traffic paths and examine failures and policy at every boundary."
+  },
+  {
+    "id": "spine-leaf",
+    "title": "Spine-leaf topology",
+    "basic": "A common data-center design connects each leaf switch to every spine switch. Endpoints attach to leaves.",
+    "intermediate": "In a typical routed fabric, traffic between leaves crosses a spine. Equal-cost multipath can distribute flows across available paths.",
+    "advanced": "Capacity depends on link speeds, counts and traffic patterns. Aggregate offered traffic exceeding uplink capacity creates oversubscription; equal path counts do not imply equal bandwidth.",
+    "example": "A leaf with eight equal-speed host links and two equal-speed uplinks has a nominal 4:1 host-to-uplink capacity ratio before overhead and traffic effects.",
+    "question": "Is a spine-leaf fabric a full mesh of all switches?",
+    "answer": "No. The usual leaf-to-spine pattern is bipartite: leaves connect to spines, not every switch to every other switch."
+  },
+  {
+    "id": "wireless",
+    "title": "Wireless infrastructure and mesh",
+    "basic": "Infrastructure Wi-Fi clients associate with access points. Wireless mesh can use radio links between infrastructure nodes.",
+    "intermediate": "Distinguish client access from backhaul. Obstacles, interference and shared airtime influence performance even when all nodes are visible on a diagram.",
+    "advanced": "Multi-hop paths can consume airtime repeatedly; a dedicated backhaul changes the tradeoff. Roaming, channel planning and authentication are separate design concerns.",
+    "example": "Draw a client-to-access-point link and a separate backhaul link; label which radio or cable carries each.",
+    "question": "Does mesh guarantee higher speed?",
+    "answer": "No. Link quality, airtime, hop count, backhaul design and offered load determine performance."
+  },
+  {
+    "id": "resilience",
+    "title": "Redundancy, loops and convergence",
+    "basic": "Redundancy supplies alternatives. Resilience is the ability to continue or recover service under faults.",
+    "intermediate": "Layer 2 loop-prevention mechanisms and Layer 3 routing solve different forwarding problems. Recovery requires detection and a valid alternate path.",
+    "advanced": "Measure packet loss and recovery time as well as eventual connectivity. Two paths sharing one power source are not independent against a power failure.",
+    "example": "On paper, remove one link and then one central node. Find a remaining path and list the assumptions needed to use it.",
+    "question": "Can an extra cable reduce reliability?",
+    "answer": "Yes. Without an appropriate forwarding design it can create loops or unintended paths."
+  },
+  {
+    "id": "design",
+    "title": "Choosing and documenting a topology",
+    "basic": "Start with required communication, endpoint count, distance, budget and acceptable downtime.",
+    "intermediate": "Compare cabling cost, central dependencies, expansion, troubleshooting and bandwidth. Place routing and firewall boundaries deliberately.",
+    "advanced": "Record both expected and observed behavior, including shared failure domains and convergence limits. Update diagrams after changes and validate using approved evidence.",
+    "example": "Create a fictional office design with staff, guest and IoT segments; explain allowed flows and what happens if the access switch fails.",
+    "question": "Does a VLAN diagram prove isolation?",
+    "answer": "No. You must also verify routing, filtering, service exposure and the actual configuration."
+  }
+]

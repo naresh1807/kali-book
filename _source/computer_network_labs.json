@@ -1,0 +1,73 @@
+[
+  [
+    "27",
+    "Build a computer and VM inventory",
+    "Read Chapters 01-03. Run these read-only commands inside Kali; guest values are not host specifications.",
+    [
+      [
+        "Record resources",
+        "Write CPU count, available RAM and visible disk capacity.",
+        "lscpu\nfree -h\nlsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS"
+      ],
+      [
+        "Map mounted storage",
+        "Connect a mount point to a partition. Explain why filesystem free space differs from physical disk capacity.",
+        "df -h"
+      ],
+      [
+        "Draw the boundary",
+        "Draw physical SSD -> host filesystem -> virtual disk file -> guest partition -> guest filesystem. Label which measurements need host-side inspection.",
+        ""
+      ]
+    ]
+  ],
+  [
+    "28",
+    "Solve subnetting without network traffic",
+    "Read Chapters 04-05. Python 3 only; no network connection is needed.",
+    [
+      [
+        "Calculate a /26",
+        "Predict the network and broadcast before running.",
+        "python3 -c \"import ipaddress; n=ipaddress.ip_network('192.0.2.70/26', strict=False); print(n, n.netmask, n.broadcast_address, n.num_addresses)\""
+      ],
+      [
+        "Check membership",
+        "Predict True for .100 and False for .130.",
+        "python3 -c \"import ipaddress; n=ipaddress.ip_network('192.0.2.64/26'); print(ipaddress.ip_address('192.0.2.100') in n); print(ipaddress.ip_address('192.0.2.130') in n)\""
+      ],
+      [
+        "Explain the result",
+        "Answer: /26 means blocks of 64; .64-.127 is this block, with 62 conventional host addresses. /31 and /32 require different treatment.",
+        ""
+      ]
+    ]
+  ],
+  [
+    "29",
+    "Trace a localhost HTTP request",
+    "Read Chapter 06. Requires Python 3 and curl. Use two Kali terminals. A new empty directory avoids exposing existing files.",
+    [
+      [
+        "Terminal A: isolated local server",
+        "mktemp creates an empty temporary directory. Record its path for later cleanup. If port 8910 is occupied, choose another unused port in all steps.",
+        "labdir=$(mktemp -d)\nprintf \"%s\n\" \"$labdir\"\npython3 -m http.server 8910 --bind 127.0.0.1 --directory \"$labdir\""
+      ],
+      [
+        "Terminal B: inspect and request",
+        "The request stays on the same machine; it needs neither DNS nor a default gateway.",
+        "ss -lnt\ncurl --noproxy \"*\" --max-time 5 -I http://127.0.0.1:8910/"
+      ],
+      [
+        "Stop and compare",
+        "Press Ctrl+C in Terminal A, then repeat the curl command in Terminal B. Normally it reports connection refused if no replacement listener or filtering intervenes.",
+        ""
+      ],
+      [
+        "Explain and clean up",
+        "Describe address, TCP port, HTTP method and response status. After stopping the server, rmdir removes only the empty directory created in Terminal A.",
+        "rmdir \"$labdir\""
+      ]
+    ]
+  ]
+]

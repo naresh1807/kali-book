@@ -1,0 +1,767 @@
+{
+  "start": {
+    "title": "From command to result",
+    "steps": [
+      {
+        "label": "Shell input",
+        "body": "The shell reads the command and separates words according to quoting rules."
+      },
+      {
+        "label": "Program + arguments",
+        "body": "The selected executable receives its arguments; shell syntax is not passed unchanged."
+      },
+      {
+        "label": "Exit status",
+        "body": "The program returns an exit status and may write stdout and stderr. Check both output and status."
+      }
+    ]
+  },
+  "files": {
+    "title": "Resolve a filesystem path",
+    "steps": [
+      {
+        "label": "Working directory",
+        "body": "A relative path starts at the current directory; an absolute path starts at /."
+      },
+      {
+        "label": "Directory entries",
+        "body": "Each component selects an entry. Traversal permissions apply along the path."
+      },
+      {
+        "label": "Selected file",
+        "body": "Read or change only the intended entry; confirm the path before a modification."
+      }
+    ]
+  },
+  "text": {
+    "title": "A pipeline carries stdout",
+    "steps": [
+      {
+        "label": "Producer",
+        "body": "The first command writes bytes to standard output."
+      },
+      {
+        "label": "Filter",
+        "body": "The pipe connects those bytes to the next command standard input; stderr remains separate unless redirected."
+      },
+      {
+        "label": "Consumer",
+        "body": "The final stage displays or saves the transformed stream. Inspect pipeline failures as well as output."
+      }
+    ]
+  },
+  "access": {
+    "title": "Evaluate a file access request",
+    "steps": [
+      {
+        "label": "Identity",
+        "body": "The process has a user identity and group memberships."
+      },
+      {
+        "label": "Permission policy",
+        "body": "Ownership, mode bits and additional controls determine the requested access."
+      },
+      {
+        "label": "Allow or deny",
+        "body": "Reading a file and traversing its containing directories require different permissions."
+      }
+    ]
+  },
+  "system": {
+    "title": "Find a resource bottleneck",
+    "steps": [
+      {
+        "label": "Measure workload",
+        "body": "Observe the slow task while it runs; idle measurements may miss the problem."
+      },
+      {
+        "label": "Compare resources",
+        "body": "Compare CPU activity, available memory, disk capacity and I/O symptoms."
+      },
+      {
+        "label": "Test a hypothesis",
+        "body": "Change one relevant condition and compare results; high utilization alone does not prove the cause."
+      }
+    ]
+  },
+  "packages": {
+    "title": "Package and service lifecycle",
+    "steps": [
+      {
+        "label": "Package metadata",
+        "body": "Repository metadata describes available packages and dependencies."
+      },
+      {
+        "label": "Installed files",
+        "body": "Installing a package places files on disk; this does not prove its service is healthy."
+      },
+      {
+        "label": "Running service",
+        "body": "Check service state and logs independently of installation status."
+      }
+    ]
+  },
+  "transfer": {
+    "title": "Verify a backup copy",
+    "steps": [
+      {
+        "label": "Source data",
+        "body": "Identify the files and the recovery point you need."
+      },
+      {
+        "label": "Transfer or archive",
+        "body": "An archive groups files; an authenticated transfer protects the connection to the intended peer."
+      },
+      {
+        "label": "Restore check",
+        "body": "Open or restore a sample and verify integrity. A successful copy alone is not a recovery test."
+      }
+    ]
+  },
+  "evidence": {
+    "title": "Preserve and examine evidence",
+    "steps": [
+      {
+        "label": "Original bytes",
+        "body": "Record source and acquisition context before modifying evidence."
+      },
+      {
+        "label": "Working copy",
+        "body": "Inspect a copy and record the tools and methods used."
+      },
+      {
+        "label": "Integrity comparison",
+        "body": "A matching cryptographic hash supports byte equality, not the truth or origin of the contents."
+      }
+    ]
+  },
+  "automation": {
+    "title": "A bounded script workflow",
+    "steps": [
+      {
+        "label": "Validate inputs",
+        "body": "Check required arguments, paths and allowed values before doing work."
+      },
+      {
+        "label": "Run one step",
+        "body": "Quote variables and inspect the exit status of operations that can fail."
+      },
+      {
+        "label": "Stop or continue",
+        "body": "Handle failures explicitly and bound loops. Do not silently treat missing results as success."
+      }
+    ]
+  },
+  "network": {
+    "title": "Choose the next hop",
+    "steps": [
+      {
+        "label": "Destination address",
+        "body": "The application needs a route to the destination IP address."
+      },
+      {
+        "label": "Route selection",
+        "body": "Select the most specific applicable route, subject to routing policy."
+      },
+      {
+        "label": "Local delivery",
+        "body": "Resolve the on-link next hop when needed. An off-subnet destination normally uses a gateway link address."
+      }
+    ]
+  },
+  "web": {
+    "title": "An HTTPS request, simplified",
+    "steps": [
+      {
+        "label": "Name resolution",
+        "body": "If needed, obtain an address using DNS or local configuration."
+      },
+      {
+        "label": "Secure connection",
+        "body": "Establish transport and validate the TLS peer for HTTPS. Cached connections can skip a new handshake."
+      },
+      {
+        "label": "HTTP exchange",
+        "body": "Send a request and interpret status, headers and body. TLS success does not guarantee application correctness."
+      }
+    ]
+  },
+  "netmap": {
+    "title": "Build an evidence-based network map",
+    "steps": [
+      {
+        "label": "Known scope",
+        "body": "Start with approved ranges and local interface and route information."
+      },
+      {
+        "label": "Observed links",
+        "body": "Collect bounded observations and associate them with their time and measurement point."
+      },
+      {
+        "label": "Annotated map",
+        "body": "Mark unknown devices and uncertain relationships. A missing response is not proof of absence."
+      }
+    ]
+  },
+  "discovery": {
+    "title": "Interpret a port probe",
+    "steps": [
+      {
+        "label": "Selected probe",
+        "body": "Choose the target, protocol, port and scan method for the question."
+      },
+      {
+        "label": "Response or timeout",
+        "body": "The scanner may receive a reply, rejection or no usable response."
+      },
+      {
+        "label": "Inferred state",
+        "body": "Infer open, closed or an uncertain state for that method. An open port is not a confirmed vulnerability."
+      }
+    ]
+  },
+  "packets": {
+    "title": "From capture to explanation",
+    "steps": [
+      {
+        "label": "Capture point",
+        "body": "Traffic visibility depends on interface, placement and capture filters."
+      },
+      {
+        "label": "Saved packets",
+        "body": "A trace preserves observed packet bytes and timestamps; offload and loss can affect interpretation."
+      },
+      {
+        "label": "Protocol analysis",
+        "body": "Apply display filters and follow an exchange. Absence from the capture does not prove it never occurred."
+      }
+    ]
+  },
+  "netwire": {
+    "title": "Measure a controlled exchange",
+    "steps": [
+      {
+        "label": "Define endpoints",
+        "body": "Choose known local lab endpoints and a small measurement budget."
+      },
+      {
+        "label": "Send and observe",
+        "body": "Record traffic and timings from the relevant observation points."
+      },
+      {
+        "label": "Compare evidence",
+        "body": "Distinguish throughput, latency, loss and application behavior; they measure different properties."
+      }
+    ]
+  },
+  "pysec": {
+    "title": "A small Python evidence utility",
+    "steps": [
+      {
+        "label": "Input bytes",
+        "body": "Read a bounded file or response and handle decoding and input errors."
+      },
+      {
+        "label": "Parsed values",
+        "body": "Convert to structured values and validate required fields before using them."
+      },
+      {
+        "label": "Tested result",
+        "body": "Produce a reproducible summary and test malformed as well as valid input."
+      }
+    ]
+  },
+  "jssec": {
+    "title": "Asynchronous JavaScript",
+    "steps": [
+      {
+        "label": "Start operation",
+        "body": "Calling an async function returns a promise representing eventual completion."
+      },
+      {
+        "label": "Await outcome",
+        "body": "await suspends that async function, allowing other event-loop work to proceed."
+      },
+      {
+        "label": "Handle result",
+        "body": "Check HTTP status and parsing separately; a fulfilled fetch promise can contain an HTTP error response."
+      }
+    ]
+  },
+  "webtest": {
+    "title": "Compare an application rule",
+    "steps": [
+      {
+        "label": "Expected rule",
+        "body": "Write what each identity should be allowed to do."
+      },
+      {
+        "label": "Controlled request",
+        "body": "Change one relevant variable and preserve the rest of the request context."
+      },
+      {
+        "label": "Observed effect",
+        "body": "Check returned data and state changes. A status code by itself may not establish the result."
+      }
+    ]
+  },
+  "codeprojects": {
+    "title": "Build a local utility",
+    "steps": [
+      {
+        "label": "Synthetic fixture",
+        "body": "Prepare known inputs with expected outcomes and no real credentials."
+      },
+      {
+        "label": "Bounded program",
+        "body": "Set timeouts and size limits and handle errors explicitly."
+      },
+      {
+        "label": "Positive + negative tests",
+        "body": "Confirm the intended match and a nearby non-match; explain what remains untested."
+      }
+    ]
+  },
+  "vulnidentity": {
+    "title": "Identity is not permission",
+    "steps": [
+      {
+        "label": "Authentication",
+        "body": "Establish who is making the request."
+      },
+      {
+        "label": "Object policy",
+        "body": "Check whether that identity may act on this object in this tenant."
+      },
+      {
+        "label": "Authorized result",
+        "body": "Return only permitted data. A successful login does not grant access to every object."
+      }
+    ]
+  },
+  "vulninput": {
+    "title": "Keep data separate from syntax",
+    "steps": [
+      {
+        "label": "Untrusted data",
+        "body": "Treat request fields and stored user content as untrusted at the relevant boundary."
+      },
+      {
+        "label": "Safe API boundary",
+        "body": "Use parameterized database operations or context-appropriate output handling."
+      },
+      {
+        "label": "Destination context",
+        "body": "HTML, JavaScript, SQL and filesystem paths require different protections; one generic escape is insufficient."
+      }
+    ]
+  },
+  "burpweb": {
+    "title": "A proxy-mediated request",
+    "steps": [
+      {
+        "label": "Lab browser",
+        "body": "Configure the intended browser to use the proxy; HTTPS inspection also needs the configured trust setup."
+      },
+      {
+        "label": "Proxy inspection",
+        "body": "Inspect the selected request and preserve session context while changing one variable."
+      },
+      {
+        "label": "Lab application",
+        "body": "Compare responses and server-side effects. A proxy observation alone does not confirm impact."
+      }
+    ]
+  },
+  "webtools": {
+    "title": "Discovery results need validation",
+    "steps": [
+      {
+        "label": "Candidate input",
+        "body": "Start with scoped names, paths or technology hints."
+      },
+      {
+        "label": "Tool observation",
+        "body": "A tool reports behavior under its filters, access and timing conditions."
+      },
+      {
+        "label": "Manual validation",
+        "body": "Check ownership, false positives and application context before treating a candidate as a finding."
+      }
+    ]
+  },
+  "webcode": {
+    "title": "A bounded HTTP reviewer",
+    "steps": [
+      {
+        "label": "Local request",
+        "body": "Use the synthetic server and explicit timeout and response-size limits."
+      },
+      {
+        "label": "Response checks",
+        "body": "Inspect the exact headers or fields that the utility is designed to assess."
+      },
+      {
+        "label": "Limited conclusion",
+        "body": "A missing header is an observation. It does not prove an exploitable vulnerability or complete security."
+      }
+    ]
+  },
+  "vulnadvanced": {
+    "title": "A rule spanning multiple operations",
+    "steps": [
+      {
+        "label": "Business invariant",
+        "body": "State the property that must remain true across requests, caches or services."
+      },
+      {
+        "label": "Boundary interaction",
+        "body": "Consider concurrency, parser differences or cached state where assumptions can diverge."
+      },
+      {
+        "label": "Invariant retest",
+        "body": "Check the resulting state and legitimate behavior after the repair, not only one response."
+      }
+    ]
+  },
+  "advweb": {
+    "title": "Focused advanced discovery",
+    "steps": [
+      {
+        "label": "Question and scope",
+        "body": "Specify the asset and the uncertainty you want to resolve."
+      },
+      {
+        "label": "Focused observation",
+        "body": "Select one suitable tool or extension and bound generated traffic."
+      },
+      {
+        "label": "Correlated evidence",
+        "body": "Compare observations with application behavior and known configuration before drawing a conclusion."
+      }
+    ]
+  },
+  "advassess": {
+    "title": "From source rule to finding",
+    "steps": [
+      {
+        "label": "Pattern or contract",
+        "body": "A template, source rule or API contract defines a limited check."
+      },
+      {
+        "label": "Candidate result",
+        "body": "A match may lack reachability, runtime context or business impact."
+      },
+      {
+        "label": "Validation + retest",
+        "body": "Trace the data flow, establish the relevant effect and verify the fix with negative controls."
+      }
+    ]
+  },
+  "audit": {
+    "title": "A scoped assessment cycle",
+    "steps": [
+      {
+        "label": "Baseline",
+        "body": "Record scope, versions, configuration and expected behavior."
+      },
+      {
+        "label": "Assessment",
+        "body": "Collect evidence using checks relevant to that baseline."
+      },
+      {
+        "label": "Remediation verification",
+        "body": "Prioritize supported findings and repeat the relevant checks after repair."
+      }
+    ]
+  },
+  "netsvc": {
+    "title": "Assess a network service",
+    "steps": [
+      {
+        "label": "Service identity",
+        "body": "Confirm the endpoint, protocol and intended role."
+      },
+      {
+        "label": "Configuration evidence",
+        "body": "Inspect allowed authentication, protocol and cryptographic settings in context."
+      },
+      {
+        "label": "Retest result",
+        "body": "Verify corrected behavior while ensuring legitimate clients still work."
+      }
+    ]
+  },
+  "shodan": {
+    "title": "Search indexed observations",
+    "steps": [
+      {
+        "label": "Scoped search",
+        "body": "Query the existing index for assets within your approved scope."
+      },
+      {
+        "label": "Recorded banner",
+        "body": "Read observation time, address and service details; data may be stale or inferred."
+      },
+      {
+        "label": "Asset verification",
+        "body": "Verify current ownership and configuration before reporting an exposure. Search is not a live login or scan."
+      }
+    ]
+  },
+  "metasploit": {
+    "title": "A module workflow",
+    "steps": [
+      {
+        "label": "Select module",
+        "body": "Read its description and understand whether it scans, checks or performs another operation."
+      },
+      {
+        "label": "Configure context",
+        "body": "Review target, required options and inherited global settings in the correct console."
+      },
+      {
+        "label": "Interpret result",
+        "body": "A completed job is not necessarily a session or confirmed weakness. Module capabilities differ."
+      }
+    ]
+  },
+  "caseapi": {
+    "title": "Object and field access boundary",
+    "steps": [
+      {
+        "label": "Alice requests Bob data",
+        "body": "The synthetic request targets an invoice owned by another user and tenant."
+      },
+      {
+        "label": "Policy decision",
+        "body": "Vulnerable mode omits the required object restriction; fixed mode checks identity and tenant."
+      },
+      {
+        "label": "Compare modes",
+        "body": "The fixture changes the unauthorized read to 403 while legitimate owner access stays available."
+      }
+    ]
+  },
+  "caseauth": {
+    "title": "Complete the session lifecycle",
+    "steps": [
+      {
+        "label": "Pending session",
+        "body": "Login creates an incomplete session; protected routes must reject it."
+      },
+      {
+        "label": "MFA transition",
+        "body": "Fixed mode accepts the training second factor and rotates the token."
+      },
+      {
+        "label": "Completed session",
+        "body": "The new token works; the old token, logged-out token and expired token must fail."
+      }
+    ]
+  },
+  "caselogic": {
+    "title": "Check and update atomically",
+    "steps": [
+      {
+        "label": "Shared unused state",
+        "body": "Two requests both want to redeem one coupon."
+      },
+      {
+        "label": "Critical decision",
+        "body": "An unprotected check then update can admit both; the fixed local fixture uses one locked decision."
+      },
+      {
+        "label": "One success",
+        "body": "Verify exactly one successful redemption and one rejection. A process lock does not coordinate multiple servers."
+      }
+    ]
+  },
+  "casereview": {
+    "title": "Trace the missing check",
+    "steps": [
+      {
+        "label": "Entry point",
+        "body": "Find where external input and the authenticated identity enter the route."
+      },
+      {
+        "label": "Data access",
+        "body": "Follow how the object is selected and which permission check protects it."
+      },
+      {
+        "label": "Regression assertion",
+        "body": "Write one allowed case and one forbidden case that expose the root cause."
+      }
+    ]
+  },
+  "casebrowser": {
+    "title": "Accept only the intended message",
+    "steps": [
+      {
+        "label": "Message event",
+        "body": "The browser supplies origin, source and message data."
+      },
+      {
+        "label": "Boundary checks",
+        "body": "Compare expected origin and source, then validate message shape and allowed type."
+      },
+      {
+        "label": "Safe display",
+        "body": "Use textContent for the accepted text. Passing unit tests does not prove browser CSP enforcement."
+      }
+    ]
+  },
+  "casethreat": {
+    "title": "Threats become testable questions",
+    "steps": [
+      {
+        "label": "Asset and actor",
+        "body": "Name the protected data and the identities that can approach it."
+      },
+      {
+        "label": "Trust boundary",
+        "body": "Mark where identity, input or data crosses a change in trust."
+      },
+      {
+        "label": "Control and evidence",
+        "body": "State the abuse case, repair and test that would demonstrate the intended rule."
+      }
+    ]
+  },
+  "caseregression": {
+    "title": "A test must detect failure",
+    "steps": [
+      {
+        "label": "Positive control",
+        "body": "Run assertions against the fixed fixture and preserve legitimate behavior."
+      },
+      {
+        "label": "Negative control",
+        "body": "Apply fixed expectations to the vulnerable fixture and confirm that they detect its weakness."
+      },
+      {
+        "label": "Coverage statement",
+        "body": "Document what the assertions cover and the browser or integration checks that remain manual."
+      }
+    ]
+  },
+  "casecapstone": {
+    "title": "Build a reviewable finding",
+    "steps": [
+      {
+        "label": "Reproduction",
+        "body": "Record synthetic scope, prerequisites and a minimal repeatable observation."
+      },
+      {
+        "label": "Root cause and repair",
+        "body": "Explain the missing rule and the change that restores it."
+      },
+      {
+        "label": "Retest evidence",
+        "body": "Compare repaired and legitimate cases and record limits in the report."
+      }
+    ]
+  },
+  "comphardware": {
+    "title": "Where active data lives",
+    "steps": [
+      {
+        "label": "Persistent storage",
+        "body": "Programs and files remain on SSD or HDD after normal shutdown."
+      },
+      {
+        "label": "Working memory",
+        "body": "The OS loads active data into RAM; cache holds smaller frequently used portions near execution."
+      },
+      {
+        "label": "CPU execution",
+        "body": "The CPU executes instructions using the memory hierarchy. This is a simplified data path, not a timing model."
+      }
+    ]
+  },
+  "compos": {
+    "title": "An application uses the kernel",
+    "steps": [
+      {
+        "label": "Application request",
+        "body": "A user program requests a protected operation through an OS interface."
+      },
+      {
+        "label": "Kernel mediation",
+        "body": "The kernel checks access and manages resources and device drivers."
+      },
+      {
+        "label": "Operation result",
+        "body": "The program receives data or an error. The shell is a user program, not the kernel."
+      }
+    ]
+  },
+  "compvirtual": {
+    "title": "Nested storage views",
+    "steps": [
+      {
+        "label": "Host filesystem",
+        "body": "Physical host storage contains the virtual disk file and other host files."
+      },
+      {
+        "label": "Virtual block device",
+        "body": "The hypervisor presents virtual capacity to the guest; file allocation may grow over time."
+      },
+      {
+        "label": "Guest filesystem",
+        "body": "Guest partitions and filesystems have their own sizes and free space; enlarging one layer does not resize every layer."
+      }
+    ]
+  },
+  "netfund": {
+    "title": "Encapsulate for delivery",
+    "steps": [
+      {
+        "label": "Application + transport",
+        "body": "Application bytes are carried by a transport protocol such as TCP or UDP."
+      },
+      {
+        "label": "IP packet",
+        "body": "An IP envelope supports delivery across networks."
+      },
+      {
+        "label": "Link frame",
+        "body": "The link layer carries the packet to the next hop. Routers replace the link envelope for subsequent links."
+      }
+    ]
+  },
+  "netaddress": {
+    "title": "Locate 192.0.2.70/26",
+    "steps": [
+      {
+        "label": "Prefix length",
+        "body": "A /26 leaves six host bits, giving blocks of 64 IPv4 addresses."
+      },
+      {
+        "label": "Containing block",
+        "body": "70 lies in the .64 through .127 block; the mask is 255.255.255.192."
+      },
+      {
+        "label": "Host range",
+        "body": "For this conventional subnet, .65 through .126 are 62 host addresses. /31 and /32 differ."
+      }
+    ]
+  },
+  "netservices": {
+    "title": "Find the failing layer",
+    "steps": [
+      {
+        "label": "Interface + route",
+        "body": "Check link state, addresses and the selected path before blaming an application."
+      },
+      {
+        "label": "Name + transport",
+        "body": "Separate name resolution from reaching the intended listener and port."
+      },
+      {
+        "label": "TLS + application",
+        "body": "Distinguish certificate validation, HTTP error status and incorrect application data."
+      }
+    ]
+  }
+}

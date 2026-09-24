@@ -1,0 +1,92 @@
+{
+  "webtest": [
+    [
+      "01 / A repeatable testing process",
+      "Define exact origins, accounts, time window and limits. Map normal behavior, establish baselines, test one hypothesis at a time, preserve evidence, recommend a fix and retest. Discovery identifies candidates; assessment establishes whether behavior violates a security requirement."
+    ],
+    [
+      "02 / HTTP, origin and TLS",
+      "An origin combines scheme, hostname and port. HTTP methods describe operations, headers carry metadata, and bodies carry content. HTTPS protects transport; it does not make application logic correct. Inspect certificates and fix trust configuration instead of routinely disabling validation."
+    ],
+    [
+      "03 / Cookies and sessions",
+      "A session cookie or bearer token links requests to an identity. Secure restricts cookie transport to HTTPS; HttpOnly blocks JavaScript access to the cookie; SameSite influences cross-site sending. Check expiry, rotation and server-side invalidation. These controls address different threats and are not interchangeable."
+    ],
+    [
+      "04 / Access control and IDOR",
+      "Object identifiers are not authorization checks. For a training app, give two users different synthetic records and compare permitted reads with cross-account reads. The server must enforce ownership and role permissions on every relevant operation. Unpredictable IDs alone do not fix missing authorization."
+    ],
+    [
+      "05 / Injection and SQL injection",
+      "Injection occurs when untrusted input changes the structure of an interpreter command. SQL parameters should be bound as data rather than concatenated into query text. Use a dedicated vulnerable lab to study response differences. A database error is a clue; document a controlled, repeatable behavior change before confirming a finding."
+    ],
+    [
+      "06 / XSS and output contexts",
+      "Cross-site scripting lets untrusted content become browser code. Reflected, stored and DOM-based paths describe how input reaches an execution context. Use context-appropriate output encoding and safe DOM APIs. A harmless unique text marker can establish reflection, but reflection alone does not prove executable XSS."
+    ],
+    [
+      "07 / CSRF and CORS",
+      "CSRF concerns unwanted actions made with a user browser session; anti-CSRF tokens, origin checks and suitable cookie settings help. CORS governs whether browser scripts can read cross-origin responses. CORS is not server-side authorization, and command-line clients do not enforce browser CORS rules."
+    ],
+    [
+      "08 / SSRF and outbound requests",
+      "SSRF occurs when attacker-influenced input causes unintended server-side requests. In a dedicated lab, use an endpoint you control and harmless unique markers. Defenses include strict destination validation, redirect checks and network egress restrictions. A failed browser request says little about what the server can reach."
+    ],
+    [
+      "09 / Uploads and path handling",
+      "File handling needs content checks, size limits, safe generated names, non-executable storage and access control. Resolve paths against an allowed root and verify the final location. A filename extension or browser-supplied Content-Type is not sufficient validation. Practice with inert text files and synthetic content."
+    ],
+    [
+      "10 / API, JWT and GraphQL",
+      "API endpoints need the same identity, object and function permissions as browser pages. Decoding a JWT does not verify its signature; validate signature, issuer, audience and time claims. GraphQL field-level access and query cost matter even with a single endpoint. An exposed schema is context, not automatically a vulnerability."
+    ],
+    [
+      "11 / Business logic and concurrency",
+      "Security requirements include workflow order, quantity limits and one-time actions. Model the state transitions and expected invariants before testing. Use synthetic orders or coupons in an isolated app; repeated requests can create real side effects. A race condition needs a controlled concurrent reproduction, not only a slow response."
+    ],
+    [
+      "12 / Caches and request smuggling",
+      "Caches can leak data when keys omit security-relevant request attributes. Request smuggling arises when intermediaries disagree about request boundaries. Study these in an isolated multi-component lab because tests can affect other requests. Document the proxy chain and protocol versions; single-server results cannot establish multi-hop behavior."
+    ]
+  ],
+  "burpweb": [
+    [
+      "01 / Proxy versus active testing",
+      "The proxy observes and can modify traffic routed through it. Repeater resends selected requests, Intruder varies values, and Scanner automates checks. Each step has a different traffic footprint. Begin with browsing and one controlled edit before automation."
+    ],
+    [
+      "02 / HTTPS interception",
+      "A testing proxy terminates and recreates TLS to inspect HTTP. The embedded browser handles the common setup path. An external lab browser needs its own proxy and CA trust configuration. Keep the test CA confined to that profile and remove it when the exercise ends."
+    ],
+    [
+      "03 / Session state affects conclusions",
+      "A request copied yesterday may use an expired token today. Confirm the active account using a benign identity endpoint or known account page before evaluating access. A 200 response can still be a login form; a redirect can signal expiration rather than successful defense."
+    ],
+    [
+      "04 / Advanced differential testing",
+      "Maintain a known permitted baseline, then vary exactly one parameter, role or token. Compare body semantics as well as status and timing. Repeat a small number of times to distinguish transient failures from consistent behavior, and record any nondeterministic fields."
+    ]
+  ],
+  "webtools": [
+    [
+      "01 / Choose a tool by question",
+      "Burp and ZAP inspect application traffic; Wappalyzer suggests technologies; Subfinder gathers candidate names; Gobuster and DirBuster try paths; ffuf varies selected request fields; Katana follows links; httpx summarizes endpoints. Nuclei checks templates and sqlmap investigates SQL injection. None replaces understanding the application."
+    ],
+    [
+      "02 / Passive versus active discovery",
+      "Reading existing provider datasets differs from querying a target directly. Browser navigation, crawling and wordlist discovery all generate requests. Third-party APIs also have quotas and data-handling implications. Record where each observation came from and when it was collected."
+    ],
+    [
+      "03 / Soft 404s and wildcard answers",
+      "Some applications return the same page for every path; DNS can resolve every subdomain to one address. Establish random negative controls and compare content, redirects and sizes before filtering. A high result count can indicate a wildcard response rather than many valid resources."
+    ],
+    [
+      "04 / Wordlists, recursion and budget",
+      "A wordlist is a set of hypotheses. Use names relevant to the application and start small. Extensions, recursion and multiple insertion positions multiply requests. Threads limit simultaneous work; a request-rate limit controls a different quantity. Stop and review on repeated errors or throttling."
+    ],
+    [
+      "05 / Findings versus coverage",
+      "A tool result reflects the selected paths, credentials, payloads and response rules. No alerts does not mean secure; an alert is not automatically exploitable. Track untested roles, unreachable endpoints and excluded functions so reviewers can understand coverage gaps."
+    ]
+  ]
+}

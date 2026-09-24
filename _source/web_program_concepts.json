@@ -1,0 +1,18 @@
+[
+  [
+    "01 / Run and learn",
+    "Full source and fixtures are in examples/web-programs next to the book. Read the code, copy the folder into Kali, then follow Lab 17. Python uses .py; Node uses .mjs; the browser inventory uses the training-page console. Nothing runs automatically."
+  ],
+  [
+    "02 / Scope and request behavior",
+    "The reviewer accepts your explicitly supplied HTTP(S) URL. Use assets you own or are permitted to assess. It makes one GET per run, without credentials, redirects, crawling or retries. GET can still have side effects on poorly designed applications. Start with the included fixture."
+  ],
+  [
+    "03 / Interpret evidence",
+    "A header present flag does not validate its policy. Cookie flags depend on purpose and transport. CORS response reflection is not proof of browser-readable private data. Response comparisons require known identity and permissions; changed timestamps and login pages can create differences."
+  ],
+  [
+    "04 / Program limits",
+    "The review tools are educational utilities, not complete scanners. They do not log in, execute browser JavaScript, perform TLS configuration audits or enumerate hidden paths. The browser inventory sees only the current DOM. Large responses fail instead of producing a misleading partial report."
+  ]
+]

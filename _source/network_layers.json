@@ -1,0 +1,86 @@
+[
+  {
+    "number": "7",
+    "name": "Application",
+    "tcpip": "Application",
+    "unit": "Application data / messages",
+    "basic": "Defines the network service and meaning of an exchange for applications. It is the protocol behavior, not simply the entire browser or other user interface.",
+    "intermediate": "HTTP, DNS, SMTP and SSH are familiar application protocols. Their requests, responses and errors have different semantics.",
+    "advanced": "A successful lower-layer connection does not prove a correct application result. Authentication, authorization and business rules can fail even with healthy connectivity.",
+    "example": "A server returns a 200 login page instead of the requested report. Inspect the content and identity context before calling the operation successful.",
+    "question": "What does an HTTP 403 establish?",
+    "answer": "The application or intermediary returned a refusal for that request; it does not by itself identify the precise authorization rule or prove the network is broken."
+  },
+  {
+    "number": "6",
+    "name": "Presentation",
+    "tcpip": "Application",
+    "unit": "Represented application data",
+    "basic": "Concerns how information is represented so communicating applications interpret it consistently. Think of encoding, serialization and negotiated representation.",
+    "intermediate": "UTF-8 text, a JSON serialization or a compression format illustrates a representation concern; they are not all standalone OSI presentation protocols.",
+    "advanced": "Do not force every implementation into a separate layer-six module. Encryption is often placed here in teaching diagrams, but real TLS and other security protocols cross model boundaries.",
+    "example": "A client expects JSON but receives HTML, or decodes bytes with the wrong character encoding. Receiving all bytes successfully does not make their interpretation correct.",
+    "question": "Is every certificate error simply a layer-six fault?",
+    "answer": "No. Diagnose the actual TLS validation failure, expected peer, certificate chain, time and configuration rather than assigning a single OSI number."
+  },
+  {
+    "number": "5",
+    "name": "Session",
+    "tcpip": "Application",
+    "unit": "Dialog / session data",
+    "basic": "Concerns coordination of a communication dialog, including establishing, managing and ending it and, in some designs, synchronization or recovery points.",
+    "intermediate": "Real internet applications often implement dialog state within their own protocols or libraries rather than a separate OSI session protocol.",
+    "advanced": "An application login session, a TCP connection and an OSI session-layer service are different concepts. One login can span many connections, and one connection can carry many application exchanges.",
+    "example": "A multi-step workflow loses its application state while the TCP connection remains usable. Check workflow and token state rather than assuming the connection defines the login.",
+    "question": "Does a working TCP connection prove a user is logged in?",
+    "answer": "No. Application identity and workflow state are established and checked separately."
+  },
+  {
+    "number": "4",
+    "name": "Transport",
+    "tcpip": "Transport",
+    "unit": "TCP segment / UDP datagram",
+    "basic": "Provides transport communication between endpoints. TCP supplies an ordered byte stream; UDP provides datagrams without built-in delivery or ordering guarantees.",
+    "intermediate": "TCP/UDP ports distinguish transport endpoints. A typical connection is described by protocol, source address/port and destination address/port.",
+    "advanced": "TCP flow control concerns receiver capacity; congestion control concerns network conditions. Reliability and encryption are separate properties. QUIC builds secure stream transport over UDP and does not fit a naive one-protocol-per-layer picture.",
+    "example": "The destination IP is reachable, but no listener accepts the intended TCP port. Check listening address, port and policy instead of changing DNS without evidence.",
+    "question": "Does one TCP send correspond to one receiver read?",
+    "answer": "No. Applications must define message boundaries in the byte stream."
+  },
+  {
+    "number": "3",
+    "name": "Network",
+    "tcpip": "Internet",
+    "unit": "IP packet / datagram",
+    "basic": "Addresses and forwards packets across networks. A routing decision selects a next hop rather than delivering a file or authenticating a user.",
+    "intermediate": "IPv4 and IPv6 carry network-layer addressing. ICMP/ICMPv6 provide control information. Ordinary routers use routing tables and forwarding policy.",
+    "advanced": "IP does not guarantee ordered or successful delivery. MTU behavior differs between IPv4 and IPv6. NAT, where present, changes addressing and sometimes ports; it is not the same function as routing.",
+    "example": "An endpoint has a local address but lacks a useful route to the destination. Inspect the prefix, chosen route and next hop before investigating an application login.",
+    "question": "Does an IP address identify a permanent physical device?",
+    "answer": "No. Addresses can change, be shared through translation, or represent virtual endpoints."
+  },
+  {
+    "number": "2",
+    "name": "Data link",
+    "tcpip": "Link / network access",
+    "unit": "Frame",
+    "basic": "Carries data across the current link. Ethernet framing includes local-link address information and error detection; other link technologies have their own formats.",
+    "intermediate": "Switch forwarding, VLAN membership and local neighbor resolution influence the next-hop frame. ARP supports IPv4 link-address resolution and does not use a TCP/UDP port.",
+    "advanced": "A routed path normally gets a new link-layer envelope at each hop. Device labels are not exclusive layer assignments: a multilayer switch can also route.",
+    "example": "The cable is connected, but a VLAN mismatch prevents expected local communication. Inspect the intended link domain and forwarding configuration.",
+    "question": "Does the original client Ethernet frame reach a remote internet server unchanged?",
+    "answer": "Normally no. Routers remove and replace the local link envelope while forwarding the packet."
+  },
+  {
+    "number": "1",
+    "name": "Physical",
+    "tcpip": "Link / network access",
+    "unit": "Encoded signals / symbols carrying bits",
+    "basic": "Transmits encoded signals over a medium: electrical, optical or radio. Connectors, cabling and radio conditions are part of the physical path.",
+    "intermediate": "A network interface and its physical transceiver convert between internal data handling and medium-specific signaling. Link negotiation and signal quality affect operation.",
+    "advanced": "Bandwidth, interference, damaged cabling and optical or radio conditions can limit communication. A physical link indicator does not establish IP reachability or application health.",
+    "example": "A damaged cable can cause link loss or errors even while IP settings are correct. Check the physical path before rewriting application configuration.",
+    "question": "What does a link light prove?",
+    "answer": "Only a limited physical/link state for that interface, not working DNS, routing, authentication or internet access."
+  }
+]

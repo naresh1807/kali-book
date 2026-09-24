@@ -1,0 +1,11 @@
+# Synthetic local lab only. Does not start a server.
+Host lab-ssh
+    HostName 127.0.0.1
+    Port 2222
+    User labuser
+    StrictHostKeyChecking ask
+    ForwardAgent no
+    ConnectTimeout 5
+    ServerAliveInterval 15
+    ServerAliveCountMax 2
+    ExitOnForwardFailure yes

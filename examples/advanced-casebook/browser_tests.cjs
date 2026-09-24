@@ -1,0 +1,10 @@
+const assert=require('node:assert/strict');
+const {acceptMessage}=require('./browser.js');
+const source={};const origin='http://127.0.0.1:8901';
+const good={origin,source,data:{type:'lab-status',text:'synthetic'}};
+assert.equal(acceptMessage(good,origin,source),true);
+assert.equal(acceptMessage({...good,origin:'https://other.invalid'},origin,source),false);
+assert.equal(acceptMessage({...good,source:{}},origin,source),false);
+assert.equal(acceptMessage({...good,data:{type:'lab-status',text:'x'.repeat(81)}},origin,source),false);
+assert.equal(acceptMessage({...good,data:null},origin,source),false);
+console.log('PASS: five message-policy cases; this is not a browser CSP test.');

@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Approved application path",
+    "source_zone": "staff",
+    "destination": "192.0.2.10",
+    "protocol": "tcp",
+    "port": 443,
+    "expected": "allow",
+    "observed": "reachable"
+  },
+  {
+    "name": "Unexpected guest management path",
+    "source_zone": "guest",
+    "destination": "192.0.2.20",
+    "protocol": "tcp",
+    "port": 22,
+    "expected": "deny",
+    "observed": "reachable"
+  },
+  {
+    "name": "Verified policy rejection",
+    "source_zone": "guest",
+    "destination": "192.0.2.20",
+    "protocol": "tcp",
+    "port": 22,
+    "expected": "deny",
+    "observed": "policy_blocked"
+  },
+  {
+    "name": "Silent response needs investigation",
+    "source_zone": "iot",
+    "destination": "192.0.2.20",
+    "protocol": "tcp",
+    "port": 22,
+    "expected": "deny",
+    "observed": "timeout"
+  },
+  {
+    "name": "Closed service is not proof of segmentation",
+    "source_zone": "guest",
+    "destination": "192.0.2.30",
+    "protocol": "tcp",
+    "port": 445,
+    "expected": "deny",
+    "observed": "closed"
+  },
+  {
+    "name": "Required service unavailable",
+    "source_zone": "staff",
+    "destination": "192.0.2.30",
+    "protocol": "tcp",
+    "port": 443,
+    "expected": "allow",
+    "observed": "closed"
+  }
+]

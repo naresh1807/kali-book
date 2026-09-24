@@ -1,0 +1,1 @@
+(()=>{let t;try{t=localStorage.getItem('fieldbook-theme')}catch{}if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t;})();

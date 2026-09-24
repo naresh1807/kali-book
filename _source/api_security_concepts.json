@@ -1,0 +1,82 @@
+[
+  {
+    "id": "http",
+    "title": "REST, JSON and HTTP methods",
+    "basic": "An API request has a method, URL, headers and sometimes a body. JSON is a data format; REST is an architectural style, not a synonym for every JSON endpoint.",
+    "intermediate": "GET reads resources; POST often creates or invokes an operation; PATCH applies a partial update. Interpret status, content type and response body together.",
+    "advanced": "Document the contract, permitted methods, required fields and error shape. A syntactically valid request can still violate ownership or business rules.",
+    "tools": "curl displays a single exchange; jq selects JSON fields; Postman organizes repeatable requests. Compare one valid request with one invalid request.",
+    "practice": "Start the supplied fixed-mode app, then request /api/profile without a credential: expect 401. A 200 HTML login page would not prove authenticated access.",
+    "code": "curl --silent --show-error --max-time 5 -i http://127.0.0.1:8901/api/profile"
+  },
+  {
+    "id": "authentication",
+    "title": "API keys, bearer tokens, JWT and OAuth",
+    "basic": "An API key may identify an application rather than a human. A bearer token grants whatever authority the service associates with it. JWT is a token format; OAuth is a delegation framework.",
+    "intermediate": "Check whether tokens are intended for this API and whether expiry, issuer, audience and signature are validated. Decoding claims does not validate a JWT.",
+    "advanced": "Separate access tokens, refresh tokens and identity tokens. Model scope, revocation and client type. An authenticated request still needs object and function authorization.",
+    "tools": "Use Postman local variables for the fixture token; Burp Repeater compares authenticated and unauthenticated responses. Never paste real credentials into public token-decoding websites.",
+    "practice": "The casebook uses opaque in-memory tokens and synthetic MFA, not JWT or OAuth. Login gives a pending token; /mfa produces a full token in fixed mode.",
+    "code": "python3 exercise.py --expect fixed --case auth"
+  },
+  {
+    "id": "bola",
+    "title": "BOLA / IDOR: object ownership",
+    "basic": "Broken Object-Level Authorization allows a caller to access an object outside their permitted scope. Guessable identifiers alone do not establish the weakness.",
+    "intermediate": "Use Alice and Bob with known objects. Compare Alice own invoice, Alice requesting Bob invoice, and Bob own invoice. Change one variable at a time.",
+    "advanced": "Enforce tenant and owner rules at the service or data-access boundary. Unpredictable identifiers cannot replace permission checks. Include lists and nested resources.",
+    "tools": "Use Burp Repeater tabs labelled Alice-own, Alice-other and Bob-own. The supplied Postman collection exercises the same fixed-mode matrix.",
+    "practice": "In fixed mode Alice gets invoice 1 with 200, invoice 2 with 403; Bob gets invoice 2 with 200. Vulnerable mode deliberately permits Alice to read invoice 2.",
+    "code": "python3 exercise.py --expect fixed --case api"
+  },
+  {
+    "id": "function",
+    "title": "Broken function-level authorization",
+    "basic": "Function authorization decides whether a role may perform an operation, such as issuing refunds or changing permissions. It differs from which object a caller may read.",
+    "intermediate": "Build a role-by-operation matrix including anonymous, ordinary and administrator accounts. Check the server endpoint even when its UI button is hidden.",
+    "advanced": "Apply policy consistently across versions and alternate methods. An admin-looking URL does not prove a function is privileged; use the documented policy and observed action.",
+    "tools": "Use Postman folders for roles and Burp Repeater for one authorized fixture operation at a time. ZAP passive review can flag response observations, but cannot infer the business role policy.",
+    "practice": "The included fixture has no administrator-only refund route. Use a design worksheet for this topic; do not claim its role-field test proves complete function authorization.",
+    "code": "Role | Operation | Expected | Observed\nAnonymous | read invoice | deny | record\nOwner | read own invoice | allow | record\nUser | administrator operation in a separate lab | deny | record"
+  },
+  {
+    "id": "properties",
+    "title": "Data exposure and mass assignment",
+    "basic": "Read-side exposure returns fields a caller should not receive. Mass assignment accepts fields the caller must not control.",
+    "intermediate": "Use explicit output schemas and writable-field allowlists. Test a permitted display_name update separately from an attempted role update.",
+    "advanced": "Inspect nested fields, bulk updates and serialization paths. Browser-side hiding does not remove a field from the response or enforce a write restriction.",
+    "tools": "Use jq or Postman to inspect response fields and Burp Repeater to compare two small JSON bodies. Do not treat every returned field as sensitive without context.",
+    "practice": "Fixed mode rejects PATCH /api/profile with role using 400, preserves role=user, and accepts display_name. Vulnerable mode intentionally accepts the role field.",
+    "code": "{\"display_name\":\"Alice fixture\"}\n\nComparison body for the local fixture only:\n{\"role\":\"admin\"}"
+  },
+  {
+    "id": "limits",
+    "title": "Rate limits and resource consumption",
+    "basic": "Request rate, response size and computational cost are different limits. A single costly operation may consume more resources than many simple ones.",
+    "intermediate": "Test a small documented boundary in an isolated lab. Record pagination, body-size and timeout rules; stop when the agreed limit or stop condition is reached.",
+    "advanced": "A rate limiter needs a chosen identity and window. Consider shared users, expensive operations and recovery. Do not infer adequate limits from one 429 response.",
+    "tools": "Use one curl request for a pagination boundary and unit tests with controlled time for rate-limit logic. Avoid load tools on this teaching server.",
+    "practice": "The fixture allows list limits 1 through 10 and rejects 11. This proves input-bound validation only: it has no rate limiter and is not a load-testing target.",
+    "code": "GET /api/invoices?limit=1  -> expected 200 with a full token\nGET /api/invoices?limit=11 -> expected 400 with a full token"
+  },
+  {
+    "id": "graphql",
+    "title": "GraphQL security fundamentals",
+    "basic": "GraphQL defines typed operations and selected response fields. Queries, mutations and subscriptions need appropriate authorization.",
+    "intermediate": "Review object and field permissions, pagination and error content. An HTTP 200 can still contain an errors array; inspect the response body.",
+    "advanced": "Use depth, breadth and cost controls appropriate to the schema. Disabling introspection does not establish authorization or prevent expensive operations.",
+    "tools": "Use GraphiQL or Postman with a separately configured local GraphQL server and its known schema. Check one allowed object and one denied object.",
+    "practice": "The provided REST fixture has no GraphQL endpoint. The query below is a schema-dependent reading example, not a command for port 8901.",
+    "code": "query OwnInvoice($id: ID!) {\n  invoice(id: $id) { id amount }\n}\n# Requires a local schema defining invoice, id and amount."
+  },
+  {
+    "id": "retest",
+    "title": "Remediation, regression tests and reporting",
+    "basic": "Reproduce the smallest policy failure with synthetic data, repair the authorization or validation rule, then rerun the same test.",
+    "intermediate": "Retest a legitimate operation as well as the denied case. Keep separate expectations for vulnerable and fixed teaching modes.",
+    "advanced": "A green test establishes only its asserted properties. Note untested protocols, roles, token formats, concurrency and infrastructure controls.",
+    "tools": "Use Python unittest for deterministic regressions, Postman for readable request sequences and Burp for manual comparisons. Link each finding to evidence and its repair.",
+    "practice": "Download the lab ZIP, start the casebook in vulnerable mode, run the API exercise, stop it, then restart fixed mode and repeat. A passing vulnerable-mode exercise confirms the intentional weakness.",
+    "code": "python3 -m unittest -v test_lab\npython3 exercise.py --expect fixed --case api"
+  }
+]

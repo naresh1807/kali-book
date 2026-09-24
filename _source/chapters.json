@@ -1,0 +1,272 @@
+[
+  [
+    "comphardware",
+    "01",
+    "Computer hardware and data",
+    "CPU, memory, storage, units and resource measurement."
+  ],
+  [
+    "compos",
+    "02",
+    "Operating systems and filesystems",
+    "Boot, processes, permissions and mounted storage."
+  ],
+  [
+    "compvirtual",
+    "03",
+    "Virtualization and lab architecture",
+    "Host/guest boundaries, virtual disks and network modes."
+  ],
+  [
+    "netfund",
+    "04",
+    "How networks carry data",
+    "Devices, layers, frames, segmentation and performance."
+  ],
+  [
+    "netaddress",
+    "05",
+    "IP addressing and subnetting",
+    "IPv4, IPv6, CIDR, gateways and supporting services."
+  ],
+  [
+    "netservices",
+    "06",
+    "Network services and troubleshooting",
+    "Transport, ports, DNS, HTTPS and diagnosis."
+  ],
+  [
+    "start",
+    "07",
+    "Terminal foundations",
+    "Learn the shape of a command and discover help before running it."
+  ],
+  [
+    "files",
+    "08",
+    "Files & folders",
+    "Navigate your lab, inspect files and make deliberate changes."
+  ],
+  [
+    "text",
+    "09",
+    "Text & pipelines",
+    "Turn terminal output and log files into useful evidence."
+  ],
+  [
+    "access",
+    "10",
+    "Users & permissions",
+    "Understand identity, ownership and least privilege."
+  ],
+  [
+    "system",
+    "11",
+    "System & storage",
+    "Check CPU, RAM, disks and running processes."
+  ],
+  [
+    "packages",
+    "12",
+    "Packages & services",
+    "Maintain Kali and understand background services."
+  ],
+  [
+    "transfer",
+    "13",
+    "Backup & transfer",
+    "Archive work and copy files over authenticated connections."
+  ],
+  [
+    "evidence",
+    "14",
+    "Files & evidence",
+    "Identify formats, inspect metadata and verify integrity."
+  ],
+  [
+    "automation",
+    "15",
+    "Shell & scripting",
+    "Build small, readable workflows with clear exit conditions."
+  ],
+  [
+    "network",
+    "16",
+    "Network essentials",
+    "Find interfaces, routes, neighbours and listening ports."
+  ],
+  [
+    "web",
+    "17",
+    "DNS, HTTP & TLS",
+    "Understand requests, responses and encrypted connections."
+  ],
+  [
+    "netmap",
+    "18",
+    "Network discovery & mapping",
+    "Interfaces, routes, local-link discovery and segmentation concepts."
+  ],
+  [
+    "discovery",
+    "19",
+    "Nmap toolkit",
+    "Discovery, TCP/UDP scans, service identification, scripts and reports for your own lab."
+  ],
+  [
+    "packets",
+    "20",
+    "Packet analysis",
+    "Capture a small lab trace and inspect it offline."
+  ],
+  [
+    "netwire",
+    "21",
+    "Packets & network testing",
+    "Ncat, tcpdump, Wireshark, TShark, Scapy, Nping, Hping3 and iperf3."
+  ],
+  [
+    "pysec",
+    "22",
+    "Python for security work",
+    "Language foundations, evidence processing, validation and tested automation."
+  ],
+  [
+    "jssec",
+    "23",
+    "JavaScript for security work",
+    "Node.js, browser behavior, JSON, async code and secure data handling."
+  ],
+  [
+    "webtest",
+    "24",
+    "Web testing foundations",
+    "HTTP, sessions, vulnerability concepts, evidence and local practice."
+  ],
+  [
+    "codeprojects",
+    "25",
+    "Build your own lab utilities",
+    "Runnable Python and JavaScript projects with fictional evidence and localhost HTTP."
+  ],
+  [
+    "vulnidentity",
+    "26",
+    "Website vulnerabilities: trust & identity",
+    "Foundations, authentication, access control, sessions, recovery and tokens."
+  ],
+  [
+    "vulninput",
+    "27",
+    "Website vulnerabilities: input & browser",
+    "Injection, XSS, CSRF, CORS, file handling, SSRF and unsafe parsing."
+  ],
+  [
+    "burpweb",
+    "28",
+    "Burp Suite: basic to advanced",
+    "Proxy, Repeater, Intruder, comparisons and authenticated testing."
+  ],
+  [
+    "webtools",
+    "29",
+    "Web discovery & assessment tools",
+    "Gobuster, DirBuster, Wappalyzer, Subfinder, ffuf, ZAP and more."
+  ],
+  [
+    "webcode",
+    "30",
+    "Web testing programs: Python & JavaScript",
+    "Runnable HTTP reviewers, response comparisons, DOM inventory and a synthetic practice server."
+  ],
+  [
+    "vulnadvanced",
+    "31",
+    "Website vulnerabilities: advanced concepts",
+    "API properties, business logic, races, caching, protocol boundaries and remediation."
+  ],
+  [
+    "advweb",
+    "32",
+    "Advanced web discovery & proxy tools",
+    "Focused discovery, Burp extensions, traffic inspection and TLS assessment."
+  ],
+  [
+    "advassess",
+    "33",
+    "Advanced web assessment & code review",
+    "Templates, API contracts, static analysis, secrets and dependencies."
+  ],
+  [
+    "audit",
+    "34",
+    "Security workbench",
+    "Open common security tools and assess your own lab."
+  ],
+  [
+    "netsvc",
+    "35",
+    "Network service assessment",
+    "DNS, SMB, SNMP, SSH, TLS, vulnerability assessment and retesting."
+  ],
+  [
+    "shodan",
+    "36",
+    "Shodan: basic to advanced",
+    "Search concepts, scoped queries, CLI and API workflows, monitoring and evidence interpretation."
+  ],
+  [
+    "metasploit",
+    "37",
+    "Metasploit: basic to advanced",
+    "Console fundamentals, module settings, database workflows, automation and lab sessions."
+  ],
+  [
+    "caseapi",
+    "38",
+    "Advanced API security",
+    "A worked local case study: scenario, evidence, repair and regression tests."
+  ],
+  [
+    "caseauth",
+    "39",
+    "Authentication, sessions and federation",
+    "A worked local case study: scenario, evidence, repair and regression tests."
+  ],
+  [
+    "caselogic",
+    "40",
+    "Business rules and concurrency",
+    "A worked local case study: scenario, evidence, repair and regression tests."
+  ],
+  [
+    "casereview",
+    "41",
+    "Secure code review",
+    "A worked local case study: scenario, evidence, repair and regression tests."
+  ],
+  [
+    "casebrowser",
+    "42",
+    "Browser trust and messaging",
+    "A worked local case study: scenario, evidence, repair and regression tests."
+  ],
+  [
+    "casethreat",
+    "43",
+    "Threat modeling and trust boundaries",
+    "A worked local case study: scenario, evidence, repair and regression tests."
+  ],
+  [
+    "caseregression",
+    "44",
+    "Automated security regression",
+    "A worked local case study: scenario, evidence, repair and regression tests."
+  ],
+  [
+    "casecapstone",
+    "45",
+    "Complete assessment and retest",
+    "A worked local case study: scenario, evidence, repair and regression tests."
+  ]
+]

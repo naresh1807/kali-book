@@ -1,0 +1,148 @@
+[
+  {
+    "title": "Computer and networking foundations",
+    "level": "Beginner",
+    "chapters": [
+      "comphardware",
+      "compos",
+      "compvirtual",
+      "netfund",
+      "netaddress",
+      "netservices"
+    ],
+    "labs": [
+      "01",
+      "02",
+      "03"
+    ],
+    "milestone": "Explain host versus guest, memory versus storage, IP prefixes and a local HTTP request. Continue to Linux foundations in Part 2."
+  },
+  {
+    "title": "Linux foundations",
+    "level": "Beginner",
+    "chapters": [
+      "start",
+      "files",
+      "text",
+      "access",
+      "system",
+      "packages",
+      "transfer",
+      "evidence",
+      "automation"
+    ],
+    "labs": [
+      "04",
+      "05",
+      "06"
+    ],
+    "milestone": "Navigate files, explain permissions, make a backup and run a small shell script."
+  },
+  {
+    "title": "Networking and traffic",
+    "level": "Beginner to intermediate",
+    "chapters": [
+      "network",
+      "web",
+      "netmap",
+      "discovery",
+      "packets",
+      "netwire"
+    ],
+    "labs": [
+      "07",
+      "08",
+      "09",
+      "10",
+      "11"
+    ],
+    "milestone": "Explain an address, route, port and HTTP response; connect a local request with its packet trace."
+  },
+  {
+    "title": "Programming foundations",
+    "level": "Intermediate",
+    "chapters": [
+      "pysec",
+      "jssec"
+    ],
+    "labs": [
+      "12"
+    ],
+    "milestone": "Read and modify a small Python or JavaScript program, validate JSON and handle errors."
+  },
+  {
+    "title": "Web security practice",
+    "level": "Intermediate",
+    "chapters": [
+      "webtest",
+      "codeprojects",
+      "vulnidentity",
+      "vulninput",
+      "burpweb",
+      "webtools",
+      "webcode"
+    ],
+    "labs": [
+      "13",
+      "14",
+      "15",
+      "16",
+      "17"
+    ],
+    "milestone": "Inspect a request, compare test identities and explain why an observation is or is not a vulnerability."
+  },
+  {
+    "title": "Advanced web assessment",
+    "level": "Advanced",
+    "chapters": [
+      "vulnadvanced",
+      "advweb",
+      "advassess"
+    ],
+    "labs": [
+      "18"
+    ],
+    "milestone": "Choose a focused advanced check, inspect its rule, and verify positive and negative controls."
+  },
+  {
+    "title": "Broader assessments and reporting",
+    "level": "Advanced",
+    "chapters": [
+      "audit",
+      "netsvc",
+      "shodan",
+      "metasploit"
+    ],
+    "labs": [
+      "19",
+      "20",
+      "21"
+    ],
+    "milestone": "Combine service, exposure and framework evidence into a scoped finding with a fix and a retest."
+  },
+  {
+    "title": "Advanced case studies and complete assessment",
+    "level": "Advanced",
+    "chapters": [
+      "caseapi",
+      "caseauth",
+      "caselogic",
+      "casereview",
+      "casebrowser",
+      "casethreat",
+      "caseregression",
+      "casecapstone"
+    ],
+    "labs": [
+      "22",
+      "23",
+      "24",
+      "25",
+      "26",
+      "27",
+      "28",
+      "29"
+    ],
+    "milestone": "Reproduce a synthetic finding, explain its trust boundary, verify the repair with positive and negative controls, and write a complete report."
+  }
+]

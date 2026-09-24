@@ -1,0 +1,30 @@
+{
+  "advweb": [
+    [
+      "Choose by question",
+      "Feroxbuster explores content paths, Arjun and Param Miner investigate inputs, Autorize compares identities, JWT Editor examines token handling, Dalfox focuses on XSS, mitmproxy exposes HTTP conversations and testssl.sh assesses TLS behavior. Select a specific question before choosing automation."
+    ],
+    [
+      "Control amplification",
+      "Recursion, parameter mining, retries, session replay and browser verification can multiply traffic. Set scope, concurrency, rate, time and stopping conditions. Save an unchanged baseline and watch the actual requests. Do not assume a tool with one target sends one request."
+    ],
+    [
+      "Keep identities and state separate",
+      "Use dedicated lab accounts and synthetic data. Verify the active session before interpreting a denied or successful request. Extensions may replay traffic automatically; start with a read endpoint and understand every configured trigger."
+    ]
+  ],
+  "advassess": [
+    [
+      "Four complementary views",
+      "DAST observes a running application; SAST inspects source; dependency analysis checks known component advisories; secret scanning finds credential-like patterns. None guarantees complete coverage, and a clean result from one does not settle the others."
+    ],
+    [
+      "Treat rules as code",
+      "Review request methods, destinations, matchers, local execution and callbacks in templates and plugins. Record the exact rule and tool version. Validate a known positive fixture and a negative control before relying on a custom rule."
+    ],
+    [
+      "Maintain evidence quality",
+      "Separate observed behavior, confidence and potential impact. Preserve a minimal reproduction, expected policy and test identity. Redact shared evidence, document untested features, and retest both the repaired case and normal behavior."
+    ]
+  ]
+}

@@ -1,0 +1,156 @@
+[
+  {
+    "id": "scope",
+    "chapter": "netmap",
+    "title": "Define a network assessment",
+    "concept": "Separate inventory, exposure, service configuration, segmentation and exploitation objectives. An asset list is not a statement that every test is permitted.",
+    "setup": "Record exact owned lab targets, approved protocols, source zones, timing, credentials and stop conditions. Identify fragile devices and dependencies before active probes.",
+    "workflow": "Begin with diagrams and existing inventory. Establish a baseline from one approved source, then select the smallest check answering a specific question. Keep discovery separate from vulnerability conclusions.",
+    "limits": "A reachable host may be a shared gateway, proxy or reassigned address. Verify asset identity and scope before continuing. A successful scan does not establish authorization.",
+    "tools": "Use ip, route inspection, Nmap explicit target/port selection and a flow worksheet. The supplied exercises stay on loopback or synthetic data.",
+    "retest": "Report endpoint, transport, vantage point and time. Retest the same observation after the specific configuration repair."
+  },
+  {
+    "id": "path",
+    "chapter": "network",
+    "title": "Interfaces, routes and vantage points",
+    "concept": "A connection depends on the selected interface, source address, route, listener and policy. Each source zone may see a different result.",
+    "setup": "Record the intended source interface and destination. Distinguish host loopback, VM NAT, host-only adapters and bridged networks. Avoid publishing actual workstation addresses in reports.",
+    "workflow": "Use local route and listener inspection before probing. Compare the application bind address with the destination clients use. A loopback-only service is usually inaccessible from a separate host.",
+    "limits": "No route, no listener, filtering and application rejection are different failures. A failed ping does not prove a host is down.",
+    "tools": "ip route, ip address and ss show local configuration; approved source-specific connections test the path.",
+    "retest": "Repair the incorrect bind, route or policy at the responsible layer. Retest from both an allowed and denied source."
+  },
+  {
+    "id": "discovery",
+    "chapter": "netmap",
+    "title": "Host discovery and asset confidence",
+    "concept": "Host discovery asks which addresses respond to chosen probes from a particular location. It does not prove that silent addresses are unused.",
+    "setup": "Use an exact lab inventory or reviewed narrow address set. Understand whether the source is on the same link or across a router before interpreting ARP, neighbor discovery or ICMP results.",
+    "workflow": "Start with passive inventory records when available. If active discovery is in scope, document the probe types and follow up only on approved assets. Correlate observations with authoritative inventory.",
+    "limits": "A device can block discovery probes while serving an application. NAT can aggregate many devices behind one address. Neighbor tables may contain stale entries.",
+    "tools": "Nmap discovery modes, ip neigh and managed switch inventory answer different questions. MAC-vendor information is a hint, not a verified device identity.",
+    "retest": "Correct stale inventory and remove unintended exposures. Do not scan an entire network merely to fill missing documentation."
+  },
+  {
+    "id": "ports",
+    "chapter": "discovery",
+    "title": "TCP and UDP scan interpretation",
+    "concept": "A scan reports observations about selected transport ports. Open, closed, filtered and ambiguous states depend on probe method and responses.",
+    "setup": "Select one configured service and a narrow port list. Know whether the method completes a connection and whether privileges are required. Set time and rate bounds appropriate to the lab.",
+    "workflow": "Run the explicit localhost TCP-connect example in the workbook, then stop its listener and repeat. Correlate Nmap with ss and the application state.",
+    "limits": "UDP silence can be ambiguous because services may ignore invalid requests and networks may drop replies. An open port is not by itself a vulnerability, and a port label is not confirmed software identity.",
+    "tools": "Nmap -sT uses operating-system TCP connections; reason output and server logs help explain results. Version probes send additional application data.",
+    "retest": "Close unused listeners or restrict their reachable sources. Retest the same protocol and port without assuming a TCP result describes UDP."
+  },
+  {
+    "id": "packets",
+    "chapter": "packets",
+    "title": "Capture placement and packet evidence",
+    "concept": "A packet capture shows traffic visible at one observation point. It may not show both directions or traffic on other switch ports.",
+    "setup": "Choose the correct interface and a narrow capture filter. Limit duration and packet count. Use only synthetic plaintext in a teaching capture and protect real captures as sensitive data.",
+    "workflow": "Capture the local Ncat exchange, stop collection, then analyze the saved file. Locate the handshake, payload and closure. Compare packet timestamps with application activity.",
+    "limits": "Retransmissions may indicate loss or capture artifacts; checksum offload can create misleading checksum warnings. Encrypted traffic usually exposes metadata but not application plaintext without appropriate keys.",
+    "tools": "tcpdump captures and reads; Wireshark provides interactive analysis; TShark extracts selected fields. Capture and display filters use different languages.",
+    "retest": "Preserve original capture evidence, record capture location and avoid presenting inferred application content as directly observed."
+  },
+  {
+    "id": "segmentation",
+    "chapter": "netsvc",
+    "title": "Segmentation and firewall policy testing",
+    "concept": "Segmentation is an expected communication policy between zones and services. A VLAN name or subnet diagram alone does not prove enforcement.",
+    "setup": "Create a matrix of source zone, destination asset, transport, port and expected reachability. Include management interfaces and permitted application paths.",
+    "workflow": "Test each approved row from its stated vantage point and correlate with listener state and policy logs. Compare allowed and denied cases using the same destination service.",
+    "limits": "Timeout is inconclusive without supporting evidence. A closed port cannot prove a firewall would block an active service. A successful TCP connection proves transport reachability, not successful application authorization.",
+    "tools": "The offline flow evaluator teaches pass/fail/inconclusive reasoning using synthetic evidence; it does not change firewall rules or send packets.",
+    "retest": "Repair overly broad policy, confirm required traffic still works, and preserve uncertainty where evidence cannot identify the failure layer."
+  },
+  {
+    "id": "dns",
+    "chapter": "netsvc",
+    "title": "DNS services and naming boundaries",
+    "concept": "DNS resolution, authoritative data and recursive service are distinct roles. Naming correctness and service exposure require different checks.",
+    "setup": "Identify the intended resolver, authoritative zone and whether recursion is expected for the source. Use fixture names and an owned DNS service for active testing.",
+    "workflow": "Compare an expected answer with a deliberately absent fixture name. Record response code, queried server and TTL. Inspect split-horizon behavior only from approved zones.",
+    "limits": "A cached answer can differ from current authoritative data. No answer can mean a valid empty response, NXDOMAIN, timeout or refusal; record which occurred.",
+    "tools": "dig provides structured DNS observations. A broad zone transfer attempt is unnecessary for a basic resolution check and requires explicit test scope.",
+    "retest": "Restrict unintended recursion or zone access, repair incorrect records and retest from relevant zones after accounting for caches."
+  },
+  {
+    "id": "tls",
+    "chapter": "netsvc",
+    "title": "TLS: transport protection and identity",
+    "concept": "TLS can protect data in transit, but the client must validate the peer identity and certificate trust. Encryption alone does not authorize a service operation.",
+    "setup": "Identify the expected DNS name, trust roots and whether mutual TLS is required. Preserve hostname verification instead of disabling it to make a check pass.",
+    "workflow": "On a separately configured local TLS service, inspect the handshake and verify the name and trust chain. Then check application authorization as a separate test.",
+    "limits": "An expired certificate and an unsupported protocol are different observations. SNI selects a virtual service but does not itself verify its identity.",
+    "tools": "OpenSSL s_client and curl help inspect configured TLS; testssl.sh can perform a broader approved configuration review with additional probes. No TLS server is bundled in this new lab.",
+    "retest": "Repair trust deployment, naming, expiry and obsolete configurations as appropriate. Retest using the same expected hostname and client trust policy."
+  },
+  {
+    "id": "services",
+    "chapter": "netsvc",
+    "title": "SSH, SMB and SNMP service assessment",
+    "concept": "Assess who can reach a management or file service, which identities can authenticate, and what authorized users can do. These are separate controls.",
+    "setup": "Use supplied lab credentials and minimum needed privileges. Document account lockout behavior and permitted operations; do not guess passwords as a default assessment step.",
+    "workflow": "Inspect configured algorithms and authentication policy for SSH, share permissions for SMB, and intended read scope and protection for SNMP. Compare one allowed resource with one denied resource.",
+    "limits": "A banner version may be patched by a vendor without changing its advertised version. Successful authentication does not imply administrator rights or access to every share.",
+    "tools": "OpenSSH clients, smbclient and SNMP utilities need separately configured services and credentials. The workbook provides decision guidance without inventing a working server.",
+    "retest": "Remove obsolete services, restrict management sources and reduce permissions. Retest both transport exposure and application-level authorization."
+  },
+  {
+    "id": "identity",
+    "chapter": "netsvc",
+    "title": "Directory services and identity trust",
+    "concept": "Directory-backed networks combine account identity, group membership, service permissions and trust relationships. Broad privileges can create indirect exposure.",
+    "setup": "For an authorized directory lab, define read-only inventory rights, test accounts and data handling. Separate configuration review from credential attacks.",
+    "workflow": "Map a small approved set of groups and privileged operations. Verify why a permission exists and whether inherited or nested membership changes effective access.",
+    "limits": "A graph edge or group name is not sufficient evidence of an exploitable path. Preconditions, enforcement and actual privileges must be validated.",
+    "tools": "Directory administration tools and approved read-only queries support review. Specialist relationship-mapping tools can collect sensitive data and need a defined collection scope.",
+    "retest": "Reduce unnecessary privilege, protect service accounts and document legitimate dependencies. Retest effective permissions after changes."
+  },
+  {
+    "id": "wireless",
+    "chapter": "netwire",
+    "title": "Wireless and local-link trust",
+    "concept": "Wireless enrollment, client isolation and management access are distinct security properties. Local-link protocols can influence neighbor and gateway decisions.",
+    "setup": "Use an isolated radio lab with known devices and a recovery plan. Record authentication mode, guest policy and expected client-to-client reachability.",
+    "workflow": "Review joining and ownership procedures, compare guest and management access, and inspect supplied captures. Keep active radio disruption and traffic interception outside routine configuration checks.",
+    "limits": "A strong wireless password does not prove segmentation. Seeing a beacon or neighbor announcement does not establish that its claimed identity is trusted.",
+    "tools": "Wireshark and vendor administration interfaces can support a controlled review. Monitor-mode capture depends on hardware, drivers and the intended channel.",
+    "retest": "Repair weak onboarding and overly broad reachability, then retest guest isolation and legitimate access independently."
+  },
+  {
+    "id": "vulnerabilities",
+    "chapter": "netsvc",
+    "title": "From service observation to verified vulnerability",
+    "concept": "A service fingerprint or vulnerability-feed match is a candidate finding. Confirm the affected implementation, build, configuration and reachable feature.",
+    "setup": "Record source evidence and vendor advisories. Prefer credentialed configuration or package evidence where approved, with least-privilege accounts.",
+    "workflow": "Reproduce the smallest relevant condition on a resettable lab or verify the vulnerable configuration directly. Do not infer exploitability from a generic CVE label alone.",
+    "limits": "Backported patches, disabled features and incorrect fingerprints can invalidate a match. A clean scanner result is limited by credential success and coverage.",
+    "tools": "Nmap service observations and approved vulnerability scanners provide leads; vendor records and manual validation establish applicability. Review scripts before execution.",
+    "retest": "Patch or mitigate the root cause, record residual exposure and confirm the service still performs its required function after repair."
+  },
+  {
+    "id": "measurement",
+    "chapter": "netwire",
+    "title": "Latency, throughput and availability",
+    "concept": "Latency, loss and throughput measure different properties. A loopback benchmark mostly measures local software and host resources, not a physical network path.",
+    "setup": "Use a brief bounded test with a known server and traffic budget. Avoid interpreting load-induced disruption as a useful default security test.",
+    "workflow": "Run the three-second loopback iperf3 example, record duration and rate, and explain the measurement boundary. Repeat only when the changed condition warrants comparison.",
+    "limits": "High latency can result from queueing, scheduling or a different route. Missing ICMP replies can reflect rate limiting rather than equivalent application loss.",
+    "tools": "iperf3 measures throughput; ping or controlled application timings answer narrower reachability and latency questions. Capture evidence may help explain loss.",
+    "retest": "Relate measurements to a requirement, isolate the cause and retest under comparable conditions without expanding load unnecessarily."
+  },
+  {
+    "id": "report",
+    "chapter": "netsvc",
+    "title": "Network findings and remediation verification",
+    "concept": "A useful network finding ties an unintended exposure or permission to a specific endpoint, source zone, observed behavior and business consequence.",
+    "setup": "Use a worksheet with expected policy, test method, time, evidence and uncertainty. Redact actual system addresses and credentials in shared learning material.",
+    "workflow": "Preserve original scan or capture evidence securely; summarize only needed details. Compare before and after from the same source and with the same selected service.",
+    "limits": "An unreachable service after a fix may simply be stopped. Verify that legitimate clients still succeed before claiming correct segmentation.",
+    "tools": "The supplied synthetic JSON matrix and assessment worksheet support repeatable review; they are not a substitute for live validation in an authorized environment.",
+    "retest": "Record repaired, partly repaired and inconclusive outcomes distinctly. Include remaining assumptions and a concrete next verification step."
+  }
+]

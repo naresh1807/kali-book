@@ -1,0 +1,4 @@
+{"status": 200, "path": "/"}
+{"status": 404, "path": "/missing"}
+{"status": 403, "path": "/private-fixture"}
+{"status": 200, "path": "/help"}

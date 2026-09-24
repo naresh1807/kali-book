@@ -1,0 +1,128 @@
+[
+  {
+    "id": "attack-path",
+    "title": "Build an attack path from prerequisites",
+    "mechanism": "An attack path links an entry point to a violated trust boundary and a useful capability. Discovery, access, privilege and impact are separate stages, not guaranteed steps.",
+    "prerequisites": "State attacker position, reachable services, existing credentials, required victim behavior and intended effect. A local-link attacker has different opportunities from a remote internet client.",
+    "reasoning": "For each transition, ask what the receiver trusts and what the attacker can actually control. Stop the proposed path wherever a prerequisite is missing instead of assuming success.",
+    "evidence": "A reachable port or a diagram edge is not proof that the next stage is possible. Record known, inferred and untested conditions separately.",
+    "defense": "Break the path with identity verification, scoped authorization, segmentation and monitoring. Retest the blocked transition and required legitimate behavior."
+  },
+  {
+    "id": "arp",
+    "title": "ARP spoofing and local-link interception",
+    "mechanism": "ARP maps IPv4 neighbors to link-layer addresses on a local broadcast domain. A forged mapping can redirect a host traffic to an unintended peer if the host accepts it.",
+    "prerequisites": "The attacker generally needs relevant local-link reachability or control of a component on that link. The target must accept an incorrect association and route useful traffic through it.",
+    "reasoning": "Separate mapping manipulation, traffic forwarding and application compromise. Becoming a network intermediary does not automatically defeat correctly validated TLS. A broken forwarder may cause an outage instead of interception.",
+    "evidence": "Inspect mapping changes, competing claims, switch-port identity and timing. Gateway failover or a legitimate replacement can also change the mapping.",
+    "defense": "Use appropriate ARP inspection and trusted binding policies, secure switching access and end-to-end identity checks. Validate static-host exceptions and recovery paths."
+  },
+  {
+    "id": "dhcp-ipv6",
+    "title": "Rogue DHCP and IPv6 router advertisements",
+    "mechanism": "Configuration messages can influence address assignment, DNS settings and default routes. An unintended server or router can move traffic toward an untrusted path.",
+    "prerequisites": "A receiver must accept the configuration message and use the resulting settings. IPv4 DHCP and IPv6 router discovery use different mechanisms and need separate review.",
+    "reasoning": "Trace advertisement -> accepted configuration -> selected route or resolver -> subsequent connection. Check both address families; securing only IPv4 can leave an unexpected alternate path.",
+    "evidence": "A rogue-looking announcement is not proof a client adopted it. Correlate the client configuration and traffic with trusted server/router inventory.",
+    "defense": "Apply supported DHCP snooping and router-advertisement protections with correct trusted ports. Retest legitimate enrollment, redundancy and static configurations."
+  },
+  {
+    "id": "name-resolution",
+    "title": "Name-resolution poisoning",
+    "mechanism": "When a client cannot resolve a name through its intended mechanism, a fallback protocol may accept a response from an unintended peer. The redirected connection can expose a later authentication boundary.",
+    "prerequisites": "The client must use the affected resolution path, accept the response and connect to a service of interest. Local protocols are not equivalent to poisoning every DNS resolver.",
+    "reasoning": "Follow the unresolved name, competing responses, chosen address and subsequent connection. Separate redirection from credential disclosure or successful authentication relay.",
+    "evidence": "Name-resolution packets alone do not establish that credentials were sent or a resource was accessed. Misconfigured legitimate software can generate similar queries.",
+    "defense": "Remove unneeded fallback resolution, maintain reliable intended DNS, verify service identity and constrain authentication. Validate operational dependencies before disabling protocols."
+  },
+  {
+    "id": "relay",
+    "title": "Authentication relay versus replay",
+    "mechanism": "Relay forwards a live authentication exchange to another service; replay reuses previously captured material. Challenge-response mechanisms can prevent simple replay yet remain vulnerable to relay in some deployments.",
+    "prerequisites": "The target must accept the forwarded authentication in that context and grant a useful operation. Service binding, signing requirements and protocol-specific protections influence feasibility.",
+    "reasoning": "Model who authenticates to whom, which identity the destination sees and what operation becomes available. Relay does not necessarily disclose the underlying password.",
+    "evidence": "A captured authentication message is not proof of target acceptance. Required SMB signing protects SMB integrity; other protocols require their own binding and protection review.",
+    "defense": "Require supported signing, channel/service binding or extended protections where appropriate, reduce legacy authentication and scope privileges. Validate the exact target protocol and deployment."
+  },
+  {
+    "id": "credentials",
+    "title": "Password attacks and exposed credentials",
+    "mechanism": "Online guessing, password spraying, credential stuffing and offline guessing use different inputs and produce different telemetry. Reused or exposed credentials may bypass the need to exploit a service.",
+    "prerequisites": "Online testing needs an explicit account list, lockout knowledge and request budget. Credential validity, privilege and target reachability are separate prerequisites.",
+    "reasoning": "Use synthetic authentication logs to compare many guesses against one account, one candidate across many accounts, and ordinary user mistakes. Evaluate the sequence and account impact.",
+    "evidence": "A few failures do not prove an attack; a successful login does not identify the physical operator. Log coverage and clock alignment affect interpretation.",
+    "defense": "Use strong authentication, MFA where supported, exposure response, appropriate rate controls and account monitoring. Test detection with approved synthetic events rather than real-user guessing."
+  },
+  {
+    "id": "vlan",
+    "title": "VLAN and trunk trust failures",
+    "mechanism": "VLANs separate Layer 2 domains when switch ports and trunks are correctly configured. Unexpected trunking or tagging behavior can undermine intended boundaries in some designs.",
+    "prerequisites": "Feasibility depends on switch behavior, port configuration, native VLAN treatment and the specific topology. A generic VLAN-hopping claim is not valid for every switch.",
+    "reasoning": "Review access versus trunk roles, negotiated behaviors and permitted VLAN lists. Identify the exact path a frame would take and whether a return path exists.",
+    "evidence": "A tagged frame in a capture is not proof of crossing an unauthorized boundary. A routing rule can legitimately connect VLANs and must be assessed separately.",
+    "defense": "Explicitly configure port roles, constrain trunks, isolate management and validate routing/firewall policy. Use a dedicated switch lab for any active tagging experiment."
+  },
+  {
+    "id": "routing",
+    "title": "Routing manipulation and source spoofing",
+    "mechanism": "A forged source address changes a packet claim, not the sender actual return path. Routing manipulation changes where traffic travels and can affect availability or observation.",
+    "prerequisites": "Source-spoofed exchanges often cannot receive replies without control of the path. Routing attacks depend on adjacency, policy or infrastructure compromise; local route changes and interdomain route leaks are different cases.",
+    "reasoning": "Separate packet-origin validation, route acceptance and application identity. Inspect why an advertised route was accepted and whether it changed forwarding.",
+    "evidence": "A route change can be legitimate failover. RPKI origin validation helps assess route origins but does not by itself validate every property of an entire path.",
+    "defense": "Use appropriate source validation, authenticated control-plane relationships and route policy. Multihoming and asymmetric paths need careful validation to avoid blocking legitimate traffic."
+  },
+  {
+    "id": "dns",
+    "title": "DNS integrity, redirection and tunneling indicators",
+    "mechanism": "Resolver compromise, unauthorized record changes and forged answers are distinct ways naming can misdirect clients. DNS can also carry unexpected data, but unusual names alone do not establish a covert channel.",
+    "prerequisites": "Identify resolver trust, caching, authoritative control and whether the client validates the destination service identity. Determine which logs retain queries and responses.",
+    "reasoning": "Compare an unexpected answer with authoritative data, resolver configuration and subsequent connections. Review query patterns in context without decoding or publishing sensitive content.",
+    "evidence": "DNSSEC authenticates covered DNS data when validation succeeds; it does not encrypt queries or make a destination benign. Encrypted DNS protects a transport path but does not solve endpoint compromise.",
+    "defense": "Protect resolver and zone administration, validate where appropriate, enforce necessary egress policy and correlate DNS with host evidence. Retest legitimate split-horizon behavior."
+  },
+  {
+    "id": "lateral",
+    "title": "Lateral movement and remote-management abuse",
+    "mechanism": "Lateral movement uses reachable services and sufficient credentials or vulnerabilities to act on another system. Legitimate administration tools can be used for legitimate or unauthorized activity.",
+    "prerequisites": "A path requires source access, destination reachability, accepted identity and permission for the desired operation. A tunnel can alter reachability without creating application authorization.",
+    "reasoning": "Draw each hop with its account, service and permitted operation. Identify where shared credentials or broad administrative groups make the path wider than intended.",
+    "evidence": "A remote-management process or SSH session alone is not malicious. Compare account, target, time and action against approved activity.",
+    "defense": "Reduce shared privilege, restrict management sources, isolate service accounts and record remote actions. Test account revocation and existing-session termination separately."
+  },
+  {
+    "id": "availability",
+    "title": "Denial of service: resource models",
+    "mechanism": "Availability attacks can exhaust bandwidth, connection state, CPU, memory or application work queues. Reflection and amplification depend on third-party behavior and often forged source addresses.",
+    "prerequisites": "Identify the limiting resource and the legitimate service requirement. A high-volume test can create operational harm without proving a useful repair.",
+    "reasoning": "Use an offline resource model or documented counters to explain arrival rate, service rate and capacity. Plan any real capacity test as a separate controlled performance exercise.",
+    "evidence": "A timeout does not locate the bottleneck. One service failure may result from an upstream dependency, client limit or measurement artifact.",
+    "defense": "Constrain exposed services, apply source validation and suitable rate/capacity controls, and plan upstream protection where required. Avoid treating a successful flood as a necessary demonstration."
+  },
+  {
+    "id": "wireless-attacks",
+    "title": "Wireless impersonation and enrollment trust",
+    "mechanism": "A copied network name can resemble a trusted wireless network without establishing the same identity. Management and enrollment weaknesses can expose traffic or availability.",
+    "prerequisites": "Client selection, authentication mode, certificate validation and proximity determine the relevant conditions. A visible duplicate name is not enough to establish successful impersonation.",
+    "reasoning": "Review which identity a client verifies and how it chooses a network. Compare approved onboarding with a configuration that lacks the intended validation in a dedicated lab.",
+    "evidence": "Radio interference and roaming can resemble disruption. Protected management features do not replace proper authentication or segmentation.",
+    "defense": "Use appropriate enterprise validation or protected credentials, controlled provisioning, guest isolation and monitoring. Do not run disruption or deauthentication tests on shared radio space."
+  },
+  {
+    "id": "detection",
+    "title": "Detection engineering and false positives",
+    "mechanism": "A detection maps observations to a hypothesis. It should state required data, expected signal, alternative explanations and a validation procedure.",
+    "prerequisites": "Define which packets, switch logs, authentication events or endpoint records are needed and verify collection actually works. Use synthetic fixtures with known outcomes.",
+    "reasoning": "Correlate a configuration anomaly with the affected connection and action. Add a negative control such as legitimate gateway failover, administrative maintenance or user password mistakes.",
+    "evidence": "Technique labels are not verdicts. Absence of alerts may mean missing telemetry, not absence of activity; several tools can reflect the same underlying event.",
+    "defense": "Measure coverage and false positives, document blind spots and preserve evidence. Retest after control changes and validate permitted activity still works."
+  },
+  {
+    "id": "tool-choice",
+    "title": "Tools: observe, model and validate",
+    "mechanism": "Choose a tool by the question: packet meaning, route state, service identity, policy decision or endpoint behavior. Its output must be interpreted within that scope.",
+    "prerequisites": "Use approved captures and synthetic logs first. Distinguish offline parsing from active discovery, packet generation, poisoning and credential operations.",
+    "reasoning": "Wireshark/TShark inspect evidence; Nmap checks selected reachable services; Scapy can parse saved packets or generate traffic, which are different activities. Match the tool mode to the exercise.",
+    "evidence": "Responder, Bettercap and Impacket include capabilities that can alter network behavior or interact with authentication. Naming a tool does not establish that every mode is suitable for a given lab.",
+    "defense": "Use a separately scoped isolated environment for active validation, record versions and exact behavior, and restore it afterward. This addition provides offline analysis commands and tabletop exercises."
+  }
+]

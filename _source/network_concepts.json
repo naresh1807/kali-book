@@ -1,0 +1,104 @@
+{
+  "netmap": [
+    [
+      "01 / Learning path and coverage",
+      "Start with interfaces, routes and explicit scope. Continue with discovery, port assessment, traffic analysis, service configuration, segmentation and retesting. This is a practical selection of common tools, not every Kali package or option. Chapter 19 already contains the detailed Nmap reference; Chapter 37 covers Metasploit."
+    ],
+    [
+      "02 / Build the correct lab",
+      "Use loopback for the supplied text and performance labs. For multi-VM exercises, configure a dedicated Internal Network or controlled host-only network and verify addresses. Host-only includes the host; NAT provides outbound access; bridged networking joins the physical LAN. A private address does not establish test authorization."
+    ],
+    [
+      "03 / Layers and identifiers",
+      "Ethernet moves frames on a local link, IP routes packets between networks, and TCP/UDP ports identify transport endpoints. DNS names can point to several addresses, and one address can host several applications. Keep MAC, IP, port and service identity separate in your notes."
+    ],
+    [
+      "04 / CIDR and scope",
+      "CIDR expresses a prefix length, not a count of discovered hosts. A /24 spans 256 IPv4 addresses, with conventional subnet host-use restrictions. Inventory the exact approved addresses, exclusions and protocols before expanding a range. IPv6 address spaces need explicit asset discovery rather than blindly enumerating all addresses."
+    ],
+    [
+      "05 / TCP, UDP and scan states",
+      "TCP handshakes and resets give useful state evidence; UDP often provides no reply to an unsuitable request. Open means a service may accept traffic; filtered means probes could not settle the state. An open port is exposure, not automatically a vulnerability. Check the existing Nmap glossary for each reported state."
+    ],
+    [
+      "06 / Vantage points and asymmetry",
+      "A result depends on where the test runs. Routes, NAT, ACLs and security groups can change reachability. A forward path may differ from the return path. Record source interface and address as well as destination so another tester can reproduce the result."
+    ],
+    [
+      "07 / IPv6 coverage",
+      "IPv4 restrictions do not automatically apply to IPv6. Review IPv6 listeners, routes and policies separately. Link-local destinations may need an interface zone identifier. ARP tools cannot replace IPv6 Neighbor Discovery analysis, and absence from an IPv4 scan says nothing about IPv6 exposure."
+    ],
+    [
+      "08 / Masscan and fast discovery",
+      "Masscan emphasizes asynchronous port discovery over detailed assessment. Its separate packet stack and high potential rate require careful planning. Inspect its configuration and use a small approved target set with a deliberate rate; confirm interesting results with a focused service check. Speed is not a measure of finding quality."
+    ]
+  ],
+  "netwire": [
+    [
+      "01 / Capture versus display filters",
+      "Capture filters reduce what is saved, for example tcp port 9099. Wireshark display filters select from already captured packets, for example tcp.port == 9099. Their syntax differs. A display filter does not remove hidden packets from the original file or sanitize an export."
+    ],
+    [
+      "02 / What your interface can see",
+      "On a switched network, an ordinary host normally sees its own traffic plus relevant broadcast/multicast traffic. Promiscuous mode does not magically reveal every switch port. Use an approved mirror port or tap when a wider capture is required. Loopback traffic must be captured on the loopback interface."
+    ],
+    [
+      "03 / TCP analysis beyond the handshake",
+      "Sequence numbers track byte order; acknowledgments confirm received data. Retransmissions can arise from loss or missing acknowledgments; zero windows concern receiver capacity. Offload features and dropped capture packets can distort a trace. Correlate both endpoints before attributing a failure to the network."
+    ],
+    [
+      "04 / Latency, jitter, loss and bandwidth",
+      "Latency is delay, jitter is delay variation, loss is missing traffic, and throughput is delivered data per time. They measure different behavior. Limit the duration and offered rate of tests. A fast loopback result does not describe Wi-Fi, disk throughput, or a routed network path."
+    ],
+    [
+      "05 / Packet crafting and state",
+      "Scapy constructs and parses packets; Nping and Hping3 generate selected probes. Raw packets may not correspond to a normal operating-system connection, so kernel resets and missing socket state can affect results. Begin with packet construction offline, then use a few local probes and inspect the capture."
+    ],
+    [
+      "06 / MTU and fragmentation",
+      "An MTU limits packet size on a link; path MTU depends on the route. Blocked control messages and encapsulation overhead can make large transfers fail while small pings work. Diagnose with endpoint observations and controlled size changes. Do not treat one failed packet size as proof of a particular firewall rule."
+    ],
+    [
+      "07 / Interception tool families",
+      "Bettercap and similar frameworks combine network discovery and interception features. Some modules alter neighbor relationships or traffic flow and can disrupt other hosts. Learn the trust failure using isolated synthetic traffic and owner-approved controls; packet observation does not require activating traffic manipulation."
+    ],
+    [
+      "08 / Wireless is a separate test surface",
+      "Aircrack-ng tools concern wireless traffic and security. A VirtualBox Ethernet adapter does not provide radio monitor mode; a supported adapter and guest access are separate prerequisites. Assess only your own access point and clients, checking encryption, credentials, guest isolation and firmware. Wired findings do not establish wireless coverage."
+    ]
+  ],
+  "netsvc": [
+    [
+      "01 / Protocol-aware assessment",
+      "Choose a tool for the service and the question: dig for DNS, smbclient for SMB access, Net-SNMP for managed objects, ssh-audit for SSH algorithms, and OpenSSL for TLS. A generic port check cannot establish authentication, authorization or protocol configuration."
+    ],
+    [
+      "02 / Windows enumeration tools",
+      "enum4linux-ng gathers Windows/Samba information; NetExec supports assessments across several network protocols. Their options can initiate authentication and other active operations. Choose narrowly scoped read-only questions, use dedicated test identities, and inspect current help. Do not assume a broad default enumeration is passive or necessary."
+    ],
+    [
+      "03 / Identity protocols and relay concepts",
+      "DNS, time synchronization, Kerberos, LDAP and SMB interact in domain environments. Name-resolution spoofing and authentication relay exploit trust assumptions between components. Review signing, channel binding, protected name resolution and credential policy. Confirm each mitigation against the actual protocol path rather than a single generic setting."
+    ],
+    [
+      "04 / Credentials and lockout",
+      "Authenticated assessment uses credentials intentionally supplied for the task. Confirm role, lockout thresholds, test window and secret storage before automated logins. A failed login may indicate syntax, realm or time problems. Credential guessing and repeated retries are not substitutes for diagnosing those prerequisites."
+    ],
+    [
+      "05 / Vulnerability scanners and confidence",
+      "Greenbone/OpenVAS and other vulnerability scanners aggregate checks, evidence and severity. Feed freshness, scan configuration and authentication success affect coverage. Severity describes potential impact; confidence describes evidential strength. Review false positives, vendor backports and unreachable services before assigning remediation."
+    ],
+    [
+      "06 / TLS, certificates and service identity",
+      "Encryption, certificate trust and hostname validation answer different questions. A certificate can be trusted for the wrong name, or correct for the name but untrusted by a particular client. SNI influences which certificate/service is selected. Check chain, hostname, validity and negotiated protocol together."
+    ],
+    [
+      "07 / Segmentation and management planes",
+      "Separate user, server and management access according to intended flows. Confirm listening services first, then compare approved source zones and both IP families. A VPN or tunnel changes the path and possibly the applicable policy; document it instead of treating tunnel access as proof of direct reachability."
+    ],
+    [
+      "08 / Evidence and remediation",
+      "Record scope, vantage point, timestamp, tool version, exact options, observations and uncertainty. Keep an original capture and a minimal redacted sharing copy. After a fix, retest both the previously failing security requirement and a legitimate allowed use case so the repair does not silently break service."
+    ]
+  ]
+}

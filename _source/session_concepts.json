@@ -1,0 +1,82 @@
+[
+  {
+    "id": "fundamentals",
+    "title": "What session hijacking means",
+    "basic": "A session lets an application recognize a user across requests. In a bearer-token design, possession of a valid token can be sufficient to act within that session.",
+    "intermediate": "Session hijacking is unauthorized use of another user session. It differs from guessing a password, although either can lead to account compromise.",
+    "advanced": "A login protected by MFA can still issue a bearer session afterward. Evaluate how subsequent requests and sensitive actions are authenticated.",
+    "practice": "Draw browser, application and session store. Label the credential used for login separately from the session token used afterward."
+  },
+  {
+    "id": "lifecycle",
+    "title": "Session lifecycle and trust boundaries",
+    "basic": "Follow anonymous browsing, login, authenticated requests, privilege changes, logout and expiration.",
+    "intermediate": "For each transition, record which identifier changes and which server-side permission state is retained.",
+    "advanced": "A renewed browser cookie does not prove that the previous token was invalidated. Check old and new states against a protected endpoint.",
+    "practice": "Build a table with transition, old token accepted, new token accepted and expected identity. Use only synthetic lab accounts."
+  },
+  {
+    "id": "fixation",
+    "title": "Session fixation versus token theft",
+    "basic": "Fixation involves an identifier known or influenced before a victim authenticates. Token theft involves obtaining an already authenticated credential.",
+    "intermediate": "Authentication should not elevate a pre-login identifier that remains usable by another party. Rotate the session identifier at the authentication boundary.",
+    "advanced": "An identifier change alone is insufficient if the former identifier still reaches authenticated state. Check invalidation and identity binding together.",
+    "practice": "In your own fixture, compare the pre-login identifier with the authenticated identifier and verify the former has no authenticated access."
+  },
+  {
+    "id": "exposure",
+    "title": "How session credentials become exposed",
+    "basic": "Exposure can occur through insecure transport, script-accessible storage, accidental logs, URLs or compromised browser components.",
+    "intermediate": "Inventory token locations without copying real values into reports. Review telemetry, analytics, error messages and debugging exports for accidental disclosure.",
+    "advanced": "A leaked credential is sensitive even if it looks random or is signed. Signing usually does not make the contents confidential or prevent bearer replay.",
+    "practice": "Use a clearly fake token in a local logging fixture and verify that logs redact it. Never publish real cookies in screenshots or examples."
+  },
+  {
+    "id": "cookies",
+    "title": "Cookie controls and their limits",
+    "basic": "Secure restricts cookie transmission to secure contexts under browser rules. HttpOnly prevents ordinary page JavaScript from reading the cookie.",
+    "intermediate": "SameSite limits some cross-site cookie sending. Choose scope and attributes according to the application flow; test login redirects and embedded flows.",
+    "advanced": "HttpOnly does not prevent injected script from issuing actions in the current browser session. Cookie flags do not replace server-side authorization.",
+    "practice": "Review Set-Cookie in your lab browser developer tools. Record the attributes and purpose while redacting the value."
+  },
+  {
+    "id": "csrf-xss",
+    "title": "Distinguish hijacking, XSS and CSRF",
+    "basic": "XSS executes unwanted script in an application context. CSRF induces unwanted authenticated requests from a browser. Neither necessarily requires reading a session token.",
+    "intermediate": "Keep separate findings for token disclosure, unintended actions and missing object authorization. Their evidence and repairs differ.",
+    "advanced": "One control may reduce several risks without resolving all of them. Test the specific security property rather than treating any one cookie flag as complete protection.",
+    "practice": "Write three fictional findings: exposed token, forged state-changing request and another user record returned. Assign the appropriate control to each."
+  },
+  {
+    "id": "expiry",
+    "title": "Expiration, logout and revocation",
+    "basic": "A session should stop granting access when its server-enforced validity ends. Closing a browser is not a reliable revocation test.",
+    "intermediate": "Distinguish idle timeout from absolute lifetime. After logout, check that the former lab credential is rejected by the protected service.",
+    "advanced": "In distributed systems, caches and replication can delay invalidation. Measure the observed window and compare it with the documented policy.",
+    "practice": "Record access before logout, immediately afterward and after the expected propagation interval; do not infer access solely from a cached page."
+  },
+  {
+    "id": "tokens",
+    "title": "Opaque sessions, JWTs and refresh tokens",
+    "basic": "An opaque session identifier typically references server-side state. A self-contained signed token carries claims that a verifier must validate.",
+    "intermediate": "Validate issuer, audience, expiry and signature according to the chosen design. A refresh token is a separate credential with its own lifecycle.",
+    "advanced": "Stateless validation makes immediate revocation a design problem. Refresh rotation can detect reuse only when corresponding state and race handling exist.",
+    "practice": "Document whether logout revokes server sessions, access tokens, refresh tokens or only clears one browser cookie. Explain any remaining validity window."
+  },
+  {
+    "id": "detection",
+    "title": "Detection and incident response",
+    "basic": "Monitor session creation, renewal, revocation and suspicious use without recording raw tokens.",
+    "intermediate": "A sudden location or device change can justify investigation or step-up authentication, but is not conclusive evidence of hijacking.",
+    "advanced": "Mobile networks, shared gateways and privacy tools can change signals. Balance detection with false positives and avoid relying on IP binding as the sole defense.",
+    "practice": "For a fictional exposed token: revoke affected sessions, investigate the disclosure source, repair it and verify that replacement credentials are protected."
+  },
+  {
+    "id": "testing",
+    "title": "Authorized test workflow and reporting",
+    "basic": "Use an isolated application and two accounts you control. Define the expected session policy before testing.",
+    "intermediate": "With browser developer tools or Burp Repeater scoped to your own lab, inspect login rotation, logout invalidation, expiry and the identity returned by a protected endpoint.",
+    "advanced": "Check status, response content and actual server-side identity. A 200 response may be a login page; redirects and caches can disguise denial or success.",
+    "practice": "Record token labels such as OLD-A and NEW-A instead of values. Report minimal reproduction, affected transition, expected versus observed identity, remediation and retest."
+  }
+]

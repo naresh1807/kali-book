@@ -1,0 +1,82 @@
+[
+  {
+    "id": "models",
+    "title": "Remote access: what is being granted?",
+    "basic": "Remote access can provide a terminal, desktop, file transfer, application session or routed network path. These grant different capabilities and require different controls.",
+    "intermediate": "Draw client, identity provider, gateway and target resource. Separate transport reachability, authenticated identity and permitted operations.",
+    "advanced": "Choose the narrowest access needed for the job. A successful VPN connection must not automatically grant administrator rights or access to every internal service.",
+    "practice": "Compare an SSH terminal, RDP desktop and application gateway in a worksheet: user, target, operation, authentication and revocation."
+  },
+  {
+    "id": "ssh",
+    "title": "SSH: encrypted terminal and server identity",
+    "basic": "SSH provides encrypted remote sessions and additional channels such as file transfer or forwarding when permitted by the server.",
+    "intermediate": "Verify the server host-key fingerprint through a trusted independent channel. User authentication and host authentication solve different problems.",
+    "advanced": "Investigate an unexpected host-key change; do not routinely delete known-host entries or disable checking. Limit server reachability and permitted account actions.",
+    "practice": "The supplied SSH configuration points only to a separately configured loopback lab server on port 2222. Its inspection command does not connect."
+  },
+  {
+    "id": "keys",
+    "title": "Keys, passwords, MFA and credential handling",
+    "basic": "A public key can be authorized by a server; the corresponding private key must remain protected. A host key identifies a server, while a user key authenticates a client.",
+    "intermediate": "Use individual identities, protect private keys and use appropriate passphrases or hardware-backed credentials. Plan MFA or other additional checks where the access platform supports them.",
+    "advanced": "Agent forwarding exposes use of the agent through another host and should not be enabled by default. A key pair is not automatically MFA, and an SSH key does not expire unless the surrounding policy implements expiry or certificates.",
+    "practice": "Inventory who can use each lab account and how access is revoked. Never put passwords or private keys into shared command examples."
+  },
+  {
+    "id": "rdp",
+    "title": "RDP, VNC and graphical sessions",
+    "basic": "Remote desktop tools expose an interactive graphical session. Clipboard, device and drive redirection can move data across the session boundary.",
+    "intermediate": "Verify the server identity, allowed users and resource redirection policy. Use supported clients and the intended gateway or VPN path. Authentication features differ between implementations.",
+    "advanced": "Network Level Authentication performs authentication before a full RDP session is established; it is not the same as MFA. VNC protection depends on the implementation and configuration.",
+    "practice": "Use a separately configured owned Windows lab host. Check denied accounts and unnecessary clipboard/drive access as well as a legitimate login; no RDP or VNC service is enabled by this book."
+  },
+  {
+    "id": "vpn",
+    "title": "VPNs: encryption, routes and access policy",
+    "basic": "A VPN creates a protected path between peers or networks. Routing determines which traffic uses it; firewall and application rules still determine permitted access.",
+    "intermediate": "Compare split tunneling with full tunneling. Document DNS behavior, IPv4 and IPv6 routes, endpoint trust and the intended internal destinations.",
+    "advanced": "WireGuard peer AllowedIPs participates in destination selection and accepted source-address checks; it is not an application authorization rule. Route installation also depends on the client or helper configuration.",
+    "practice": "Review an approved WireGuard or OpenVPN profile with the administrator. Test one allowed service and one denied service; a handshake alone is not proof of correct policy."
+  },
+  {
+    "id": "gateways",
+    "title": "Bastions, jump hosts and access gateways",
+    "basic": "A bastion provides an intermediate access point; an application gateway may authorize access to individual resources rather than a whole network.",
+    "intermediate": "Document which identities may reach the gateway and which targets they may access afterward. Restrict outbound access from the gateway and protect its administration.",
+    "advanced": "A jump host adds a boundary but does not remove the need to verify the final host or protect credentials. Centralization can simplify auditing while concentrating availability and compromise risk.",
+    "practice": "Draw user -> gateway -> selected server. Evaluate both gateway compromise and gateway outage; define how access can be revoked and recovered."
+  },
+  {
+    "id": "forwarding",
+    "title": "SSH local forwarding: follow both endpoints",
+    "basic": "A local SSH forward accepts a connection on the client and carries it through SSH to a destination reached from the SSH server.",
+    "intermediate": "Bind the client listener to loopback when only the client needs it. Confirm the server permits forwarding and the destination is explicitly approved.",
+    "advanced": "The destination 127.0.0.1 is evaluated on the SSH server side, not necessarily on the client. Forwarding changes reachability; it does not add application authentication. Avoid forwarding unintended management services.",
+    "practice": "The workbook maps client port 8899 to a fictional HTTP service on server-side port 8910. ExitOnForwardFailure checks forward setup, not every later destination connection."
+  },
+  {
+    "id": "files",
+    "title": "Remote file transfer and integrity",
+    "basic": "SFTP transfers files through SSH. Its permissions and path access still depend on the remote account and server policy.",
+    "intermediate": "Verify host identity and use a dedicated lab folder with synthetic files. Decide which transfers are allowed and protect sensitive local outputs.",
+    "advanced": "A transfer success does not prove provenance. Compare an independently trusted digest when integrity matters. Restrict accounts to required paths and operations where supported.",
+    "practice": "Use the supplied SFTP command only after configuring the local SSH lab. Compare a permitted file operation with an explicitly denied path."
+  },
+  {
+    "id": "lifecycle",
+    "title": "Least privilege, logging and revocation",
+    "basic": "Remote access should be attributable to an individual and limited in resource, privilege and duration. Service identities require their own scoped policy.",
+    "intermediate": "Record session starts, authentication outcomes, target resource and administrative changes without logging reusable secrets. Define approval and expiry for temporary access.",
+    "advanced": "Disabling an account or key may not terminate an already established session. Revoke credentials and active sessions according to the platform, and verify the result.",
+    "practice": "Test login denial after revocation and separately test whether an existing lab session remains usable. Document idle timeouts, absolute limits and emergency recovery procedures."
+  },
+  {
+    "id": "troubleshooting",
+    "title": "Diagnose remote access one layer at a time",
+    "basic": "Distinguish name resolution, route, transport connection, host verification, user authentication and resource authorization. Each has different evidence.",
+    "intermediate": "Check the intended endpoint and port, local route and server listener before changing authentication settings. Preserve useful error messages while redacting personal details.",
+    "advanced": "A timeout is not proof of a wrong password. Permission denied after a completed SSH handshake is different from a refused TCP connection. Do not weaken certificate or host-key validation to hide a configuration error.",
+    "practice": "Use SSH verbose output in a controlled lab, noting that it can reveal paths and identifiers. Retest both intended access and explicitly denied access after a repair."
+  }
+]

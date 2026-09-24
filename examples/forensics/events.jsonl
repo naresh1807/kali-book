@@ -1,0 +1,3 @@
+{"id": "evt-2", "source": "application-fixture", "timestamp": "2026-01-10T10:32:00+05:30", "event": "Synthetic file export recorded"}
+{"id": "evt-1", "source": "auth-fixture", "timestamp": "2026-01-10T05:00:00Z", "event": "Synthetic sign-in recorded"}
+{"id": "evt-3", "source": "audit-fixture", "timestamp": "2026-01-10T05:02:00+00:00", "event": "Synthetic audit record at the same normalized time"}

@@ -1,0 +1,407 @@
+{
+  "start": {
+    "basic": "A command line is input to an interpreter. The terminal displays text; the shell parses it. Separate the program name, options and positional arguments before running a command. Learn the current directory and installed help first.",
+    "intermediate": "Quoting changes interpretation. Single quotes preserve literal text; double quotes still allow parameter expansion. Standard input, output and error are separate streams, so useful results and errors may travel different paths.",
+    "advanced": "Understand expansion, argument boundaries and exit status before automating. A pipeline can hide an earlier failure unless status handling is designed carefully. Command text assembled from external strings is code, not ordinary data.",
+    "example": "annual report.txt is one filename. Passing it without quotes can produce two arguments. Compare the argument structure before assuming the file is missing.",
+    "mistake": "Python syntax pasted into Bash does not execute Python automatically.",
+    "question": "Why should a path variable usually be quoted?",
+    "answer": "Quoting preserves spaces and wildcard characters as part of one argument instead of allowing unintended splitting or filename expansion."
+  },
+  "files": {
+    "basic": "A path identifies a location in a filesystem namespace. Absolute paths begin at the root; relative paths depend on the working directory. Directories contain names referring to filesystem objects.",
+    "intermediate": "A hard link names the same underlying file; a symbolic link stores a path to resolve. Moving within one filesystem often changes directory entries; moving across filesystems generally copies then removes.",
+    "advanced": "File identity and path identity can diverge. A process may keep an open file after its name is removed. A path can change between checking it and using it, so secure programs need suitable file APIs and boundary checks.",
+    "example": "Two hard links show the same edited contents. Removing one name does not remove the remaining name or close another process open handle.",
+    "mistake": "A filename extension does not verify actual content.",
+    "question": "Why can disk usage stay high after deleting a large log?",
+    "answer": "A process may still hold it open. Space is normally reclaimed when the final relevant reference is released."
+  },
+  "text": {
+    "basic": "Text tools transform streams into answers. Identify the format first: lines, delimited records and JSON need different parsing strategies. Preserve the original input before transformation.",
+    "intermediate": "Filtering selects records, extraction chooses fields and aggregation combines them. Encoding, delimiters and line endings affect results. A regular expression is not automatically a parser for structured nested data.",
+    "advanced": "Specify what counts as a record, how malformed input is handled and whether ordering matters. Check each stage with a small known fixture before using a large dataset.",
+    "example": "A log has three successes and two failures. Searching for fail also matches a URL containing that word; using the structured status field gives a more meaningful count.",
+    "mistake": "A text match is not necessarily a semantic match.",
+    "question": "How would you validate a counting pipeline?",
+    "answer": "Use known counts, misleading words and malformed records, then compare actual and expected outcomes."
+  },
+  "access": {
+    "basic": "Access control decides whether an identity may operate on a resource. Linux permissions separate owner, group and others. Directory permissions govern listing, traversal and entry changes.",
+    "intermediate": "Effective access can also depend on ACLs, mount options and mandatory controls. File write permission is different from permission to replace its directory entry.",
+    "advanced": "Apply least privilege to the operation. A service should receive only required file, network and process privileges. Review temporary files, inherited environment and privilege changes as part of the boundary.",
+    "example": "A directory writer with traversal access may remove a file entry even if the file itself is not writable, subject to controls such as the sticky bit.",
+    "mistake": "Running everything with sudo hides the original permission problem.",
+    "question": "What evidence is needed before fixing a permission error?",
+    "answer": "Record identity, exact operation, path-component permissions and additional controls, then change only the missing permission."
+  },
+  "system": {
+    "basic": "CPU time, working memory and storage are separate resources. Measure the specific workload while it is slow rather than judging an idle snapshot.",
+    "intermediate": "Available memory is more informative than simply unused memory because cache can often be reclaimed. Filesystem free space and I/O delay measure different properties.",
+    "advanced": "Build a baseline and compare changes under similar conditions. A bottleneck can move after a repair. Distinguish sustained saturation from brief bursts and correlate timing across resources.",
+    "example": "A VM has low CPU use but waits repeatedly for storage. Adding virtual CPUs will not directly remove storage waits; inspect both host and guest evidence.",
+    "mistake": "One high utilization number does not explain every slow task.",
+    "question": "Why inspect the host as well as the guest?",
+    "answer": "Guests share physical resources with host processes and other VMs, so contention may originate outside the guest."
+  },
+  "packages": {
+    "basic": "A package manager tracks installed files and dependencies. A service manager controls background processes. Installation and runtime health are separate states.",
+    "intermediate": "Repositories define available packages and trusted metadata. Updates can change dependencies and configuration. Service logs explain failures an installation success message cannot.",
+    "advanced": "Plan a recovery path and verify behavior after a change. Record versions and configuration differences. Running processes may need restarting to use updated code, depending on the component.",
+    "example": "A web server installs but fails to start because its port is occupied. Inspect the service error and listener rather than reinstalling blindly.",
+    "mistake": "Installed does not mean enabled, running or reachable.",
+    "question": "What should you record before updating a service?",
+    "answer": "Version, configuration, known working behavior and recoverable data, followed by equivalent checks after updating."
+  },
+  "transfer": {
+    "basic": "A backup must restore the data you need. Define what to recover and from what time. An archive groups files but may still sit on the same disk as the original.",
+    "intermediate": "Remote identity, transfer integrity and confidentiality are separate goals. Authentication identifies the peer; hashes compare bytes; encryption protects data in transit. Preserve required metadata.",
+    "advanced": "Define recovery objectives and test them. Recovery point concerns tolerable data loss in time; recovery time concerns restoration delay. Synchronizing a deletion can remove both copies.",
+    "example": "If source and archive share one failed SSD, neither is available. An independent backup addresses a different failure mode from a local VM snapshot.",
+    "mistake": "A completed copy does not prove recoverability.",
+    "question": "What makes a restore test meaningful?",
+    "answer": "Restore to a separate location, verify content and permissions, and check that the consuming application can use the data."
+  },
+  "evidence": {
+    "basic": "Evidence is an observation with context. Record where it came from, when it was collected and which action produced it. Preserve originals before analysis.",
+    "intermediate": "A hash summarizes bytes. Matching strong hashes support integrity comparisons but do not establish authorship or truth. Metadata may be incomplete or modified.",
+    "advanced": "Record versions, time zones and transformations so analysis can be repeated. Keep raw and derived artifacts distinct. Consider whether collection changed the environment or missed events.",
+    "example": "Two captures disagree because they observed different interfaces. Their timestamps and collection positions are part of the explanation.",
+    "mistake": "A screenshot without request context may show a symptom without proving its cause.",
+    "question": "What should accompany an HTTP response in a finding?",
+    "answer": "Target, request conditions, identity, time, response evidence, interpretation and limitations."
+  },
+  "automation": {
+    "basic": "A script makes repeatable steps explicit. Begin with clear inputs, outputs and stop conditions. Functions help isolate tasks and explain failures.",
+    "intermediate": "Validate input, quote arguments and check operations that can fail. Prefer an argument list when invoking a subprocess instead of constructing shell code from external text.",
+    "advanced": "Reliable automation is bounded. Define retries, timeouts and partial-failure handling. An idempotent operation can be repeated without unintended additional effects; not every action has that property.",
+    "example": "A script builds a temporary report and replaces the final file only after success. Readers avoid mistaking partial output for a complete result.",
+    "mistake": "A script reaching its end does not prove every subprocess succeeded.",
+    "question": "When should an operation be retried?",
+    "answer": "Only when its failure and side-effect semantics permit retry, under a bounded policy."
+  },
+  "network": {
+    "basic": "An interface connects to a link, an address identifies it in a network context, and a route selects a path. A listener is a local transport endpoint.",
+    "intermediate": "The most specific applicable route normally wins, subject to policy and metrics. Neighbor information supports local delivery; it is not an inventory of all devices.",
+    "advanced": "Reason about both directions. Multiple adapters, VPNs and asymmetric routes can change forward and return paths. Host and network firewalls apply independent policy.",
+    "example": "For an off-subnet IPv4 address, resolve the gateway link address rather than the remote server MAC across the internet.",
+    "mistake": "A default route does not prove DNS or the destination service works.",
+    "question": "Why can localhost access work while remote access fails?",
+    "answer": "The service may bind only to loopback, or remote routes and firewall policy may prevent the connection."
+  },
+  "web": {
+    "basic": "An exchange has a request and response. Identify method, target, headers and body, then interpret status and content. One displayed page can involve many requests.",
+    "intermediate": "Cookies and tokens maintain application context across requests. Proxies and caches affect the path. Distinguish a reused connection from a new request and a redirect from the final response.",
+    "advanced": "Correlate behavior with cache keys, identity context and proxy boundaries. HTTPS protects the connection to the validated peer; it does not prove application rules are correct.",
+    "example": "A 200 response contains a login page instead of the report. Compare final URL, content type and body before declaring report access successful.",
+    "mistake": "TLS success and application correctness are different checks.",
+    "question": "What should you compare across two HTTP observations?",
+    "answer": "Inputs and identity, redirects, status, relevant headers, body and resulting application state."
+  },
+  "netmap": {
+    "basic": "A map is a model supported by observations. Begin with known assets and intended segments. Mark relationships as known or inferred.",
+    "intermediate": "Active and passive observations offer different visibility. Neighbors, routes and switch information describe different relationships; no single source gives a complete inventory.",
+    "advanced": "Track freshness and confidence. Address reuse, NAT and dual stack complicate identity. An IP address is not necessarily a permanent asset identifier.",
+    "example": "A laptop moves and receives another address. Yesterday IP may now belong to another device, so an old map can misattribute a service.",
+    "mistake": "No reply does not establish absence.",
+    "question": "What makes a map relationship trustworthy?",
+    "answer": "Relevant evidence, a timestamp and an explanation of how the relationship was established."
+  },
+  "discovery": {
+    "basic": "A scan asks a protocol-specific question and interprets the response. Target, port and method determine which evidence is possible. Start with one known local service.",
+    "intermediate": "Open, closed and filtered depend on method and path. Service detection adds application probes; a port label may only reflect a conventional assignment.",
+    "advanced": "Compare scans under controlled conditions. Timing, privileges, firewall behavior and service changes affect results. Validate important conclusions through configuration or a focused application check.",
+    "example": "A TCP connection on port 8000 establishes a listener at that time. It does not prove an exact software version or vulnerability.",
+    "mistake": "Missing UDP replies may be ambiguous.",
+    "question": "What must remain comparable across scans?",
+    "answer": "Scope, method, ports and observation conditions; record differences that may explain changed results."
+  },
+  "packets": {
+    "basic": "A capture records traffic visible at a chosen point. Identify addresses, protocol, ports and time before using complex filters.",
+    "intermediate": "Capture filters determine what is saved; display filters determine what is shown. Interface choice, packet loss and capture length can omit evidence.",
+    "advanced": "Reconstruct exchanges using sequence and timing context. Retransmissions alone do not locate the cause of loss. Host offload can make local packet boundaries or checksums differ from wire observations.",
+    "example": "A loopback request appears in a loopback capture but may not appear on the physical Ethernet interface. It used a different path.",
+    "mistake": "A local checksum warning is not automatically proof of on-wire corruption.",
+    "question": "Why preserve the full trace before filtering?",
+    "answer": "It allows a new hypothesis to examine evidence the current display filter hides."
+  },
+  "netwire": {
+    "basic": "Define endpoints, measurement and budget. Connectivity, delay, throughput and application responses are different questions.",
+    "intermediate": "Record direction, duration, count and payload size. A throughput test consumes capacity and can influence other tests. ICMP results do not substitute for application evidence.",
+    "advanced": "Use repeated comparable measurements and inspect variability. One-way delay requires care about clock synchronization; round-trip measurements answer a different question.",
+    "example": "A high-bandwidth path still handles sequential small requests slowly when each waits for a long round trip.",
+    "mistake": "A fast ping does not prove high throughput.",
+    "question": "What makes a performance comparison fair?",
+    "answer": "Comparable endpoints, paths, workloads and competing traffic, with enough repetition to observe normal variation."
+  },
+  "pysec": {
+    "basic": "Python values have types; functions take inputs and return results. Build small deterministic transformations before adding network access or concurrency.",
+    "intermediate": "Separate parsing, validation and processing. Handle expected errors close to their cause. Use context managers for resources and explicit timeouts and input-size limits.",
+    "advanced": "Async I/O overlaps waiting when libraries cooperate with an event loop; it does not automatically accelerate CPU-heavy work. Bound concurrency and define cancellation and partial-result behavior.",
+    "example": "A JSON utility checks required keys before counting records. A malformed row produces a defined error or recorded skip instead of silently changing the report.",
+    "mistake": "Catching every exception and returning success hides missing evidence.",
+    "question": "Which tests belong around a parser?",
+    "answer": "Valid input, missing fields, wrong types, malformed data and size limits, with explicit expected outcomes."
+  },
+  "jssec": {
+    "basic": "Browser JavaScript and Node.js run in different environments. Learn values, objects, functions and scope in the intended runtime; browser and filesystem APIs are not interchangeable.",
+    "intermediate": "Promises represent eventual outcomes. Await suspends the async function, not the entire runtime. Network completion, HTTP status and JSON parsing are separate stages.",
+    "advanced": "Bound asynchronous work and define cancellation and ownership of results. Validate external data before passing it to the DOM or another privileged interface. Browser origin rules remain relevant even when code runs correctly.",
+    "example": "A fetch promise resolves with a 404 response. The program must check response.ok or status before treating the body as the requested result.",
+    "mistake": "Node filesystem code will not run unchanged in a browser console.",
+    "question": "Why use textContent for plain untrusted text?",
+    "answer": "It inserts text without interpreting that value as HTML markup."
+  },
+  "webtest": {
+    "basic": "A test starts with an expected rule: which actor may perform which operation on which resource? Establish a legitimate request before changing an input.",
+    "intermediate": "Compare unauthenticated, owner and other-user states. Record the response and, where the lab allows, actual server-side effects. Change one relevant variable at a time.",
+    "advanced": "Distinguish observations from confirmed violations and impact. Negative controls show specificity; repeatability helps rule out transient behavior. Limit conclusions to what the evidence demonstrates.",
+    "example": "Alice reads her invoice, then requests Bob invoice using the same session. Confirm Bob can still read his own invoice to isolate the object policy.",
+    "mistake": "Different responses are not automatically vulnerabilities.",
+    "question": "What establishes a broken-access finding?",
+    "answer": "A reproducible operation that violates the stated policy, with an allowed comparison and evidence of the actual effect."
+  },
+  "codeprojects": {
+    "basic": "A utility needs a narrow purpose and a known fixture. Define input and expected output before writing request logic or a parser.",
+    "intermediate": "Separate parsing, HTTP access and reporting for independent checks. Include malformed, missing and non-matching input, not just the happy path.",
+    "advanced": "Missing data must not become a clean result. Bound response sizes, timeouts and concurrency. Preserve provenance so results can be related to a specific fixture and tool version.",
+    "example": "A header checker distinguishes an absent header from a connection failure and invalid response. These outcomes cannot all become PASS.",
+    "mistake": "No findings may mean nothing was successfully inspected.",
+    "question": "What belongs in a small tool report?",
+    "answer": "Fixture or target, time, checks attempted, results, errors and limits on the conclusion."
+  },
+  "vulnidentity": {
+    "basic": "Authentication establishes an identity; authorization decides allowed actions. Sessions carry identity context. Ownership and tenant membership can matter even after login.",
+    "intermediate": "Apply policy to every object operation, including list, detail and update routes. The normal interface and direct requests must enforce the same server-side rule.",
+    "advanced": "Model login, step-up verification, role changes, expiration and logout as transitions. Obsolete sessions should lose access according to the defined lifecycle, rather than keeping unintended privileges.",
+    "example": "Hiding an admin button does not help if the server accepts the forbidden update directly. Presentation is not the authorization boundary.",
+    "mistake": "A hard-to-guess object ID is not proof of permission.",
+    "question": "How should an access-control repair be retested?",
+    "answer": "Confirm forbidden access is rejected while the intended actor still performs the same operation successfully."
+  },
+  "vulninput": {
+    "basic": "Input is dangerous when data is interpreted as instructions in the wrong context. Identify the entry point and the operation that consumes it.",
+    "intermediate": "Use destination-appropriate protections: database parameters, text DOM APIs and constrained filesystem operations solve different problems. Validation does not replace safe interpretation.",
+    "advanced": "Trace transformations across storage, templates and downstream parsers. Stored content can become unsafe later; a value safe in one context may need different handling in another.",
+    "example": "A display name is valid text but becomes markup when concatenated into HTML. A text API preserves the name without turning it into HTML syntax.",
+    "mistake": "One generic escaping function cannot secure every context.",
+    "question": "What should source review follow?",
+    "answer": "External input through transformations to the operation that interprets or acts on it."
+  },
+  "burpweb": {
+    "basic": "A proxy lets you observe browser-to-application exchanges. Understand the request, session and expected behavior before modifying it.",
+    "intermediate": "Repeated requests can encounter expired tokens or changed workflow state. Keep a working baseline and change one relevant variable.",
+    "advanced": "Use proxy results as evidence, correlating responses with application state. Document altered fields and distinguish generated warnings from validated effects.",
+    "example": "Replaying a state-changing request twice may create two records. A later response difference may come from changed state rather than the field under test.",
+    "mistake": "Proxy setup does not guarantee every browser connection is intercepted or decrypted.",
+    "question": "Why keep an unchanged baseline request?",
+    "answer": "It separates session or workflow failure from the effect of a controlled modification."
+  },
+  "webtools": {
+    "basic": "Discovery tools generate candidate names, paths and technology hints. Assessment tools apply checks. Interpret results according to their actual observations.",
+    "intermediate": "Soft-404 pages, redirects, login pages and shared hosting create false positives. Compare content and normal fallback behavior, not just status or size.",
+    "advanced": "Chain tools only when each resolves a defined uncertainty. Verify ownership before following a new asset; unverified outputs can amplify mistaken assumptions through an automated workflow.",
+    "example": "Every unknown path returns a branded 200 page. An enumerator reports many candidates unless the fallback response is recognized.",
+    "mistake": "A technology hint does not establish an exact vulnerable build.",
+    "question": "How should a discovered path be validated?",
+    "answer": "Compare a known missing path, inspect content and redirects, and establish its relevance to the scoped application."
+  },
+  "webcode": {
+    "basic": "An HTTP utility should ask explicit questions about a bounded response. Separate transport errors from security observations.",
+    "intermediate": "Normalize only fields whose differences are irrelevant to the task. Removing timestamps can help comparison, but removing owner information can conceal an access violation.",
+    "advanced": "Use fixtures that prove each comparison rule, including matching, changed and ambiguous cases. Report uncertainty when the response cannot support the intended conclusion.",
+    "example": "Two equal-length responses contain different invoice owners. Length alone misses the difference; structured fields can expose it.",
+    "mistake": "A response difference is not always a security issue.",
+    "question": "What should happen with an unexpected content type?",
+    "answer": "Record the mismatch and avoid parsing it as the expected format without a supported explicit fallback."
+  },
+  "vulnadvanced": {
+    "basic": "Advanced flaws often break a property spanning requests or components. Express the invariant before choosing a test: what must always remain true?",
+    "intermediate": "Concurrent operations, stale caches and differing parsers can disagree about state or meaning. Locate the authoritative decision and where its assumptions may become invalid.",
+    "advanced": "The repair must hold in the deployment model. A single-process lock, one cache purge or a filter on one route may leave other workers or paths unprotected.",
+    "example": "Two checkout requests both observe one remaining unit and reserve it. The shared-state boundary needs an atomic check and reservation.",
+    "mistake": "A sequential retest does not prove a concurrency repair.",
+    "question": "What must a race test examine besides status codes?",
+    "answer": "The final shared state and side effects, verifying the business invariant."
+  },
+  "advweb": {
+    "basic": "Advanced discovery starts with a focused question, not a larger tool list. Identify the route, protocol behavior or intermediary you need to understand.",
+    "intermediate": "Extensions and scanners introduce their own traffic and transformations. Inspect how a check sends requests and recognizes a match.",
+    "advanced": "Attribute a response to the relevant component. A cache, gateway and backend can produce similar-looking results; correlate evidence before deciding where a fix belongs.",
+    "example": "A gateway rejects a request before the application sees it. Editing backend code may not affect that response at all.",
+    "mistake": "More extensions do not automatically produce better coverage.",
+    "question": "What should be recorded for an extension finding?",
+    "answer": "Version, configuration, request context, observed effect, responsible component if known and manual validation."
+  },
+  "advassess": {
+    "basic": "Static analysis checks source; dependency analysis checks component information; runtime checks observe behavior. Each sees a different part of the system.",
+    "intermediate": "For a source match, ask whether input reaches it, which guards apply and what configuration enables the path. An advisory requires version and package applicability checks.",
+    "advanced": "Combine evidence. A custom rule should distinguish its target defect from safe nearby patterns. Preserve a positive fixture and a negative control rather than trusting one demonstration.",
+    "example": "A source sample uses eval on a constant. The match identifies a construct to review; it does not prove external input can reach execution.",
+    "mistake": "A zero-finding scan does not prove all source or vulnerability classes were checked.",
+    "question": "What makes a custom rule useful?",
+    "answer": "A clear target, matching and non-matching fixtures, understood false positives and documented limits."
+  },
+  "audit": {
+    "basic": "An assessment compares a system with its intended baseline. Define assets, purpose and the checks relevant to their role.",
+    "intermediate": "Separate configuration observations from demonstrated defects and operational recommendations. An enabled service can be necessary rather than automatically inappropriate.",
+    "advanced": "Prioritize by impact, exposure, confidence and practical repair. Record dependencies between changes and confirm that the corrected system still delivers required services.",
+    "example": "Remote login on an administration server may be necessary. Assess identity policy, authentication and exposure instead of simply reporting that it exists.",
+    "mistake": "A tool score is not a complete risk assessment.",
+    "question": "What makes a recommendation actionable?",
+    "answer": "Affected condition, evidence, expected risk, a concrete change and a verification method."
+  },
+  "netsvc": {
+    "basic": "A reachable service exposes a protocol and configuration. Confirm endpoint identity and intended purpose before assessment.",
+    "intermediate": "Inspect permitted authentication, supported options and disclosed data in context. Banners can be customized and fixes can be backported.",
+    "advanced": "Account for proxies, multiple instances and build provenance. Retest the exact behavior or configuration that caused the finding rather than relying only on product names.",
+    "example": "A vendor applies a security fix without changing an upstream-looking banner. Package and patch information may show the banner-based suspicion is incorrect.",
+    "mistake": "A version association alone does not prove exploitability.",
+    "question": "What strengthens a service finding?",
+    "answer": "Observed behavior together with verified configuration or build evidence and a clear explanation of impact."
+  },
+  "shodan": {
+    "basic": "Shodan returns indexed service observations. A search reads stored data rather than verifying every host current state.",
+    "intermediate": "Interpret time, address, protocol, port and ownership together. Shared hosting and address reassignment can change what an association means.",
+    "advanced": "Use stable inventory keys and explicit freshness limits. Missing results can reflect index coverage or query scope rather than verified remediation.",
+    "example": "An old banner names an address your organization no longer owns. Treat it as historical context instead of assuming the new tenant is in scope.",
+    "mistake": "No search matches does not prove no exposure.",
+    "question": "What must be verified before a current finding?",
+    "answer": "Current ownership, scoped relevance, observation age and authorized configuration evidence."
+  },
+  "metasploit": {
+    "basic": "Metasploit contains different module types and command contexts. Learn the console, module purpose and required options before using the local exercise.",
+    "intermediate": "Global and local settings can influence later modules. Database records, jobs and interactive sessions describe different states; inspect the current context.",
+    "advanced": "Treat results as bounded evidence. Checks can be unsupported or inconclusive; completed jobs may create no session. Reproduction requires versions, settings and target conditions.",
+    "example": "A localhost HTTP fingerprint module reports a banner and exits. No shell is expected because it observes the service rather than establishing a session.",
+    "mistake": "Auxiliary does not mean passive; not every module supports check.",
+    "question": "What should be reviewed before a run?",
+    "answer": "Documented purpose, approved target, required and advanced options, inherited settings and expected effects."
+  },
+  "caseapi": {
+    "basic": "An API operates on objects and fields. A valid session identifies the actor but does not establish permission for every resource.",
+    "intermediate": "Test object access and writable fields separately. Editing a display name and setting a server-controlled role require different policy decisions.",
+    "advanced": "Review consistency across detail, list, bulk and versioned routes. The fixture implements REST examples; GraphQL resolvers and external gateways require separate implementation and evidence.",
+    "example": "Using Alice identity, compare her invoice, Bob invoice and a role update. Fixed mode preserves the legitimate action while rejecting the inappropriate read and field change.",
+    "mistake": "Fixing one detail route does not prove old-version or list routes are protected.",
+    "question": "Which cases belong in the repair regression suite?",
+    "answer": "Owner success, non-owner rejection, permitted update, forbidden field rejection and relevant alternate routes."
+  },
+  "caseauth": {
+    "basic": "A session has states: pending authentication, completion, expiration and logout. Each state should have defined access rules.",
+    "intermediate": "Sensitive transitions may require token rotation and invalidation. The fixture second factor is synthetic and teaches transitions, not production MFA.",
+    "advanced": "Federated login requires validated protocol messages and transaction binding, not only decoded claims. The supplied binding model does not verify JWT signatures or implement a full provider.",
+    "example": "Fixed mode rejects pending access, creates a different completed token and rejects the old token afterward. Verify each transition independently.",
+    "mistake": "Decoding a token is not cryptographic verification.",
+    "question": "What proves session rotation enforces a boundary?",
+    "answer": "The new session permits its intended action while the previous token no longer authorizes it."
+  },
+  "caselogic": {
+    "basic": "Business rules define valid state changes: redeem once, avoid overselling and prevent duplicate effects. Write the rule before implementing a check.",
+    "intermediate": "A separated check and update can race when two operations observe the same old state. Sequential tests may never reveal the defect.",
+    "advanced": "Atomicity belongs at the shared-state boundary. A process lock demonstrates the idea but cannot coordinate independent workers; production designs may require appropriate database transactions and constraints.",
+    "example": "The deterministic model schedules both readers before either update, producing two vulnerable successes. The atomic version permits only one.",
+    "mistake": "Adding a delay changes timing without necessarily fixing the rule.",
+    "question": "Why test the first valid redemption too?",
+    "answer": "Rejecting every request prevents duplicates but also breaks the required feature."
+  },
+  "casereview": {
+    "basic": "Review follows an intended rule through code. Identify the external input, actor context, resource lookup and sensitive operation.",
+    "intermediate": "Locate the guard and inspect alternate branches. A secure helper protects only paths that use it correctly.",
+    "advanced": "Write a regression assertion for observable behavior caused by the defect. A test that mirrors implementation details can pass without protecting the actual rule.",
+    "example": "A lookup by invoice ID alone is replaced with a lookup scoped to the actor permitted objects. Test a permitted object and one outside that scope.",
+    "mistake": "A pattern match begins review; it does not complete impact analysis.",
+    "question": "How do you prove the regression test detects the original issue?",
+    "answer": "Apply fixed expectations to the deliberately vulnerable fixture and confirm the relevant assertion detects failure."
+  },
+  "casebrowser": {
+    "basic": "A browser message crosses a trust boundary. The event supplies origin, source window and data; the receiver must define the expected sender and shape.",
+    "intermediate": "Check exact origin and the relevant source reference, then allowed type and bounds. Render accepted plain text through textContent.",
+    "advanced": "Unit tests can validate handler decisions but do not establish browser CSP or real frame relationships. Test browser-enforced behavior separately.",
+    "example": "A correctly shaped message from an unexpected window should be rejected even when its text looks harmless.",
+    "mistake": "A claimed sender inside message data does not authenticate the actual sender.",
+    "question": "Why check origin and source in this pattern?",
+    "answer": "Origin identifies the security origin; source identifies the expected window relationship."
+  },
+  "casethreat": {
+    "basic": "Threat modeling names assets, actors, entry points and trust boundaries. Start with what is protected and which identities may access it.",
+    "intermediate": "For each boundary, state an abuse case and a control. Mark assumptions separately from verified behavior and identify out-of-scope components.",
+    "advanced": "Link important claims to tests, owners and residual uncertainty. A diagram is useful when it supports a decision or verification, not just a list of boxes.",
+    "example": "At the browser-to-API boundary, a user requests another tenant object. The control is server-side policy; evidence comes from owner and non-owner tests.",
+    "mistake": "A long threat list without priorities or evidence is incomplete.",
+    "question": "How should an unimplemented payment system be represented?",
+    "answer": "As an explicit future or out-of-scope component, not something the current fixture claims to have tested."
+  },
+  "caseregression": {
+    "basic": "A regression test preserves expected behavior after changes. Include permitted actions as well as forbidden ones.",
+    "intermediate": "Positive and negative controls show the assertion can distinguish the conditions it claims to assess. Fresh state prevents accidental ordering dependencies.",
+    "advanced": "A passing suite supports only its assertions. Review environmental gaps and timing sensitivity. Setup failures should fail clearly instead of skipping the important operation silently.",
+    "example": "The suite checks fixed mode and includes a meta-test showing that fixed expectations detect deliberately vulnerable behavior.",
+    "mistake": "A green run does not prove every deployment setting or vulnerability family was covered.",
+    "question": "Why reset fixture state between tests?",
+    "answer": "It makes outcomes attributable to their own setup rather than earlier test side effects."
+  },
+  "casecapstone": {
+    "basic": "A finding connects a rule, evidence and consequence. State scope and prerequisites before the reproduction.",
+    "intermediate": "Include enough context for another person to repeat the result. Separate facts from assumptions and keep impact within the evidence.",
+    "advanced": "Explain the root cause, practical repair and retest conditions. Preserve legitimate workflows and record unresolved limits.",
+    "example": "The invoice report includes Alice identity, the other-user object, observed response, missing policy, fixed rejection and owner success.",
+    "mistake": "Screenshots without a violated rule are difficult to interpret and repair.",
+    "question": "When is the case study complete?",
+    "answer": "When the result is reproducible, cause explained, repair checked and remaining uncertainty recorded."
+  },
+  "comphardware": {
+    "basic": "A computer combines processing, working memory, persistent storage and input/output. Learn units before comparing capacities or speeds.",
+    "intermediate": "Caches and memory reduce repeated access costs. Storage interfaces and workload patterns affect I/O. More capacity and higher speed are different improvements.",
+    "advanced": "Measure the workload and shared resources before upgrading. VM allocations do not create physical resources; thermal or power limits can influence sustained behavior.",
+    "example": "For a fictional 1,000 GB drive, the equivalent capacity is about 931.3 GiB before overhead. This is a unit-conversion example, not a measurement of any learner computer.",
+    "mistake": "Every slow machine does not need more RAM.",
+    "question": "Which measurements distinguish memory pressure from storage exhaustion?",
+    "answer": "Available memory and swapping concern active memory; filesystem free space and disk layout concern storage capacity."
+  },
+  "compos": {
+    "basic": "An operating system manages resources and program interfaces. The kernel mediates protected operations; shells and desktops are user programs.",
+    "intermediate": "Processes hold resources and threads execute within them. Mounts attach filesystems to the directory tree; a path can refer to different storage after mounting.",
+    "advanced": "Think about namespaces and lifecycles. A process can hold a file while its name changes, and running code or configuration can outlive an on-disk update.",
+    "example": "Editing a service configuration does not guarantee the running service has reread it; a supported reload or restart may be required.",
+    "mistake": "Desktop failure does not establish that the kernel stopped.",
+    "question": "Why might a service continue using old configuration?",
+    "answer": "It can retain previously loaded values until the supported refresh operation occurs."
+  },
+  "compvirtual": {
+    "basic": "The hypervisor presents virtual hardware while the host owns physical resources. Keep host paths, guest paths and network identities distinct.",
+    "intermediate": "Dynamic disk file allocation, maximum virtual capacity and guest free space measure different layers. Network modes and shared folders determine deliberate paths across boundaries.",
+    "advanced": "Evaluate actual connectivity, including every adapter, route, forward and shared resource. Snapshots depend on their storage chain and are not independent disaster recovery.",
+    "example": "A host-only adapter plus NAT gives local host connectivity and an outbound path. The label on one adapter does not describe the entire VM.",
+    "mistake": "Being virtual does not automatically mean being isolated.",
+    "question": "What must you inspect before calling a lab isolated?",
+    "answer": "All adapters, routes, forwarding rules, shared resources and reachable services."
+  },
+  "netfund": {
+    "basic": "Switches usually forward local-link frames; routers forward IP packets between networks. One home gateway may combine multiple roles.",
+    "intermediate": "Layer models separate application meaning, transport, routing and link delivery. Encapsulation adds information for each boundary. VLANs divide logical broadcast domains.",
+    "advanced": "Delay, loss, bandwidth and request patterns jointly affect performance. Segmentation requires routing and policy; a VLAN alone is not encryption or a complete access rule.",
+    "example": "To reach another subnet, a client sends toward its gateway link address. The router forwards the packet in a new link envelope for the next hop.",
+    "mistake": "An internet server normally does not receive the original laptop Ethernet frame.",
+    "question": "What changes at a normal routed Ethernet hop?",
+    "answer": "The link envelope is replaced and forwarding fields such as TTL change; configured NAT may also change addresses or ports."
+  },
+  "netaddress": {
+    "basic": "An IP prefix groups addresses. IPv4 has 32 bits, with the prefix identifying the network portion. IPv6 has 128 bits and different address conventions.",
+    "intermediate": "A conventional IPv4 /26 leaves six host bits and 64 addresses, with 62 conventional host addresses. The subtraction rule is not universal for /31 or /32.",
+    "advanced": "Routing uses prefix specificity with policy and interface context. Private addressing, translation and reachability are different concepts; dual stack needs attention to both families.",
+    "example": "192.0.2.70/26 belongs to .64-.127. Address .100 is inside and .130 outside; the mask is 255.255.255.192.",
+    "mistake": "Not all 172 addresses are private; the range is 172.16.0.0 through 172.31.255.255.",
+    "question": "Why might similar-looking addresses require a router?",
+    "answer": "Their prefix lengths can put them into different subnets; compare actual network prefixes."
+  },
+  "netservices": {
+    "basic": "A service listens at an address and transport port. TCP provides an ordered stream, UDP datagrams; applications define messages and success.",
+    "intermediate": "DNS, transport connection, TLS validation and application response are different stages. Failure at one does not automatically implicate another.",
+    "advanced": "Start from a repeatable failing request and correlate layers. Proxies, VPNs, caches and dual-stack choices change paths. A timeout is a symptom with multiple possible causes.",
+    "example": "Localhost HTTP works but a hostname fails. Compare resolution and the selected destination before changing application code.",
+    "mistake": "A conventional port number does not prove identity or security.",
+    "question": "What does a successful TCP connection establish?",
+    "answer": "A transport endpoint accepted a connection at that time, not that TLS or the application operation is correct."
+  }
+}

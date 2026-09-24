@@ -1,0 +1,20 @@
+# Generated books and hosting output
+/START HERE.html
+/Kali Command Handbook.md
+/Learning Path.md
+/README.txt
+firebase-hosting/public/
+firebase-hosting/build-manifest.json
+.firebase/
+node_modules/
+__pycache__/
+*.py[cod]
+*-debug.log
+.env
+.env.*
+!.env.example
+# Local-only authoring and browser verification artifacts
+before-*/
+*-qa.*
+*-preview.*
+*-edge-*/

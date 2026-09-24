@@ -1,0 +1,114 @@
+{
+  "caseapi": {
+    "title": "Advanced API security",
+    "diagram": [
+      "Alice / Bob",
+      "Authentication boundary",
+      "Object + field policy",
+      "Synthetic invoices"
+    ],
+    "scenario": "Two test users own different invoices in different tenants. Vulnerable mode lets Alice read Bob invoice and change a server-owned role field; fixed mode enforces ownership/tenant checks and writable-field restrictions.",
+    "evidence": "Compare owner and non-owner reads, permitted display-name changes and forbidden role updates. Record HTTP status plus actual returned fields; a successful JSON response is not sufficient proof of correct permission.",
+    "fix": "Bind identity to a validated server-side session. Apply object/tenant policy and field allowlists on every relevant route. Retire old routes explicitly and constrain list sizes.",
+    "retest": "Owner access stays 200; other-user access becomes 403; forbidden role update becomes 400 and role stays user; permitted display-name update stays 200; retired route becomes 404.",
+    "limits": "The fixture is REST only. GraphQL, API gateways, pagination across large datasets and external webhook services are design extensions, not implemented components."
+  },
+  "caseauth": {
+    "title": "Authentication, sessions and federation",
+    "diagram": [
+      "Login proof",
+      "Pending session",
+      "Second-factor boundary",
+      "Rotated complete session"
+    ],
+    "scenario": "The training login first issues a pending token. Vulnerable mode allows protected reads prematurely and keeps the same token after MFA; fixed mode separates stages and replaces the pending token.",
+    "evidence": "Capture the protected-route result before MFA, compare old/new token identity without publishing values, then test the old token and a logged-out token.",
+    "fix": "Enforce stage and expiry on every protected route, rotate after privilege changes and invalidate previous sessions. Federated identity additionally needs verified signatures, issuer/audience, transaction binding and a correct provider flow.",
+    "retest": "Pending and old tokens return 401; complete current tokens work; explicit logout and expiry prevent further access. The supplied tests also reject an incorrect lab MFA code.",
+    "limits": "auth_binding.py only compares synthetic state/nonce/issuer/audience. It does not implement PKCE, OAuth/OIDC, JWT signature verification, account linking, password recovery or real MFA."
+  },
+  "caselogic": {
+    "title": "Business rules and concurrency",
+    "diagram": [
+      "Two requests",
+      "Shared unused state",
+      "Atomic decision boundary",
+      "Exactly one redemption"
+    ],
+    "scenario": "A coupon must be redeemed once. The offline race demo deliberately schedules two reads before either update. The HTTP fixture uses a lock so concurrent requests preserve the invariant.",
+    "evidence": "The deterministic model gives two vulnerable successes and one fixed success. The HTTP regression test expects exactly one 200 and one 409 response.",
+    "fix": "Put the check and state change in one atomic operation. In multi-process production systems use appropriate database transactions/constraints; a single Python process lock does not coordinate multiple servers.",
+    "retest": "Try sequential repeats and controlled concurrency. Confirm a legitimate first redemption succeeds and the final stored state records only one redemption.",
+    "limits": "This fixture has no payments, real refunds or persistent database. Its in-memory state resets on restart and is unsuitable for production idempotency."
+  },
+  "casereview": {
+    "title": "Secure code review",
+    "diagram": [
+      "Untrusted request",
+      "Parsing + validated identity",
+      "Authorization/control point",
+      "Data or browser sink"
+    ],
+    "scenario": "Trace a training request through body parsing, session validation, object lookup and response generation. Compare vulnerable and fixed branches to locate the missing security decision.",
+    "evidence": "Link one observed response to the exact branch and the rule it should enforce. Use browser.js to distinguish data validation from safe output handling.",
+    "fix": "Apply checks at the server boundary, use constrained input models and safe output APIs, and test both authorized and rejected paths. Framework defaults help but do not supply application-specific permissions.",
+    "retest": "The regression suite must fail when the critical check is removed and pass after restoration; a clean syntax check alone is insufficient.",
+    "limits": "Django snippets are review sketches that need actual models, middleware and trusted tenant context. They are not changes to your existing Django project."
+  },
+  "casebrowser": {
+    "title": "Browser trust and messaging",
+    "diagram": [
+      "Message sender",
+      "Origin + source checks",
+      "Payload schema",
+      "Text-only DOM update"
+    ],
+    "scenario": "The lab page accepts a specific self-message with short text. It uses an external same-origin script and a restrictive CSP. Malformed or unrelated message data is ignored.",
+    "evidence": "Inspect the document CSP in Developer Tools, send the valid message, then send a wrong type or oversized string. Compare the visible text and the pure message-policy test results.",
+    "fix": "Use exact expected origins, verify the intended window/source, constrain message types and fields, specify targetOrigin when sending and use safe DOM APIs. Review third-party scripts as code with origin privileges.",
+    "retest": "Valid expected messages update text; bad type/size is ignored. Node tests additionally check wrong origin and source; manually inspect CSP in a real browser.",
+    "limits": "Node policy tests do not exercise a browser CSP engine. Same-origin compromised scripts are already within the trust boundary; the sample does not model all DOM or cross-origin attacks."
+  },
+  "casethreat": {
+    "title": "Threat modeling and trust boundaries",
+    "diagram": [
+      "Users / provider",
+      "HTTP boundary",
+      "Policy + state store",
+      "Audit / evidence"
+    ],
+    "scenario": "Model the two-user lab before extending it with a webhook provider or admin workflow. Treat the network request, browser message and provider callback as distinct trust crossings.",
+    "evidence": "For each asset and operation record actor, entry point, trusted identity, authorization rule and downstream effect. Link each threat to at least one concrete test or review.",
+    "fix": "Mitigate at the violated boundary: object checks for invoice access, stage checks for pending sessions, atomic state changes for coupons, authenticated fresh proofs for callbacks.",
+    "retest": "Review the diagram whenever routes, identities or integrations change. Every selected mitigation should have an owner and a verification method.",
+    "limits": "The included diagram is a teaching model, not an assessment of your real network or application architecture."
+  },
+  "caseregression": {
+    "title": "Automated security regression",
+    "diagram": [
+      "Known weak behavior",
+      "Failing security assertion",
+      "Restored control",
+      "Allowed + denied tests"
+    ],
+    "scenario": "The lab test suite runs against temporary loopback servers and deliberately checks that fixed expectations fail against vulnerable mode. This guards against tests that merely echo implementation.",
+    "evidence": "Record test outcomes, exact app version and which assertions detect the missing control. Include successful legitimate behavior so a deny-everything change cannot pass as a fix.",
+    "fix": "Keep isolated fixtures, deterministic scheduling, explicit state resets and failures with nonzero exit. Add integration tests at the real authorization boundary when porting to a framework.",
+    "retest": "Run Python tests and the Node policy cases. Confirm the intended-negative meta-test passes because it detects failure, not because vulnerable behavior was accepted as secure.",
+    "limits": "These tests cover the synthetic app only. They do not validate a real OAuth provider, GraphQL API, browser CSP engine or deployed system."
+  },
+  "casecapstone": {
+    "title": "Complete assessment and retest",
+    "diagram": [
+      "Scope + policy",
+      "Controlled evidence",
+      "Root-cause repair",
+      "Regression + report"
+    ],
+    "scenario": "Assess the synthetic two-user application from start to finish. Use one finding about cross-user invoice access, one authentication-state finding and one property-update finding.",
+    "evidence": "Capture only the minimal synthetic request/response context needed to show the violated requirement. Record mode, test user, route, expected behavior, observed behavior and source location.",
+    "fix": "Switch to the fixed implementation and inspect the policy changes. Explain why each change addresses the root cause rather than only hiding a response or renaming an identifier.",
+    "retest": "Confirm the original unauthorized case is denied and legitimate owner access remains possible. Attach test outcomes and unresolved limitations; do not represent this as a production audit.",
+    "limits": "The capstone is a training assessment. It contains no findings about your Django project, public sites or other systems on your network."
+  }
+}

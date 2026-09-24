@@ -1,0 +1,44 @@
+[
+  {
+    "id": "gateway",
+    "title": "A gateway mapping changes",
+    "evidence": "The synthetic gateway label maps to MAC-A at 09:00 and MAC-B at 09:01. A switch maintenance record says redundant gateway failover occurred at 09:01. No client traffic evidence is supplied.",
+    "question": "Does the mapping change confirm interception? What would you check next?",
+    "answer": "No. Failover is a plausible explanation. Verify trusted gateway identifiers and switch ports, compare client neighbor state and inspect the relevant traffic. A mapping change alone cannot establish accepted redirection or decrypted content."
+  },
+  {
+    "id": "name",
+    "title": "A fallback name reply appears",
+    "evidence": "A synthetic client asks for an unresolved name and receives a local response from an unlisted peer. The capture ends before the next connection.",
+    "question": "Which attack stages are observed, and which are unproven?",
+    "answer": "The query and unexpected response are observed. Client adoption, connection, authentication and resource access are unproven. Obtain a complete authorized trace and relevant client/service logs before claiming credential exposure or relay."
+  },
+  {
+    "id": "relay",
+    "title": "Authentication traffic without a confirmed action",
+    "evidence": "A monitor flags a possible relay sequence. The destination service logs rejection because its required integrity protection was not satisfied. No successful operation is recorded.",
+    "question": "Is this a successful compromise?",
+    "answer": "The evidence supports an attempted or suspicious exchange and an observed rejection, not successful access. Validate the destination policy and telemetry completeness. Preserve the difference between an attempt and its outcome."
+  },
+  {
+    "id": "path",
+    "title": "An administrative path exists on paper",
+    "evidence": "A user can authenticate to a bastion and a diagram shows a route to a file server. No file-server account permissions or reachability measurements are supplied.",
+    "question": "Can you conclude lateral movement to file-server administration?",
+    "answer": "No. A route is only one prerequisite. Check actual transport reachability, destination authentication and permission for the intended operation. Bastion access does not imply administrator rights on the target."
+  },
+  {
+    "id": "timeout",
+    "title": "A service stops responding",
+    "evidence": "One client observes a timeout during a synthetic exercise. The listener state, firewall logs and server resource counters are unavailable.",
+    "question": "Does this establish a denial-of-service vulnerability or effective segmentation?",
+    "answer": "Neither follows from the timeout alone. Inspect client path, policy, listener and resource evidence. Distinguish a confirmed resource limit from a blocked or absent service. Stop active activity if the lab becomes unstable."
+  },
+  {
+    "id": "blindspot",
+    "title": "No alert after a test",
+    "evidence": "A known synthetic event was generated, but the collector health log shows no records received during the test window.",
+    "question": "Should the detection be marked effective?",
+    "answer": "No. The test is inconclusive because telemetry was missing. Restore and verify collection, then rerun positive and negative controls before assessing the detection rule."
+  }
+]

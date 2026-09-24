@@ -1,0 +1,56 @@
+{
+  "pysec": [
+    [
+      "01 / Where Python helps",
+      "Use Python for log processing, file inventories, data validation, protocol experiments and repeatable reports. Start with a pure function on synthetic data before adding files or network access. Source code goes in a .py file; shell commands such as python3 example.py belong in Terminal."
+    ],
+    [
+      "02 / Read the program in order",
+      "Imports load libraries. Assignments name values. Conditions select paths, loops repeat work and functions name reusable operations. Indentation marks Python blocks. Distinguish an expression value from printed output; returning data makes later testing easier."
+    ],
+    [
+      "03 / Files, arguments and errors",
+      "Use pathlib for filesystem paths and context managers to close resources. Command-line arguments are strings until validated. Decide expected input shape and size before processing. A readable error with a nonzero exit is preferable to an empty report that looks successful."
+    ],
+    [
+      "04 / Security boundaries in automation",
+      "Do not use eval or native-object deserialization on untrusted data. Avoid command strings passed to a shell, disable unintended redirect expansion and validate destinations before active work. Never place real credentials in code examples or shared logs. The supplied projects need no API keys."
+    ]
+  ],
+  "jssec": [
+    [
+      "01 / Browser versus Node.js",
+      "The language is JavaScript in both, but available APIs and security boundaries differ. Browser code sees document and origin rules; Node can access local files through its APIs. A Python .py file cannot run in Node, and Node imports cannot be pasted into a normal browser console."
+    ],
+    [
+      "02 / Types and object behavior",
+      "Use strict comparisons and deliberate conversion. const prevents rebinding, not mutation. null, undefined and a missing property have different meanings. Prefer explicit schemas for external JSON and Map for arbitrary data-derived keys; prototype behavior can matter at trust boundaries."
+    ],
+    [
+      "03 / DOM and browser security",
+      "textContent writes plain text; innerHTML interprets markup. Browser CORS restricts reading some cross-origin responses, not every outbound request. Client-side validation improves usability but must be repeated where the server makes security decisions. Never paste unexplained code into an authenticated real-site console."
+    ],
+    [
+      "04 / Promises and bounded work",
+      "async functions return promises, and await waits for completion without turning JavaScript into multithreaded CPU computation. Limit concurrent tasks and handle rejection. With fetch, explicitly inspect response status because HTTP error status is not usually a rejected promise; cancellation and response-size limits are separate concerns."
+    ]
+  ],
+  "codeprojects": [
+    [
+      "01 / Use the supplied files",
+      "Runnable files and sample.jsonl are in examples/programming. Copy them into ~/kali-lab/programming in Kali using your existing transfer method. That Windows path is not automatically available inside the VM. Do not copy a Windows virtual environment into Linux."
+    ],
+    [
+      "02 / What the projects demonstrate",
+      "Both log analyzers read the same fictional four-record dataset and should produce equivalent counts. Both HTTP tools inspect only 127.0.0.1, request HEAD / once, and do not follow redirects. HEAD behavior can differ from GET; the results are observations, not security verdicts."
+    ],
+    [
+      "03 / Build incrementally",
+      "Keep parsing and policy decisions in testable functions. Begin with a tiny fixture, add malformed-input tests, handle missing files and resource limits, then add one explicit I/O operation. Record version, inputs and failure state so another person can reproduce the result."
+    ],
+    [
+      "04 / Next learning steps",
+      "After these examples, extend the offline analyzer with timestamps or a validated report schema. Then study authenticated HTTP sessions in a deliberately configured lab and structured packet analysis with Scapy. Add concurrency only after serial behavior, target validation and cancellation are understood."
+    ]
+  ]
+}

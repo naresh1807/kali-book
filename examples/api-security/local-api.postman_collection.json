@@ -1,0 +1,460 @@
+{
+  "info": {
+    "name": "Kali Fieldbook - local API security (fixed mode)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Synthetic loopback fixture only. Run requests in order against fixed mode. Tokens remain runtime variables and are not included in this export."
+  },
+  "item": [
+    {
+      "name": "01 Anonymous denied",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "http://127.0.0.1:8901/api/profile"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Expected status\", function () { pm.response.to.have.status(401); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "alice login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "http://127.0.0.1:8901/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"user\": \"alice\", \"password\": \"alice-lab\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Expected status\", function () { pm.response.to.have.status(200); });",
+              "pm.variables.set(\"alice_pending\", pm.response.json().token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "alice MFA",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{alice_pending}}"
+          }
+        ],
+        "url": "http://127.0.0.1:8901/mfa",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"code\": \"123456\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Expected status\", function () { pm.response.to.have.status(200); });",
+              "pm.variables.set(\"alice_token\", pm.response.json().token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "bob login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "http://127.0.0.1:8901/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"user\": \"bob\", \"password\": \"bob-lab\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Expected status\", function () { pm.response.to.have.status(200); });",
+              "pm.variables.set(\"bob_pending\", pm.response.json().token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "bob MFA",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bob_pending}}"
+          }
+        ],
+        "url": "http://127.0.0.1:8901/mfa",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"code\": \"123456\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Expected status\", function () { pm.response.to.have.status(200); });",
+              "pm.variables.set(\"bob_token\", pm.response.json().token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Alice owns invoice 1",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{alice_token}}"
+          }
+        ],
+        "url": "http://127.0.0.1:8901/api/invoices/1"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Expected status\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"Owner is Alice\", () => pm.expect(pm.response.json().owner).to.eql(\"alice\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Alice cannot read Bob invoice",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{alice_token}}"
+          }
+        ],
+        "url": "http://127.0.0.1:8901/api/invoices/2"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Expected status\", function () { pm.response.to.have.status(403); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bob owns invoice 2",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bob_token}}"
+          }
+        ],
+        "url": "http://127.0.0.1:8901/api/invoices/2"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Expected status\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"Owner is Bob\", () => pm.expect(pm.response.json().owner).to.eql(\"bob\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Server-owned role rejected",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{alice_token}}"
+          }
+        ],
+        "url": "http://127.0.0.1:8901/api/profile",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"role\": \"admin\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Expected status\", function () { pm.response.to.have.status(400); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Allowed display name update",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{alice_token}}"
+          }
+        ],
+        "url": "http://127.0.0.1:8901/api/profile",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"display_name\": \"Alice fixture\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Expected status\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Verify permitted and protected fields",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{alice_token}}"
+          }
+        ],
+        "url": "http://127.0.0.1:8901/api/profile"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Expected status\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"Role stays user and display name changes\", () => { const p=pm.response.json(); pm.expect(p.role).to.eql(\"user\"); pm.expect(p.display_name).to.eql(\"Alice fixture\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "List bound enforced",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{alice_token}}"
+          }
+        ],
+        "url": "http://127.0.0.1:8901/api/invoices?limit=11"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Expected status\", function () { pm.response.to.have.status(400); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Logout",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{alice_token}}"
+          }
+        ],
+        "url": "http://127.0.0.1:8901/logout",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Expected status\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Former token denied",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{alice_token}}"
+          }
+        ],
+        "url": "http://127.0.0.1:8901/api/profile"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Expected status\", function () { pm.response.to.have.status(401); });",
+              "[\"alice_pending\",\"alice_token\",\"bob_pending\",\"bob_token\"].forEach(k => pm.variables.unset(k));"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

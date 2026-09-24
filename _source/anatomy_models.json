@@ -1,0 +1,774 @@
+[
+  {
+    "key": "osi-tcpip-layers",
+    "chapter": "netfund",
+    "title": "Explore the OSI layers and TCP/IP mapping",
+    "note": "Conceptual correspondence, not a claim that implementations have seven separate modules. OSI layers 5-7 usually fall within the TCP/IP application grouping; the four-layer model groups physical and link functions together.",
+    "parts": [
+      {
+        "name": "Layer 7: Application",
+        "purpose": "Defines the network service and meaning of an exchange for applications. It is the protocol behavior, not simply the entire browser or other user interface.",
+        "connect": "TCP/IP teaching correspondence: Application. Typical unit: Application data / messages.",
+        "advanced": "A successful lower-layer connection does not prove a correct application result. Authentication, authorization and business rules can fail even with healthy connectivity."
+      },
+      {
+        "name": "Layer 6: Presentation",
+        "purpose": "Concerns how information is represented so communicating applications interpret it consistently. Think of encoding, serialization and negotiated representation.",
+        "connect": "TCP/IP teaching correspondence: Application. Typical unit: Represented application data.",
+        "advanced": "Do not force every implementation into a separate layer-six module. Encryption is often placed here in teaching diagrams, but real TLS and other security protocols cross model boundaries."
+      },
+      {
+        "name": "Layer 5: Session",
+        "purpose": "Concerns coordination of a communication dialog, including establishing, managing and ending it and, in some designs, synchronization or recovery points.",
+        "connect": "TCP/IP teaching correspondence: Application. Typical unit: Dialog / session data.",
+        "advanced": "An application login session, a TCP connection and an OSI session-layer service are different concepts. One login can span many connections, and one connection can carry many application exchanges."
+      },
+      {
+        "name": "Layer 4: Transport",
+        "purpose": "Provides transport communication between endpoints. TCP supplies an ordered byte stream; UDP provides datagrams without built-in delivery or ordering guarantees.",
+        "connect": "TCP/IP teaching correspondence: Transport. Typical unit: TCP segment / UDP datagram.",
+        "advanced": "TCP flow control concerns receiver capacity; congestion control concerns network conditions. Reliability and encryption are separate properties. QUIC builds secure stream transport over UDP and does not fit a naive one-protocol-per-layer picture."
+      },
+      {
+        "name": "Layer 3: Network",
+        "purpose": "Addresses and forwards packets across networks. A routing decision selects a next hop rather than delivering a file or authenticating a user.",
+        "connect": "TCP/IP teaching correspondence: Internet. Typical unit: IP packet / datagram.",
+        "advanced": "IP does not guarantee ordered or successful delivery. MTU behavior differs between IPv4 and IPv6. NAT, where present, changes addressing and sometimes ports; it is not the same function as routing."
+      },
+      {
+        "name": "Layer 2: Data link",
+        "purpose": "Carries data across the current link. Ethernet framing includes local-link address information and error detection; other link technologies have their own formats.",
+        "connect": "TCP/IP teaching correspondence: Link / network access. Typical unit: Frame.",
+        "advanced": "A routed path normally gets a new link-layer envelope at each hop. Device labels are not exclusive layer assignments: a multilayer switch can also route."
+      },
+      {
+        "name": "Layer 1: Physical",
+        "purpose": "Transmits encoded signals over a medium: electrical, optical or radio. Connectors, cabling and radio conditions are part of the physical path.",
+        "connect": "TCP/IP teaching correspondence: Link / network access. Typical unit: Encoded signals / symbols carrying bits.",
+        "advanced": "Bandwidth, interference, damaged cabling and optical or radio conditions can limit communication. A physical link indicator does not establish IP reachability or application health."
+      }
+    ]
+  },
+  {
+    "key": "motherboard",
+    "chapter": "comphardware",
+    "title": "Explore a motherboard",
+    "note": "Generic desktop board, viewed from above. Locations, connectors and supported devices vary by model. This is a teaching illustration, not a picture of your computer.",
+    "parts": [
+      {
+        "name": "CPU socket",
+        "purpose": "Holds the processor and connects it electrically to the board. The cooler normally sits above it.",
+        "connect": "Install only a processor supported by the socket, chipset and firmware.",
+        "advanced": "A matching physical socket alone does not establish complete CPU support. Consult the exact board compatibility list."
+      },
+      {
+        "name": "DIMM memory slots",
+        "purpose": "Hold the system RAM used for active programs and data.",
+        "connect": "Use the supported memory generation and follow the board manual slot order.",
+        "advanced": "DDR generations are not interchangeable. Channel layout and the recommended two-module slots depend on the board."
+      },
+      {
+        "name": "PCIe expansion slot",
+        "purpose": "Connects expansion cards such as a graphics card or additional network adapter.",
+        "connect": "The illustrated long slot is a physical x16-style slot.",
+        "advanced": "Physical length does not guarantee the number of active electrical lanes; CPU, chipset and other devices can affect lane availability."
+      },
+      {
+        "name": "M.2 storage socket",
+        "purpose": "Mounts a compact module directly on the board; shown here with an illustrative SSD installed.",
+        "connect": "Check keying, module length and supported protocol before choosing an SSD.",
+        "advanced": "M.2 describes a form factor and connector family. A socket may support PCIe/NVMe, SATA, or a documented subset; shape alone does not prove compatibility."
+      },
+      {
+        "name": "SATA data ports",
+        "purpose": "Carry storage data between the board and compatible SATA drives.",
+        "connect": "A separate power connection from the power supply is also required for a typical SATA drive.",
+        "advanced": "SATA data and power connectors are different. Some boards share resources between SATA and M.2 connections."
+      },
+      {
+        "name": "24-pin main power",
+        "purpose": "Supplies major motherboard power rails from a compatible power supply.",
+        "connect": "Connect the designated main ATX motherboard power cable.",
+        "advanced": "Do not infer power-cable interchangeability from similar appearance; PSU-side modular cable pinouts can differ between models."
+      },
+      {
+        "name": "CPU power connector",
+        "purpose": "Provides additional power for the CPU voltage-regulation circuitry.",
+        "connect": "Use the designated CPU/EPS cable as required by the board.",
+        "advanced": "CPU/EPS and graphics PCIe power connectors have different assignments. Check labels and documentation; never force a fit."
+      },
+      {
+        "name": "Voltage regulators / VRM",
+        "purpose": "Convert supplied power into voltages needed by the processor.",
+        "connect": "These components are board circuitry, not a cable port. Heatsinks often cover them.",
+        "advanced": "Cooling, power delivery and firmware limits can affect sustained operation. A decorative heatsink is not a performance measurement."
+      },
+      {
+        "name": "Chipset / controller hub",
+        "purpose": "Coordinates a set of peripheral connections and links them to the processor on this conceptual design.",
+        "connect": "No user cable connects directly to the illustrated chipset package.",
+        "advanced": "Modern CPUs also connect directly to some memory and PCIe resources. Not all traffic travels through the chipset."
+      },
+      {
+        "name": "RTC battery",
+        "purpose": "Supports timekeeping and certain retained settings when external power is absent, depending on design.",
+        "connect": "A coin-cell holder is shown as an example; replacement procedures depend on the board.",
+        "advanced": "The operating system and user files are not stored in this battery. Removing it is not a general repair for software faults."
+      },
+      {
+        "name": "Fan header",
+        "purpose": "Provides the specified fan power and control/tachometer connections.",
+        "connect": "Connect the appropriate CPU or chassis fan header according to its label.",
+        "advanced": "Headers differ in current limits and control modes. Fan and lighting connectors are not interchangeable."
+      },
+      {
+        "name": "Internal USB header",
+        "purpose": "Connects compatible case USB ports to the motherboard.",
+        "connect": "Match the case lead to the specific header type and keyed layout.",
+        "advanced": "USB 2.0, front USB 3.x and front USB-C headers can have different shapes and capabilities. The pictured header is schematic."
+      },
+      {
+        "name": "Front-panel header",
+        "purpose": "Connects case controls and indicators such as the power switch and status LEDs.",
+        "connect": "Follow the board-specific pin diagram and LED polarity.",
+        "advanced": "The power button is a control signal, not the main power feed. There is no universal pin arrangement to assume."
+      },
+      {
+        "name": "Front audio header",
+        "purpose": "Connects compatible front-panel headphone and microphone connections.",
+        "connect": "Use the designated case audio lead and the exact board header instructions.",
+        "advanced": "Audio, USB and lighting headers have different electrical meanings even when some pins look similar."
+      }
+    ]
+  },
+  {
+    "key": "rear-ports",
+    "chapter": "comphardware",
+    "title": "Recognize the rear-panel ports",
+    "note": "Enlarged conceptual rear I/O panel. Port presence, colors, counts and supported features vary. These connector drawings are not to scale.",
+    "parts": [
+      {
+        "name": "USB Type-A",
+        "purpose": "A rectangular USB connector used by many keyboards, mice and external devices.",
+        "connect": "Insert the matching plug in its keyed orientation.",
+        "advanced": "Connector color is not a reliable guarantee of USB speed, power or feature support."
+      },
+      {
+        "name": "USB Type-C",
+        "purpose": "A reversible connector shape used for a variety of device connections.",
+        "connect": "Use a cable and device supporting the features required for the task.",
+        "advanced": "The shape alone does not promise a specific speed, charging power, video output or Thunderbolt support."
+      },
+      {
+        "name": "HDMI video output",
+        "purpose": "Carries digital display output, often including audio, to a compatible display.",
+        "connect": "Use the matching display cable and select the corresponding monitor input.",
+        "advanced": "Motherboard video output generally requires a supported graphics source and configuration. A discrete GPU may require its own display ports."
+      },
+      {
+        "name": "DisplayPort output",
+        "purpose": "Another digital display connector family; the full-size outline has a distinctive corner.",
+        "connect": "Use the matching display connection; release a latch if the cable has one.",
+        "advanced": "Supported resolution, refresh rate and adapters depend on the source, cable and display capabilities."
+      },
+      {
+        "name": "Ethernet network port",
+        "purpose": "Accepts an Ethernet cable for a wired network link. The common plug is often called RJ45.",
+        "connect": "Connect to an intended switch or router LAN port.",
+        "advanced": "Link lights indicate a physical link or activity; they do not prove that IP addressing, DNS or internet access works."
+      },
+      {
+        "name": "Analog audio jacks",
+        "purpose": "Connect compatible analog speakers, headphones or microphones according to the assigned jack function.",
+        "connect": "Check the port symbols and audio configuration rather than relying on color alone.",
+        "advanced": "Audio jacks can be reassigned by some drivers; the actual input/output role must match the connected device."
+      }
+    ]
+  },
+  {
+    "key": "memory-path",
+    "chapter": "comphardware",
+    "title": "How a program uses CPU, RAM and storage",
+    "note": "Illustrative loading sequence, not an electrical timing diagram. Click a device or play the tour to follow the roles.",
+    "parts": [
+      {
+        "name": "SSD / persistent storage",
+        "purpose": "Stores program files and data across normal shutdown.",
+        "connect": "The OS reads the required executable and data from storage.",
+        "advanced": "Storage capacity is different from RAM capacity. A fast SSD does not eliminate all consequences of insufficient working memory."
+      },
+      {
+        "name": "RAM / working memory",
+        "purpose": "Holds pages used by active programs and the operating system.",
+        "connect": "Loaded pages become available for instruction and data access.",
+        "advanced": "The OS can cache files and may swap pages under pressure. Used memory is not automatically wasted memory."
+      },
+      {
+        "name": "CPU / execution",
+        "purpose": "Executes program instructions and operates on data through its memory hierarchy.",
+        "connect": "CPU caches reduce repeated access cost for some instruction and data patterns.",
+        "advanced": "Cache is smaller than main memory and not identical to it. The real execution system is more complex than this three-device illustration."
+      },
+      {
+        "name": "Display / output",
+        "purpose": "Shows the application result after the operating system and graphics stack prepare it.",
+        "connect": "A display connection carries the selected graphics output to a monitor.",
+        "advanced": "Not every program draws a screen; programs can produce files, network messages or terminal output instead."
+      }
+    ]
+  },
+  {
+    "key": "network-devices",
+    "chapter": "netfund",
+    "title": "Follow a packet through network devices",
+    "note": "A conceptual local network with a remote service. Arrows show a selected direction; real communication also needs a return path.",
+    "parts": [
+      {
+        "name": "Laptop / endpoint",
+        "purpose": "Runs the client application and originates an IP packet.",
+        "connect": "For an off-subnet destination, the local next hop is normally a configured gateway.",
+        "advanced": "The endpoint still needs correct addressing, routing and application settings."
+      },
+      {
+        "name": "Switch / local link",
+        "purpose": "Forwards local Ethernet frames toward their link-layer destinations.",
+        "connect": "Connects endpoints and the gateway on the illustrated LAN.",
+        "advanced": "An ordinary local-link switch does not replace IP routing between different networks."
+      },
+      {
+        "name": "Router / gateway",
+        "purpose": "Routes an IP packet between connected networks.",
+        "connect": "Chooses the appropriate next hop according to the routing configuration.",
+        "advanced": "Firewalling and NAT may be additional functions, but routing is not the same operation as either one."
+      },
+      {
+        "name": "Provider / transit",
+        "purpose": "Represents the networks carrying traffic toward the remote service.",
+        "connect": "Multiple routers and administrative networks may be involved.",
+        "advanced": "The outbound and return routes can differ. A cloud icon does not mean there is only one device or one trusted operator."
+      },
+      {
+        "name": "Service / destination",
+        "purpose": "Receives traffic at the intended endpoint and processes the application request.",
+        "connect": "A response must travel back to the client using a valid path.",
+        "advanced": "Network reachability alone does not prove authentication, authorization or correct application results."
+      }
+    ]
+  },
+  {
+    "key": "packet-envelope",
+    "chapter": "netfund",
+    "title": "Look inside the network envelopes",
+    "note": "Nested envelopes illustrate encapsulation. Header layouts and sizes vary; this is a conceptual view, not an exact packet decoder.",
+    "parts": [
+      {
+        "name": "Link frame",
+        "purpose": "Carries a packet across the current link. Ethernet is one possible link technology.",
+        "connect": "Contains information for local-link delivery.",
+        "advanced": "Routers normally build a new link envelope for the next link; the original Ethernet frame does not cross the entire internet."
+      },
+      {
+        "name": "IP packet",
+        "purpose": "Carries network-layer source and destination information and an encapsulated payload.",
+        "connect": "Routing decisions use destination and policy information.",
+        "advanced": "IPv4 and IPv6 formats differ. A routed hop changes forwarding-related fields; NAT can additionally change addresses where configured."
+      },
+      {
+        "name": "Transport data",
+        "purpose": "TCP segments or UDP datagrams carry application bytes and transport endpoint information.",
+        "connect": "Ports help identify the relevant transport endpoint.",
+        "advanced": "TCP provides an ordered byte stream, while UDP provides datagrams; application reliability can also be implemented above UDP."
+      },
+      {
+        "name": "Application content",
+        "purpose": "Contains the protocol data the application understands.",
+        "connect": "Examples include a local HTTP request or a DNS message.",
+        "advanced": "Encryption can make content opaque to an observer. Packet visibility does not automatically provide readable application data."
+      }
+    ]
+  },
+  {
+    "key": "tcp-exchange",
+    "chapter": "netservices",
+    "title": "TCP: a normal connection setup",
+    "note": "Conceptual message sequence. Timing, packet boundaries, retries and optional messages are simplified. The tour highlights one stage at a time and sends no traffic.",
+    "parts": [
+      {
+        "name": "SYN",
+        "purpose": "The client proposes a new connection and initial sequence context.",
+        "connect": "Client to listening server.",
+        "advanced": "This is the common active-open pattern; other state transitions exist."
+      },
+      {
+        "name": "SYN-ACK",
+        "purpose": "The server acknowledges the proposal and supplies its own sequence context.",
+        "connect": "Server to client.",
+        "advanced": "A reply does not yet establish application-level success."
+      },
+      {
+        "name": "ACK",
+        "purpose": "The client acknowledges the server sequence context.",
+        "connect": "Client to server.",
+        "advanced": "The transport connection can now carry the application byte stream; it is not encrypted by TCP itself."
+      }
+    ]
+  },
+  {
+    "key": "dhcp-exchange",
+    "chapter": "netservices",
+    "title": "DHCPv4: initial lease acquisition",
+    "note": "Conceptual message sequence. Timing, packet boundaries, retries and optional messages are simplified. The tour highlights one stage at a time and sends no traffic.",
+    "parts": [
+      {
+        "name": "DISCOVER",
+        "purpose": "The client seeks available configuration service.",
+        "connect": "Initial client discovery; relays are omitted from this picture.",
+        "advanced": "This illustrates initial acquisition, not every lease renewal."
+      },
+      {
+        "name": "OFFER",
+        "purpose": "A server proposes lease configuration.",
+        "connect": "Server to client.",
+        "advanced": "An offer is not the final lease acknowledgment."
+      },
+      {
+        "name": "REQUEST",
+        "purpose": "The client requests the selected configuration.",
+        "connect": "Client to server.",
+        "advanced": "Actual addressing and delivery details depend on client state."
+      },
+      {
+        "name": "ACKNOWLEDGE",
+        "purpose": "The server confirms the configuration.",
+        "connect": "Server to client.",
+        "advanced": "The lease has a lifetime; later renewal follows its state rules."
+      }
+    ]
+  },
+  {
+    "key": "dns-exchange",
+    "chapter": "netservices",
+    "title": "DNS: cache miss and resolver work",
+    "note": "Conceptual message sequence. Timing, packet boundaries, retries and optional messages are simplified. The tour highlights one stage at a time and sends no traffic.",
+    "parts": [
+      {
+        "name": "Record query",
+        "purpose": "The client asks for a record for a fictional name.",
+        "connect": "For example: an address record for example.com.",
+        "advanced": "The client need not perform the full resolution process itself."
+      },
+      {
+        "name": "Resolve or use cache",
+        "purpose": "The resolver consults its cache or upstream authorities.",
+        "connect": "Upstream exchanges are intentionally not drawn.",
+        "advanced": "A cache hit can omit upstream network exchanges."
+      },
+      {
+        "name": "Answer or error",
+        "purpose": "The resolver sends a result and response status.",
+        "connect": "Client inspects record data and applicable lifetime.",
+        "advanced": "An empty record set, nonexistent name and server failure differ."
+      },
+      {
+        "name": "Application continues",
+        "purpose": "The client can use the resolved result for a later operation.",
+        "connect": "A separate application connection follows if needed.",
+        "advanced": "DNS success does not establish service reachability."
+      }
+    ]
+  },
+  {
+    "key": "tls-exchange",
+    "chapter": "netservices",
+    "title": "TLS 1.3: simplified full-handshake flights",
+    "note": "Conceptual message sequence. Timing, packet boundaries, retries and optional messages are simplified. The tour highlights one stage at a time and sends no traffic.",
+    "parts": [
+      {
+        "name": "ClientHello",
+        "purpose": "The client offers handshake parameters and key-establishment information.",
+        "connect": "Client begins negotiation.",
+        "advanced": "Resumption and early data are not shown."
+      },
+      {
+        "name": "Server flight",
+        "purpose": "The server selects parameters and sends its authenticated handshake flight.",
+        "connect": "A typical certificate-authenticated flow is illustrated.",
+        "advanced": "The client must validate the expected peer and handshake."
+      },
+      {
+        "name": "Client Finished",
+        "purpose": "The client completes its handshake confirmation.",
+        "connect": "Client to server.",
+        "advanced": "Optional client-certificate authentication is omitted."
+      },
+      {
+        "name": "Protected application data",
+        "purpose": "Application data uses the negotiated protection.",
+        "connect": "Traffic can flow in both directions.",
+        "advanced": "TLS does not decide application object permissions."
+      }
+    ]
+  },
+  {
+    "key": "encapsulation-journey",
+    "chapter": "netfund",
+    "title": "Follow encapsulation and decapsulation",
+    "note": "A simplified endpoint journey for a plaintext HTTP-over-TCP example. The diagram shows conceptual envelopes, not fixed packet sizes or an exact wire trace.",
+    "parts": [
+      {
+        "name": "Application message",
+        "purpose": "An application creates a message; this example uses plaintext HTTP over TCP to make the envelopes easy to see.",
+        "connect": "Sender begins with application bytes.",
+        "advanced": "HTTPS adds TLS protection and HTTP/3 uses QUIC; neither is drawn as this exact example."
+      },
+      {
+        "name": "Transport encapsulation",
+        "purpose": "TCP carries the application bytes in its stream and sends segments with transport information.",
+        "connect": "Conceptual envelope: TCP header plus application bytes.",
+        "advanced": "One message may span multiple segments; this simplified picture is not a guarantee of one packet per request."
+      },
+      {
+        "name": "IP encapsulation",
+        "purpose": "IP carries transport data with network-layer address and forwarding information.",
+        "connect": "Conceptual envelope: IP header around transport data.",
+        "advanced": "Packet sizing, options and fragmentation behavior depend on protocol and path."
+      },
+      {
+        "name": "Link framing",
+        "purpose": "The current link carries the IP packet inside a frame suitable for the next hop.",
+        "connect": "Conceptual envelope: Ethernet header, payload and frame check sequence.",
+        "advanced": "At a router, a new link frame normally replaces the previous one."
+      },
+      {
+        "name": "Physical transmission",
+        "purpose": "The link hardware encodes data as signals on the medium.",
+        "connect": "Signals traverse the cable, fiber or radio link.",
+        "advanced": "Signals are not another application header. Real encoding and timing depend on the medium."
+      },
+      {
+        "name": "Receiver decapsulation",
+        "purpose": "The destination processes the link, IP and transport information and delivers reconstructed data to the application.",
+        "connect": "The receiver conceptually works back up the stack.",
+        "advanced": "Checks, buffering and reassembly occur where needed; applications must still interpret their own messages."
+      }
+    ]
+  },
+  {
+    "key": "iot-boundaries",
+    "title": "IoT: follow the trust boundaries",
+    "chapter": "netsvc",
+    "note": "Select a stage or play the guided tour. Arrows show conceptual flow, not proof of trust.",
+    "parts": [
+      {
+        "name": "Device",
+        "purpose": "Reads a sensor or drives an actuator.",
+        "connect": "Authenticates using its individual identity.",
+        "advanced": "Keep physical safety constraints independent of network commands."
+      },
+      {
+        "name": "Gateway / broker",
+        "purpose": "Relays messages or routes publications.",
+        "connect": "Checks topic permissions for each authenticated client.",
+        "advanced": "A permitted connection does not grant every topic."
+      },
+      {
+        "name": "Cloud service",
+        "purpose": "Stores readings and applies policy.",
+        "connect": "Maps devices to owners and tenants.",
+        "advanced": "Enforce authorization for every object and operation."
+      },
+      {
+        "name": "User application",
+        "purpose": "Displays state and requests actions.",
+        "connect": "Uses a user session to call the service.",
+        "advanced": "Never trust an owner identifier supplied by the client."
+      }
+    ]
+  },
+  {
+    "key": "iot-update",
+    "title": "IoT: a verified update journey",
+    "chapter": "netsvc",
+    "note": "Select a stage or play the guided tour. Arrows show conceptual flow, not proof of trust.",
+    "parts": [
+      {
+        "name": "Obtain package",
+        "purpose": "Receives an update and signed metadata.",
+        "connect": "Treats downloaded bytes as untrusted.",
+        "advanced": "HTTPS alone does not replace device-side update verification."
+      },
+      {
+        "name": "Verify identity",
+        "purpose": "Checks signature and payload binding.",
+        "connect": "Uses an installed trusted signing key.",
+        "advanced": "A plain checksum does not authenticate a publisher."
+      },
+      {
+        "name": "Check policy",
+        "purpose": "Checks model, version and eligibility.",
+        "connect": "Rejects incompatible or unauthorized rollback.",
+        "advanced": "Plan authenticated recovery and signing-key rotation."
+      },
+      {
+        "name": "Install / recover",
+        "purpose": "Commits a verified image safely.",
+        "connect": "Checks health and records the result.",
+        "advanced": "Interrupted power must not leave the device without a recovery path."
+      }
+    ]
+  },
+  {
+    "key": "topology-atlas",
+    "chapter": "netfund",
+    "title": "Network topology atlas: seven connection patterns",
+    "note": "Select a layout to compare traffic paths and failure dependencies. Mesh shows a full mesh of four nodes. These are physical connection sketches; forwarding protocols are not simulated.",
+    "parts": [
+      {
+        "name": "Point-to-point topology",
+        "purpose": "A single link connects two endpoints. It is easy to understand and troubleshoot.",
+        "connect": "A routed connection between two routers is a common example. Distinguish a physical cable from a logical tunnel crossing several links.",
+        "advanced": "One link has no alternate path on its own. Two parallel links may still share a cable duct, power supply or provider."
+      },
+      {
+        "name": "Bus topology",
+        "purpose": "Devices attach to one shared backbone. Classic coaxial Ethernet is a historical example.",
+        "connect": "Attached stations share the medium. Cable termination and shared-medium access behavior matter in the relevant technology.",
+        "advanced": "A backbone fault can affect many stations; outcome depends on the physical implementation. Modern switched Ethernet should not be described as a shared coaxial bus."
+      },
+      {
+        "name": "Star topology",
+        "purpose": "Each endpoint connects to a central device, often an Ethernet switch or wireless access point.",
+        "connect": "Failure of one endpoint cable typically isolates that endpoint. Failure of the central device can disconnect all attached endpoints.",
+        "advanced": "A central hub and a switch can have the same physical star shape but different forwarding behavior. A switch does not inherently provide redundant power or paths."
+      },
+      {
+        "name": "Ring topology",
+        "purpose": "Each node has two neighbors in a closed loop. The physical ring does not define its forwarding protocol.",
+        "connect": "Some ring technologies use token passing or protection mechanisms; ordinary Ethernet links arranged in a ring do not automatically provide either.",
+        "advanced": "Redundant Layer 2 paths need loop prevention or a suitable protection design. An uncontrolled forwarding loop can circulate frames and disrupt the network."
+      },
+      {
+        "name": "Full and partial mesh",
+        "purpose": "In a full mesh, every node connects directly to every other node. A partial mesh connects only selected pairs.",
+        "connect": "A full mesh of n nodes needs n(n-1)/2 undirected point-to-point links. Five nodes need ten links; each node has four neighbors.",
+        "advanced": "Extra paths increase redundancy and operational complexity. Routing or bridging rules must choose usable paths; connectivity alone is not a security policy."
+      },
+      {
+        "name": "Tree and hierarchical topology",
+        "purpose": "A tree branches from a root through intermediate nodes to leaves. A simple tree has no cycles.",
+        "connect": "Access switches can connect endpoints to distribution devices. An upstream failure affects the subtree that depends on it.",
+        "advanced": "Real campus designs often add redundant uplinks and are no longer strict graph-theory trees. Document the actual active paths and failure domains."
+      },
+      {
+        "name": "Spine-leaf topology",
+        "purpose": "A common data-center design connects each leaf switch to every spine switch. Endpoints attach to leaves.",
+        "connect": "In a typical routed fabric, traffic between leaves crosses a spine. Equal-cost multipath can distribute flows across available paths.",
+        "advanced": "Capacity depends on link speeds, counts and traffic patterns. Aggregate offered traffic exceeding uplink capacity creates oversubscription; equal path counts do not imply equal bandwidth."
+      }
+    ]
+  },
+  {
+    "key": "session-lifecycle",
+    "chapter": "vulnidentity",
+    "title": "Session lifecycle: where trust changes",
+    "note": "Select a stage or play the guided tour. This illustration contains no real tokens and performs no network requests.",
+    "parts": [
+      {
+        "name": "Anonymous",
+        "purpose": "The browser begins without an authenticated identity.",
+        "connect": "A temporary identifier may support a shopping cart or preferences.",
+        "advanced": "Never infer authenticated access from possession of an anonymous identifier."
+      },
+      {
+        "name": "Login / rotate",
+        "purpose": "The server verifies the login and issues the authenticated session.",
+        "connect": "Replace the pre-login identifier and remove its authenticated usefulness.",
+        "advanced": "Rotation must preserve appropriate user state without preserving an attacker-known authenticated credential."
+      },
+      {
+        "name": "Validate requests",
+        "purpose": "The service checks validity and authorization on each protected operation.",
+        "connect": "Associate the request with the correct identity and current permissions.",
+        "advanced": "A valid session is not permission to read every object or act for another user."
+      },
+      {
+        "name": "Logout / expire",
+        "purpose": "The session loses validity under the application policy.",
+        "connect": "Enforce invalidation at the service, not only by deleting browser state.",
+        "advanced": "Retest old credentials and document any deliberate distributed or token-expiry window."
+      }
+    ]
+  },
+  {
+    "key": "web-assessment-cycle",
+    "chapter": "webtest",
+    "title": "Web assessment: six stages from rule to retest",
+    "note": "Select a stage or play the guided tour. Follow this cycle for each feature; the diagrams do not send requests.",
+    "parts": [
+      {
+        "name": "Define the rule",
+        "purpose": "State the security property and permitted actors.",
+        "connect": "Map an input to its trust boundary and sensitive operation.",
+        "advanced": "A tool name is not a test hypothesis."
+      },
+      {
+        "name": "Prepare controls",
+        "purpose": "Create a known-good request and a denied-case expectation.",
+        "connect": "Use synthetic accounts, objects and a reset method.",
+        "advanced": "Keep authentication state and other variables consistent."
+      },
+      {
+        "name": "Change one input",
+        "purpose": "Modify one ownership, state or input condition.",
+        "connect": "Compare the changed request against the baseline.",
+        "advanced": "Use bounded local tests and stop on unexpected effects."
+      },
+      {
+        "name": "Verify evidence",
+        "purpose": "Inspect identity, content and server-side effects.",
+        "connect": "Eliminate redirects, caches and stale sessions as explanations.",
+        "advanced": "Status, length or timing alone is rarely sufficient."
+      },
+      {
+        "name": "Repair the cause",
+        "purpose": "Enforce the rule at the trusted server boundary.",
+        "connect": "Use appropriate authorization, parsing or transaction controls.",
+        "advanced": "Suppressing a scanner finding does not repair the root cause."
+      },
+      {
+        "name": "Retest both paths",
+        "purpose": "Repeat the denied case and a legitimate operation.",
+        "connect": "Preserve useful assertions as regression tests.",
+        "advanced": "State untested variants and limits instead of claiming complete coverage."
+      }
+    ]
+  },
+  {
+    "key": "network-evidence-path",
+    "chapter": "netsvc",
+    "title": "Network testing: four boundaries behind one connection",
+    "note": "Select a boundary or play the tour. This conceptual path explains what each observation can establish; it does not probe any network.",
+    "parts": [
+      {
+        "name": "Source zone",
+        "purpose": "Defines where the observation originates.",
+        "connect": "Record interface, route and expected permissions.",
+        "advanced": "A result from one source does not establish every zone policy."
+      },
+      {
+        "name": "Network policy",
+        "purpose": "Controls permitted traffic between zones.",
+        "connect": "Correlate probes with applicable firewall evidence.",
+        "advanced": "A timeout by itself is not a verified policy block."
+      },
+      {
+        "name": "Service listener",
+        "purpose": "Accepts the transport connection on a bound address and port.",
+        "connect": "Confirm the service is actually running for the policy test.",
+        "advanced": "A closed listener does not prove that a firewall would block an active service."
+      },
+      {
+        "name": "Application policy",
+        "purpose": "Controls identity and allowed operations after transport connection.",
+        "connect": "Test a legitimate and unauthorized action with synthetic accounts.",
+        "advanced": "Transport reachability is not permission to access every resource."
+      }
+    ]
+  },
+  {
+    "key": "forensic-evidence-flow",
+    "chapter": "evidence",
+    "title": "Forensics: preserve the link from source to conclusion",
+    "note": "Select a stage or play the tour. This lesson uses synthetic examples and does not collect evidence from your device.",
+    "parts": [
+      {
+        "name": "Document source",
+        "purpose": "Identify the item and investigative question.",
+        "connect": "Record acquisition context, time and handling.",
+        "advanced": "Source identity is not established by a hash alone."
+      },
+      {
+        "name": "Preserve baseline",
+        "purpose": "Protect the acquisition and record integrity values.",
+        "connect": "Create separately identified working copies.",
+        "advanced": "Live acquisition can change the source; document those effects."
+      },
+      {
+        "name": "Analyze copies",
+        "purpose": "Extract relevant artifacts into a separate analysis area.",
+        "connect": "Record tool versions, commands and parser assumptions.",
+        "advanced": "A parser result needs validation and context."
+      },
+      {
+        "name": "Correlate / report",
+        "purpose": "Compare independent artifacts and explain uncertainty.",
+        "connect": "Preserve original timestamps and cite source locations.",
+        "advanced": "Correlation alone does not prove attribution or causation."
+      }
+    ]
+  },
+  {
+    "key": "remote-access-path",
+    "chapter": "netsvc",
+    "title": "Remote access: identity, gateway, target and lifecycle",
+    "note": "Select a stage or play the guided tour. This conceptual diagram does not open a connection.",
+    "parts": [
+      {
+        "name": "Client identity",
+        "purpose": "Uses a named user and protected credentials.",
+        "connect": "Verifies the expected server or gateway identity.",
+        "advanced": "Do not treat encryption alone as identity verification."
+      },
+      {
+        "name": "Access gateway",
+        "purpose": "Provides an approved entry path.",
+        "connect": "Authenticates access and restricts permitted targets.",
+        "advanced": "A gateway or VPN is not blanket authorization for the network."
+      },
+      {
+        "name": "Target service",
+        "purpose": "Accepts the selected SSH, RDP or application session.",
+        "connect": "Enforces account and resource permissions.",
+        "advanced": "Reachability and successful login do not imply administrator rights."
+      },
+      {
+        "name": "Audit / revoke",
+        "purpose": "Records permitted use and ends access when needed.",
+        "connect": "Revoke credentials and active sessions according to policy.",
+        "advanced": "Blocking future logins may leave existing sessions active."
+      }
+    ]
+  },
+  {
+    "key": "network-attack-chain",
+    "chapter": "netwire",
+    "title": "Network attack analysis: prove each transition",
+    "note": "Select a stage or play the tour. The model distinguishes a possible path from observed success.",
+    "parts": [
+      {
+        "name": "Attacker position",
+        "purpose": "Defines the actual starting access and controllable inputs.",
+        "connect": "Local-link access, credentials and remote reachability imply different opportunities.",
+        "advanced": "Do not assume a capability that has not been established."
+      },
+      {
+        "name": "Trust decision",
+        "purpose": "A receiver chooses whether to accept an identity, message or route.",
+        "connect": "Identify the exact rule an attacker attempts to influence.",
+        "advanced": "An input being sent does not prove that it was accepted."
+      },
+      {
+        "name": "Accepted effect",
+        "purpose": "The receiver changes a mapping, connection, identity or action.",
+        "connect": "Correlate the resulting behavior with the preceding input.",
+        "advanced": "Redirection or authentication is not automatically full compromise."
+      },
+      {
+        "name": "Confirmed impact",
+        "purpose": "The observed operation violates the intended security property.",
+        "connect": "Preserve evidence and test the control that breaks the path.",
+        "advanced": "Separate attempts, effects, business impact and untested inferences."
+      }
+    ]
+  }
+]

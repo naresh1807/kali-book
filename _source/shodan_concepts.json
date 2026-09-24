@@ -1,0 +1,50 @@
+[
+  [
+    "01 / What Shodan indexes",
+    "Shodan records observations of internet-facing services. One address can have several service records. Searching its existing index differs from running Nmap against a live host."
+  ],
+  [
+    "02 / Read a banner",
+    "Inspect ip_str, port, transport, timestamp and the raw service response. Product, organization, location and certificate fields add context, but not every record contains every field."
+  ],
+  [
+    "03 / Separate scope from hints",
+    "Start with a verified public IP inventory or owned network range. Domains, certificates and organization names are discovery hints; shared hosting and cloud reassignment can produce unrelated matches."
+  ],
+  [
+    "04 / Search syntax",
+    "A filter has the shape name:value with no separating space. Quote values containing spaces. A CLI query also needs shell quoting; a browser query does not need the outer shell quotes."
+  ],
+  [
+    "05 / Public versus private",
+    "A NATed Kali VM at 10.x or 192.168.x is not directly searchable as your private device in the public Shodan index. Do not expose a lab to the internet merely to make it searchable."
+  ],
+  [
+    "06 / Freshness and uncertainty",
+    "Record the observation timestamp and the date of your query. Zero results do not prove there is no exposure. A stale banner or IP reassignment can invalidate an apparent match."
+  ],
+  [
+    "07 / Credits and account access",
+    "Query credits and scan credits serve different operations. Search/export may spend query credits; on-demand scans spend scan credits. Check your current account entitlements rather than assuming all filters and historical features are included."
+  ],
+  [
+    "08 / Vulnerability enrichment",
+    "A CVE association can be inferred from product/version evidence. Confirm the actual build, configuration and patch status on your asset before calling it vulnerable; backported fixes can make banners misleading."
+  ],
+  [
+    "09 / Data engineering",
+    "Keep a limited raw export, then parse locally. For inventory comparison, use an endpoint key such as IP, transport and port. Preserve timestamps and missing values rather than silently treating absent data as false."
+  ],
+  [
+    "10 / API design",
+    "Use bounded queries, pagination limits and explicit error handling. Treat authentication, permission, rate-limit and network failures differently. Honor retry guidance; do not retry forever or log API keys."
+  ],
+  [
+    "11 / Monitoring concepts",
+    "Monitor can follow networks, domains or queries. These scopes can overlap and produce different coverage. Confirm ownership, configure notifications, review new observations and track remediation; creating a monitor does not establish authorization."
+  ],
+  [
+    "12 / Investigation workflow",
+    "Define scope → count → inspect a small sample → export a bounded set → verify ownership and recency → validate findings on your assets → record remediation. A search result is an observation to investigate, not a reason to log into an unknown service."
+  ]
+]

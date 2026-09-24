@@ -1,0 +1,130 @@
+[
+  {
+    "id": "architecture",
+    "title": "Device architecture and trust boundaries",
+    "basic": "A sensor measures the world; an actuator changes it. Firmware manages hardware, while gateways, brokers, cloud APIs and apps move or consume data.",
+    "intermediate": "Draw each identity and trust boundary separately. A gateway forwarding a reading does not establish that the reading is genuine.",
+    "advanced": "Model compromise of one device, one tenant and the update service separately. Keep physical safety constraints independent of cloud availability.",
+    "example": "A fictional greenhouse sensor may publish temperature, but must never authorize an irrigation command."
+  },
+  {
+    "id": "scope",
+    "title": "Inventory and a safe assessment plan",
+    "basic": "Record the device model, firmware version, owner, interfaces and expected behavior before testing.",
+    "intermediate": "Use a spare isolated device or simulator, synthetic data, a recovery image and a maintenance window. Capture baseline behavior first.",
+    "advanced": "Include dependent cloud services, radios and recovery procedures in scope. Stop if timing changes, resets or physical effects exceed agreed limits.",
+    "example": "Document a maximum request rate and a stop condition; do not run intrusive scans against a working lock or medical device."
+  },
+  {
+    "id": "threat-model",
+    "title": "Threat modeling and attack surfaces",
+    "basic": "Assets include readings, credentials, update keys, availability and actuator state. Entry points include radio, debug ports, APIs and update files.",
+    "intermediate": "Describe attacker access: remote network, nearby radio, authenticated tenant or physical possession. These produce different risks.",
+    "advanced": "Trace a proposed path across boundaries and identify evidence for every step. A version banner alone does not establish exploitability.",
+    "example": "Finding an open port is an observation; prove the specific unintended permission on a lab device before assigning impact."
+  },
+  {
+    "id": "identity",
+    "title": "Identity, provisioning and ownership",
+    "basic": "Give each device an individual identity. Authentication establishes identity; authorization decides allowed operations.",
+    "intermediate": "Use controlled onboarding and rotate or revoke credentials when a device changes owner. Avoid credentials shared across an entire fleet.",
+    "advanced": "Consider key storage, enrollment abuse, lost devices and recovery. A client-provided device ID is not proof of possession of its credential.",
+    "example": "Test owner access and another fictional owner against the same synthetic device record."
+  },
+  {
+    "id": "mqtt",
+    "title": "MQTT brokers, topics and permissions",
+    "basic": "MQTT sends publications through a broker to subscribed clients. Topic names organize data; they are not access controls.",
+    "intermediate": "Review publish and subscribe permissions separately. Understand retained messages, session persistence and wildcard subscriptions before using test data.",
+    "advanced": "QoS delivery semantics do not authorize commands or make an actuator operation safe to repeat. Use application-level command IDs and bounded deduplication.",
+    "example": "Allow sensor-a to publish lab/sensor-a/telemetry; deny lab/sensor-b/telemetry and wildcard access. Reference: MQTT 5.0 specification."
+  },
+  {
+    "id": "coap",
+    "title": "CoAP and constrained services",
+    "basic": "CoAP provides request/response semantics for constrained environments. The base specification commonly uses UDP.",
+    "intermediate": "Inspect resources, methods and identity-to-resource permissions in a local fixture. Observe retransmissions and resource limits.",
+    "advanced": "Review transport or object security in the actual deployment; DTLS and OSCORE protect different boundaries. Do not infer protection from a port number.",
+    "example": "Compare an authorized resource read with a denied read of another simulated device; never assume discovery grants access."
+  },
+  {
+    "id": "radio",
+    "title": "Wi-Fi, Bluetooth LE, Zigbee and Thread",
+    "basic": "Radio proximity creates a separate attack surface. These technologies differ in link behavior, discovery and enrollment.",
+    "intermediate": "Document pairing or joining, key lifecycle, permitted peers and gateway behavior for the exact implementation. Thread carries IPv6; Matter is an application-layer ecosystem, not a radio.",
+    "advanced": "Assess commissioning, ownership transfer and recovery in an isolated radio lab. Encryption does not fix weak onboarding or overbroad application permissions.",
+    "example": "Make a comparison worksheet: link technology, enrollment step, identity, key storage, revocation and application authorization."
+  },
+  {
+    "id": "hardware",
+    "title": "UART, JTAG and physical interfaces",
+    "basic": "UART is a serial interface; JTAG supports hardware test and debugging. Exposed pads do not automatically mean an accessible privileged console.",
+    "intermediate": "Use the manufacturer pinout and voltage requirements on a spare powered-down board before attaching suitable equipment. Incorrect voltage can damage hardware.",
+    "advanced": "Review production debug policy and physical attack assumptions. A disabled software console and hardware debug lockdown are separate controls.",
+    "example": "Photograph and label known interfaces, record uncertainty and review documentation; do not guess pin voltage or short pads."
+  },
+  {
+    "id": "firmware",
+    "title": "Firmware inspection and software inventory",
+    "basic": "Firmware is software packaged for a device. Start with a legitimately obtained image and record its origin, version and digest.",
+    "intermediate": "Inspect file types, embedded configuration and component versions offline. Do not execute unknown extracted programs. Treat apparent credentials as sensitive evidence.",
+    "advanced": "Map components to actual vendor builds and configuration. A string resembling a version or password requires validation; bundled unused code may change exposure.",
+    "example": "Use file and sha256sum on a copied lab image; compare hashes to track copies, without treating the digest as proof of publisher identity."
+  },
+  {
+    "id": "boot",
+    "title": "Secure boot and runtime trust",
+    "basic": "Secure boot checks authorized software during the boot chain. It differs from encrypting storage or verifying a downloaded file.",
+    "intermediate": "Identify the root of trust, what each stage verifies and how trust keys are updated. Document recovery paths.",
+    "advanced": "Consider debug access, mutable configuration and compromised runtime code after boot. Verified startup alone cannot prevent every runtime vulnerability.",
+    "example": "Draw boot ROM to bootloader to operating system; mark where signature verification and failure handling occur."
+  },
+  {
+    "id": "updates",
+    "title": "Signed updates, rollback and recovery",
+    "basic": "An update needs authenticity and integrity, compatibility checks and a safe installation process.",
+    "intermediate": "Verify signed metadata against a trusted key and bind it to the intended payload and device model. Plan interrupted-power recovery.",
+    "advanced": "Protect against unauthorized downgrade while preserving an authenticated recovery path. Key rotation, revocation and long offline periods need explicit design.",
+    "example": "A matching SHA-256 digest detects a change only relative to a trusted expected digest; a downloaded checksum beside malware proves no publisher identity."
+  },
+  {
+    "id": "telemetry",
+    "title": "Input validation, freshness and replay",
+    "basic": "Treat readings and commands as untrusted structured input. Validate required fields, types and acceptable limits.",
+    "intermediate": "Bind telemetry to the authenticated device and reject unexpected fields. Track sequence numbers or another freshness mechanism per identity.",
+    "advanced": "Design resets, clock drift, storage persistence and concurrent delivery explicitly. A sequence counter alone is not authentication and may fail after state loss.",
+    "example": "The offline exercise rejects booleans as temperatures and denies repeated sequence numbers; its replay memory disappears when restarted."
+  },
+  {
+    "id": "cloud",
+    "title": "Mobile apps, cloud APIs and tenant isolation",
+    "basic": "A device ecosystem includes APIs, dashboards and mobile apps. Apply ordinary web security principles at each service boundary.",
+    "intermediate": "Test object-level authorization with two synthetic users and separate devices. Review tokens, enrollment endpoints and ownership transfer.",
+    "advanced": "A secure radio link does not prevent an insecure cloud API from exposing device data. Check authorization on subscriptions, exports and administrative functions too.",
+    "example": "Change only the synthetic device identifier and verify denial for the other owner, including error and cached response paths."
+  },
+  {
+    "id": "operations",
+    "title": "Segmentation, monitoring and retirement",
+    "basic": "Separate device, management and ordinary user traffic according to required communication paths.",
+    "intermediate": "Build an allowlist of necessary services and record authentication failures, update results and unexpected reconnects without logging secrets.",
+    "advanced": "Plan certificate expiry, vendor end-of-support, data deletion and revocation at retirement. A factory reset may not revoke a cloud credential.",
+    "example": "Write an expected-flow table and a retirement checklist, then compare actual evidence from your isolated lab."
+  },
+  {
+    "id": "tools",
+    "title": "Choose tools by the question",
+    "basic": "Use Wireshark for captured traffic, file and sha256sum for image identification, and a text editor for configuration review.",
+    "intermediate": "Binwalk can help identify embedded formats; Ghidra can support offline code understanding. Broker clients and CoAP clients exercise configured local services.",
+    "advanced": "Record tool versions and exact input. Extractors process untrusted files and should run in an isolated workspace; signatures and heuristics can be wrong.",
+    "example": "Explain the question first: packet contents, image structure or authorization decision. Use the smallest tool and fixture that can answer it."
+  },
+  {
+    "id": "report",
+    "title": "Evidence, remediation and retesting",
+    "basic": "Write the expected rule, observed result, affected model/version and prerequisites. Separate observation from confirmed impact.",
+    "intermediate": "Save minimal redacted evidence and include a negative control. Suggest a specific permission, lifecycle or validation repair.",
+    "advanced": "Retest the original case and a legitimate operation after repair. State coverage limits across firmware variants, radios and cloud regions.",
+    "example": "Use the supplied offline policy lab, record allowed and denied outcomes, and explain why these tests do not certify real hardware."
+  }
+]

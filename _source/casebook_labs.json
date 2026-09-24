@@ -1,0 +1,238 @@
+[
+  [
+    "19",
+    "API object and field permissions",
+    "Read Chapter 38 and examples/advanced-casebook/README.md first.",
+    [
+      [
+        "Prepare the files",
+        "Copy the whole examples/advanced-casebook folder from Windows into ~/kali-lab/advanced-casebook inside Kali. Python 3 and Node.js are needed for all checks. Open two terminals in that folder. These files use only synthetic data.",
+        "cd \"$HOME/kali-lab/advanced-casebook\""
+      ],
+      [
+        "Terminal A: vulnerable mode",
+        "Keep this terminal running. The service binds only to 127.0.0.1.",
+        "python3 lab_app.py --mode vulnerable --port 8901"
+      ],
+      [
+        "Terminal B: observe",
+        "passed means the deliberately vulnerable behavior matches the exercise expectations.",
+        "python3 exercise.py --expect vulnerable --case api"
+      ],
+      [
+        "Terminal A: restart with the fix",
+        "Press Ctrl+C to stop the first server, then run this command. Restart resets all in-memory data.",
+        "python3 lab_app.py --mode fixed --port 8901"
+      ],
+      [
+        "Terminal B: retest",
+        "Check each result and explain why legitimate access must still work. Stop the server with Ctrl+C after finishing.",
+        "python3 exercise.py --expect fixed --case api"
+      ]
+    ]
+  ],
+  [
+    "20",
+    "Session boundaries and identity binding",
+    "Read Chapter 39. The binding script is a synthetic model, not a complete OAuth provider.",
+    [
+      [
+        "Prepare the files",
+        "Copy the whole examples/advanced-casebook folder from Windows into ~/kali-lab/advanced-casebook inside Kali. Python 3 and Node.js are needed for all checks. Open two terminals in that folder. These files use only synthetic data.",
+        "cd \"$HOME/kali-lab/advanced-casebook\""
+      ],
+      [
+        "Terminal A: vulnerable mode",
+        "Keep this terminal running. The service binds only to 127.0.0.1.",
+        "python3 lab_app.py --mode vulnerable --port 8901"
+      ],
+      [
+        "Terminal B: observe",
+        "passed means the deliberately vulnerable behavior matches the exercise expectations.",
+        "python3 exercise.py --expect vulnerable --case auth"
+      ],
+      [
+        "Terminal A: restart with the fix",
+        "Press Ctrl+C to stop the first server, then run this command. Restart resets all in-memory data.",
+        "python3 lab_app.py --mode fixed --port 8901"
+      ],
+      [
+        "Terminal B: retest",
+        "Check each result and explain why legitimate access must still work. Stop the server with Ctrl+C after finishing.",
+        "python3 exercise.py --expect fixed --case auth"
+      ],
+      [
+        "Explore transaction binding",
+        "Change one expected claim at a time in a copy of the model.",
+        "python3 auth_binding.py"
+      ]
+    ]
+  ],
+  [
+    "21",
+    "Business rules under concurrency",
+    "Read Chapter 40. These tests start their own temporary local server.",
+    [
+      [
+        "Prepare the files",
+        "Copy the whole examples/advanced-casebook folder from Windows into ~/kali-lab/advanced-casebook inside Kali. Python 3 and Node.js are needed for all checks. Open two terminals in that folder. These files use only synthetic data.",
+        "cd \"$HOME/kali-lab/advanced-casebook\""
+      ],
+      [
+        "Compare check/update behavior",
+        "Expect two successes in the vulnerable model and one in the atomic model.",
+        "python3 race_demo.py"
+      ],
+      [
+        "Verify HTTP atomicity",
+        "The regression test expects exactly one successful redemption.",
+        "python3 -m unittest -v test_lab.LabTests.test_atomic_http_redemption"
+      ]
+    ]
+  ],
+  [
+    "22",
+    "Trace a finding through source",
+    "Read Chapter 41. Inspect code before deciding which checks address the root cause.",
+    [
+      [
+        "Prepare the files",
+        "Copy the whole examples/advanced-casebook folder from Windows into ~/kali-lab/advanced-casebook inside Kali. Python 3 and Node.js are needed for all checks. Open two terminals in that folder. These files use only synthetic data.",
+        "cd \"$HOME/kali-lab/advanced-casebook\""
+      ],
+      [
+        "Trace identity to data",
+        "Follow session(), the invoice route and the profile allowlist. Read both mode branches.",
+        "less lab_app.py"
+      ],
+      [
+        "Record a review",
+        "Use sample_finding.md and report_template.md. Record the route, trust boundary, missing check, legitimate case and negative case.",
+        ""
+      ],
+      [
+        "Validate the review hypothesis",
+        "The meta-test passes only when fixed expectations detect the vulnerable app.",
+        "python3 -m unittest -v test_lab.LabTests.test_fixed_expectations_detect_vulnerable"
+      ]
+    ]
+  ],
+  [
+    "23",
+    "Browser origin and message checks",
+    "Read Chapter 42. Node checks validate the handler logic; inspect CSP in a real browser separately.",
+    [
+      [
+        "Prepare the files",
+        "Copy the whole examples/advanced-casebook folder from Windows into ~/kali-lab/advanced-casebook inside Kali. Python 3 and Node.js are needed for all checks. Open two terminals in that folder. These files use only synthetic data.",
+        "cd \"$HOME/kali-lab/advanced-casebook\""
+      ],
+      [
+        "Start the fixed page",
+        "Open http://127.0.0.1:8901/browser in the Kali browser and inspect its response headers and developer console.",
+        "python3 lab_app.py --mode fixed --port 8901"
+      ],
+      [
+        "Exercise message handling",
+        "Use the Browser console lesson in Chapter 42. Confirm valid text is displayed and wrong message types are ignored. Stop the server when finished.",
+        ""
+      ],
+      [
+        "Terminal B: test handler conditions",
+        "These assertions do not simulate browser CSP enforcement.",
+        "node browser_tests.cjs"
+      ]
+    ]
+  ],
+  [
+    "24",
+    "Turn a threat model into coverage",
+    "Read Chapter 43 and fill in threat_model.md.",
+    [
+      [
+        "Prepare the files",
+        "Copy the whole examples/advanced-casebook folder from Windows into ~/kali-lab/advanced-casebook inside Kali. Python 3 and Node.js are needed for all checks. Open two terminals in that folder. These files use only synthetic data.",
+        "cd \"$HOME/kali-lab/advanced-casebook\""
+      ],
+      [
+        "Draw boundaries",
+        "List assets, actors, entry points and where identity, object ownership and browser origins are checked.",
+        "less threat_model.md"
+      ],
+      [
+        "Map evidence",
+        "Associate each threat with a test and a repair. Mark OAuth, GraphQL and payment scenarios as unimplemented extensions.",
+        "python3 -m unittest -v test_lab"
+      ],
+      [
+        "Prioritize",
+        "Record impact, assumptions, remaining uncertainty and the owner of each remediation.",
+        ""
+      ]
+    ]
+  ],
+  [
+    "25",
+    "Security regression suite",
+    "Read Chapter 44. No manually running server is needed.",
+    [
+      [
+        "Prepare the files",
+        "Copy the whole examples/advanced-casebook folder from Windows into ~/kali-lab/advanced-casebook inside Kali. Python 3 and Node.js are needed for all checks. Open two terminals in that folder. These files use only synthetic data.",
+        "cd \"$HOME/kali-lab/advanced-casebook\""
+      ],
+      [
+        "Python checks",
+        "The suite creates fresh isolated state and includes a test that detects the intentionally vulnerable behavior.",
+        "python3 -m unittest -v test_lab"
+      ],
+      [
+        "JavaScript checks",
+        "Verify allowed and rejected messages.",
+        "node browser_tests.cjs"
+      ],
+      [
+        "Interpret results",
+        "A passing suite covers its assertions only. Record versions and remaining manual browser checks. In CI, stop on any nonzero exit code.",
+        ""
+      ]
+    ]
+  ],
+  [
+    "26",
+    "Complete a local assessment",
+    "Read Chapter 45. Start each mode with fresh state. Complete report_template.md using observed results.",
+    [
+      [
+        "Prepare the files",
+        "Copy the whole examples/advanced-casebook folder from Windows into ~/kali-lab/advanced-casebook inside Kali. Python 3 and Node.js are needed for all checks. Open two terminals in that folder. These files use only synthetic data.",
+        "cd \"$HOME/kali-lab/advanced-casebook\""
+      ],
+      [
+        "Terminal A: initial fixture",
+        "Keep the local server running.",
+        "python3 lab_app.py --mode vulnerable --port 8901"
+      ],
+      [
+        "Terminal B: collect observations",
+        "The report records synthetic checks, without publishing session token values.",
+        "python3 exercise.py --expect vulnerable --case all > vulnerable-observations.json"
+      ],
+      [
+        "Terminal A: repair",
+        "Press Ctrl+C, then restart in fixed mode.",
+        "python3 lab_app.py --mode fixed --port 8901"
+      ],
+      [
+        "Terminal B: collect retest",
+        "Review the JSON and report any false result.",
+        "python3 exercise.py --expect fixed --case all > fixed-retest.json"
+      ],
+      [
+        "Complete the report",
+        "Use report_template.md and sample_finding.md. Include scope, evidence, root cause, repair, retest and limits. Stop the server.",
+        ""
+      ]
+    ]
+  ]
+]
