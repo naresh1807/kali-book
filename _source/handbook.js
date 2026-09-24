@@ -1,7 +1,7 @@
 'use strict';
 const navItems=[...document.querySelectorAll('[data-view]')];
 const chapters=[...document.querySelectorAll('.chapter')];
-const cards=[...document.querySelectorAll('.card, .concept-depth, .anatomy-study, .protocol-guide, .layer-guide, .iot-guide, .topology-guide, .session-guide, .api-guide, .web-deep-guide, .network-deep-guide, .forensic-guide, .remote-guide, .attack-study, .security-guide')];
+const cards=[...document.querySelectorAll('.card, .concept-depth, .anatomy-study, .protocol-guide, .layer-guide, .iot-guide, .topology-guide, .session-guide, .api-guide, .web-deep-guide, .network-deep-guide, .forensic-guide, .remote-guide, .attack-study, .security-guide, .malware-guide')];
 const panels=[...document.querySelectorAll('.bookpanel')];
 const search=document.getElementById('search');
 const result=document.getElementById('result');
@@ -13,7 +13,7 @@ function render(){
  panels.forEach(p=>{p.hidden=!(isReference?p.id==='reference':p.id===view)});
  let count=0;
  cards.forEach(c=>{const match=(q.length>0||view==='all'||c.dataset.chapter===view)&&index.get(c).includes(q);c.hidden=!match;if(match)count++});
- chapters.forEach(s=>s.hidden=![...s.querySelectorAll('.card, .concept-depth, .anatomy-study, .protocol-guide, .layer-guide, .iot-guide, .topology-guide, .session-guide, .api-guide, .web-deep-guide, .network-deep-guide, .forensic-guide, .remote-guide, .attack-study, .security-guide')].some(c=>!c.hidden));
+ chapters.forEach(s=>s.hidden=![...s.querySelectorAll('.card, .concept-depth, .anatomy-study, .protocol-guide, .layer-guide, .iot-guide, .topology-guide, .session-guide, .api-guide, .web-deep-guide, .network-deep-guide, .forensic-guide, .remote-guide, .attack-study, .security-guide, .malware-guide')].some(c=>!c.hidden));
  navItems.forEach(n=>{if(!q&&n.dataset.view===view)n.setAttribute('aria-current','page');else n.removeAttribute('aria-current')});
  document.getElementById('empty').hidden=!isReference||count>0;
  result.textContent=isReference?`${count} of ${cards.length} study entries${q?' · searching all chapters':''}`:'Offline handbook · choose a chapter or start a guided lab';
