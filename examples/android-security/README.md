@@ -73,3 +73,32 @@ Coverage limits and cleanup:
 [Frida Android documentation](https://frida.re/docs/android/)
 
 Check platform-version notes before applying a test. This workbook provides manual exercises, not a supplied app or a completed device assessment.
+
+
+## 7. Advanced assessment matrix
+
+For lessons 19-30, record a separate row for each case: boundary, starting state, synthetic input, expected outcome, observed outcome, confidence, remediation and retest.
+
+IPC: compare a permitted caller with an unapproved caller. Confirm the sensitive operation itself checks authorization.
+
+Provider: compare permitted sharing with an out-of-scope fixture identifier. Confirm no unrelated rows or files are returned.
+
+Session: compare ordinary sign-in, invalid callback correlation, logout and account switching. Inspect both client and staging-server evidence.
+
+WebView: compare approved origin, unexpected origin and redirected navigation. A bridge must not gain authority merely because a page loaded.
+
+TLS: compare valid endpoint, invalid trust and offline failure. Verify that release settings preserve certificate validation.
+
+Native parser: compare valid fixture and bounded malformed fixture under an available sanitizer build. Save a minimal reproducer without inferring exploitability from a crash alone.
+
+Radio interfaces: use only owned paired peers. Check consent, identity and revocation rather than attempting nearby-device takeover.
+
+## 8. Advanced references and practice limits
+
+[Android security risks](https://developer.android.com/privacy-and-security/risks)
+[MASTG Android testing](https://mas.owasp.org/MASTG/0x05b-Android-Security-Testing/)
+[MASTG testing techniques](https://mas.owasp.org/MASTG/techniques/)
+[Intent and component concepts](https://developer.android.com/guide/components/intents-filters)
+[PendingIntent sender identity](https://developer.android.com/privacy-and-security/risks/sender-of-pending-intents)
+
+These are manual practice plans for owned test applications, synthetic data and controlled peers. No Android binary, mobile exploit or completed device assessment is included. Record OS/API level and target SDK because platform behavior changes across versions.
