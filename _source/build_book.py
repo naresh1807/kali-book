@@ -199,6 +199,28 @@ def malware_curriculum_index():
     for p in MALWARE_CURRICULUM:out+='<li><button type="button" class="roadlink" data-view="audit" data-study-target="malware-'+p['id']+'">'+p['number']+'. '+e(p['title'])+'</button><span> / '+e(p['level'])+'</span></li>'
     return out+'</ol></div>'
 
+ANDROID_CURRICULUM=json.loads((R/'_source'/'android_curriculum.json').read_text(encoding='utf-8'))
+ANDROID_WORKBOOK=(R/'examples'/'android-security'/'README.md').read_text(encoding='utf-8')
+def android_curriculum_guides(cid):
+    if cid!='audit':return ''
+    out=''
+    for i,p in enumerate(ANDROID_CURRICULUM):
+        out+='<article class="android-guide" data-chapter="audit" id="android-'+p['id']+'"><span class="eyebrow">ANDROID SECURITY CURRICULUM / '+p['number']+' OF 18 / '+e(p['level'])+'</span><h3>'+p['number']+'. '+e(p['title'])+'</h3>'
+        for label,key in [('Understand the concept','concept'),('Go deeper','deeper'),('Practice and tool context','practice')]:out+='<h4>'+label+'</h4><p>'+e(p[key])+'</p>'
+        out+='<h4>Check your understanding</h4><p>'+e(p['question'])+'</p><details><summary>Reveal answer</summary><p>'+e(p['answer'])+'</p></details><div class="security-step-nav">'
+        for j,label in [(i-1,'Previous Android lesson'),(i+1,'Next Android lesson')]:
+            if 0<=j<len(ANDROID_CURRICULUM):out+='<button class="btn" type="button" data-view="audit" data-study-target="android-'+ANDROID_CURRICULUM[j]['id']+'">'+label+' / '+ANDROID_CURRICULUM[j]['number']+'</button>'
+        out+='</div></article>'
+    for i,section in enumerate(ANDROID_WORKBOOK.split('\n## ')[1:],1):
+        title,body=section.split('\n',1)
+        out+='<article class="android-guide" data-chapter="audit" id="android-workbook-'+str(i)+'"><span class="eyebrow">ANDROID SECURITY / ASSESSMENT WORKBOOK</span><h3>'+e(title)+'</h3>'+workbook_html(body)+'</article>'
+    return out
+
+def android_curriculum_index():
+    out='<div class="callout" id="android-curriculum-index"><span class="eyebrow">ANDROID SECURITY / 01–18</span><h2>Android device and application security</h2><p>Follow eighteen lessons from architecture and ADB to application assessment and device hardening. Each link opens the exact lesson in Chapter 34. Use an owned emulator and synthetic data. Download examples/android-security for commands, tool guidance and a report template.</p><ol class="security-index">'
+    for p in ANDROID_CURRICULUM:out+='<li><button type="button" class="roadlink" data-view="audit" data-study-target="android-'+p['id']+'">'+p['number']+'. '+e(p['title'])+'</button><span> / '+e(p['level'])+'</span></li>'
+    return out+'</ol></div>'
+
 def depth_guide(cid):
     d = CHAPTER_DEPTH[cid]
     tiers = ''.join(('<section class="depth-tier"><span class="eyebrow">' + e(label) + '</span><h4>' + e(heading) + '</h4><p>' + e(d[key]) + '</p></section>' for label, heading, key in [('01 / BASIC', 'Understand the model', 'basic'), ('02 / INTERMEDIATE', 'Connect the moving parts', 'intermediate'), ('03 / ADVANCED', 'Reason about boundaries and failure', 'advanced')]))
@@ -354,7 +376,7 @@ for cid, num, title, desc in chapters:
     if cid in foundation_flows:
         intro_extra = '<div class="callout"><strong>PART 1 / BEGINNER FOUNDATIONS</strong><p>Follow Chapters 01-06 in order, then Labs 01-03. Continue to Linux foundations after completing this part. Concept diagrams are for reading; only blocks labeled Kali terminal are shell commands.</p></div>'
         intro_extra += '<div class="flow" aria-label="Foundation concept diagram">' + '<i aria-hidden="true">&#8594;</i>'.join(('<span><b>' + e(label) + '</b></span>' for label in foundation_flows[cid])) + '</div>'
-    intro_extra += security_curriculum_guides(cid) + malware_curriculum_guides(cid) + network_attack_guides(cid) + remote_access_guides(cid) + forensic_guides(cid) + network_deep_guides(cid) + web_deep_guides(cid) + api_security_guides(cid) + session_guides(cid) + topology_guides(cid) + iot_guides(cid) + anatomy_figures(cid) + chapter_visual(cid) + depth_guide(cid) + protocol_guides(cid) + network_layer_guides(cid)
+    intro_extra += security_curriculum_guides(cid) + malware_curriculum_guides(cid) + android_curriculum_guides(cid) + network_attack_guides(cid) + remote_access_guides(cid) + forensic_guides(cid) + network_deep_guides(cid) + web_deep_guides(cid) + api_security_guides(cid) + session_guides(cid) + topology_guides(cid) + iot_guides(cid) + anatomy_figures(cid) + chapter_visual(cid) + depth_guide(cid) + protocol_guides(cid) + network_layer_guides(cid)
     position = [c[0] for c in chapters].index(cid)
     chapter_steps = '<div class="chaptersteps">'
     if position:
@@ -400,7 +422,7 @@ for part_no, part in enumerate(LEARNING_PATH, 1):
     roadmap += f"</p><p><strong>Ready to continue when:</strong> {e(part['milestone'])}</p></article>"
     roadmap_md += ['', 'Ready to continue when: ' + part['milestone'], '']
 roadmap += '</div>'
-roadmap = security_curriculum_index() + malware_curriculum_index() + roadmap
+roadmap = security_curriculum_index() + malware_curriculum_index() + android_curriculum_index() + roadmap
 roadmap_md += ['## Security curriculum: read steps 01–18 in order', '', 'Read Chapters 01–06 first if computer/network foundations are new. The security concepts are collected in Chapter 34 and directly linked from Start here.', '']
 for item in SECURITY_CURRICULUM:roadmap_md += [item['number']+'. '+item['title']+' — '+item['level'], '']
 intro = intro.replace('<section class="bookpanel" id="guide">', '<section class="bookpanel" id="guide">' + roadmap, 1)
@@ -408,6 +430,8 @@ intro = intro.replace('FIELD GUIDE / START HERE', 'HOW TO USE THE BOOK')
 intro = intro.replace('Understand it. Then run it.', 'Read, practise and explain the result.')
 roadmap_md += ['## Malware analysis curriculum: steps 01–16', '', 'Complete the security foundations first. Lessons and inert workbook are in Chapter 34.', '']
 for item in MALWARE_CURRICULUM:roadmap_md += [item['number']+'. '+item['title']+' — '+item['level'], '']
+roadmap_md += ['## Android security curriculum: steps 01–18', '', 'Lessons and workbook are in Chapter 34.', '']
+for item in ANDROID_CURRICULUM:roadmap_md += [item['number']+'. '+item['title']+' — '+item['level'], '']
 (R / 'Learning Path.md').write_text('# Kali Fieldbook — Serial Learning Plan\n\n' + '\n'.join(roadmap_md), encoding='utf-8')
 intro += '<div class="callout"><strong>Generic learning examples</strong><p><button class="btn" type="button" data-view="netservices">Network protocols and animated exchanges / Chapter 06</button></p><p>All addresses and identities in examples are illustrative. 192.0.2.0/24, 198.51.100.0/24 and 2001:db8::/32 are documentation ranges; 127.0.0.1 and ::1 mean the current computer. Private address ranges and netmasks are protocol concepts, not learner system details. Replace documentation targets only with your own configured lab assets.</p></div>'
 page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><script>{THEME_BOOT}</script><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="An offline Kali Linux command handbook with 499 lessons and examples, guided labs and official references."><title>Kali Fieldbook — Command Handbook</title><style>{CSS}</style></head><body><a href="#main" class="skip">Skip to handbook</a><aside class="sidebar"><div class="brand"><div class="brandmark">&gt;_</div><div><strong>KALI</strong><small>FIELD BOOK / 01</small></div></div><nav aria-label="Book chapters"><button type="button" class="navitem" data-view="guide"><span class="num">↗</span><span>Start here</span></button><button type="button" class="navitem" data-view="all"><span class="num">#</span><span>All lessons &amp; examples</span><span class="count">499</span></button><div class="navlabel">LESSONS &amp; REFERENCE</div>{nav}<div class="navlabel">LEARN BY DOING</div><button type="button" class="navitem" data-view="labs"><span class="num">&gt;</span><span>29 guided labs</span></button><button type="button" class="navitem" data-view="troubleshoot"><span class="num">?</span><span>Troubleshooting</span></button><button type="button" class="navitem" data-view="glossary"><span class="num">Aa</span><span>Glossary</span></button><button type="button" class="navitem" data-view="sources"><span class="num">↗</span><span>Official references</span></button></nav><div class="sidefoot">LOCAL EDITION · SEPT 2026<br>No account or installation.<br>Copy commands; never auto-run.</div></aside><main id="main"><header class="topline"><div><span class="eyebrow">KALI LINUX / PRACTICAL REFERENCE</span><p>Linux foundations → authorized security labs</p></div><button class="btn" type="button" id="print">Print / Save PDF</button></header><div class="titlebar"><div><h1>Your Kali fieldbook.</h1><p class="lede">Learn the foundations, work through examples, and explain the advanced behavior.</p></div><div class="stats"><div><strong>499</strong><span>LESSONS / EXAMPLES</span></div><div><strong>45</strong><span>CHAPTERS</span></div><div><strong>29</strong><span>LABS</span></div></div></div><div class="searchrow"><label class="searchbox"><span aria-hidden="true">⌕</span><input id="search" type="search" aria-label="Search lessons and command examples" placeholder="Search vulnerabilities, commands or concepts…" autocomplete="off"><kbd>/</kbd></label><button id="clear" type="button" class="btn" hidden>Clear</button><button id="theme-toggle" type="button" class="btn" aria-label="Switch to light mode">Light mode</button></div><div class="resultbar"><span id="result" role="status" aria-live="polite"></span><span>45 CONCEPT GUIDES + 499 LESSONS</span></div><div class="printonly printcover"><span>KALI LINUX · LOCAL EDITION · SEPTEMBER 2026</span><h1>Kali Fieldbook<br>Command Handbook</h1><p>499 lessons and examples · 45 chapters · 29 guided labs</p><p>Linux foundations, administration and authorized security testing.</p><h2>Contents</h2><ol class="printtoc">{printtoc}</ol><p>Also included: guided labs, troubleshooting, glossary and references.</p></div>{intro}<section class="bookpanel" id="reference">{''.join(sections)}<div id="empty" class="empty" hidden><h3>No matching commands</h3><p>Try a tool such as nmap, or a task such as files, network or backup.</p></div></section><section class="bookpanel" id="labs"><div class="chapterhead"><span class="eyebrow">PRACTICE / TWENTY-NINE GUIDED LABS</span><h2>Learn from real output.</h2><p>Follow the numbered labs with their matching learning-path part. Read prerequisites before copying a block.</p></div>{labs}</section><section class="bookpanel" id="troubleshoot"><div class="chapterhead"><span class="eyebrow">WHEN SOMETHING FAILS</span><h2>Diagnose before changing.</h2><p>Start with the exact error, current path and intended target.</p></div>{trouble}</section><section class="bookpanel" id="glossary"><div class="chapterhead"><span class="eyebrow">THE LANGUAGE OF THE TERMINAL</span><h2>Glossary</h2></div><dl class="glossary">{glossary}</dl></section><section class="bookpanel" id="sources"><div class="chapterhead"><span class="eyebrow">GO DEEPER / PRIMARY SOURCES</span><h2>Official references</h2><p>The book works offline. These external links require internet access. Prefer local manuals for your installed version.</p></div><div class="refgrid">{refs}</div><div class="callout"><strong>Find the rest of Kali.</strong><p>Use the complete official catalog linked above. To browse commands currently visible on your system, run <code>bash -c 'compgen -c' | sort -u | less</code>.</p></div></section><noscript><div class="callout">JavaScript is disabled. All chapters are readable; use your browser's Find feature. Copy buttons and chapter filters require JavaScript.</div></noscript><footer>Prepared 19 September 2026 · Original explanations with official reference links. Results vary by version, permissions and configuration. This book does not execute commands.</footer></main><div id="toast" class="toast" role="status" aria-live="polite" hidden></div><script>{JS}</script></body></html>"""
@@ -418,6 +442,11 @@ md += [f'- {num}. {title}' for _, num, title, _ in chapters]
 md += ['- Guided labs', '- Troubleshooting', '- Glossary', '- Official references', '']
 for cid, num, title, desc in chapters:
     md += [f'## {num}. {title}', '', desc, '']
+    if cid=='audit':
+        for item in ANDROID_CURRICULUM:
+            md += ['### Android security '+item['number']+': '+item['title'], '', 'Level: '+item['level'], '']
+            for key in ('concept','deeper','practice','question','answer'):md += ['**'+key.title()+':** '+item[key], '']
+        md += [ANDROID_WORKBOOK, '']
     if cid=='audit':
         for item in MALWARE_CURRICULUM:
             md += ['### Malware analysis '+item['number']+': '+item['title'], '', 'Level: '+item['level'], '']

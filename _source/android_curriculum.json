@@ -1,0 +1,200 @@
+[
+  {
+    "id": "scope",
+    "title": "Scope and mobile threat models",
+    "level": "Beginner",
+    "concept": "Separate device, application and backend security. Record the owned emulator, app build, test accounts and authorized API environment.",
+    "deeper": "Map assets, entry points and trust boundaries. Owning a phone does not automatically authorize tests of every service it contacts.",
+    "practice": "Draw the data flow for a fictional notes app: user, local storage, another app and test API.",
+    "question": "What makes a test reproducible?",
+    "answer": "A recorded build, OS/API level, starting state, inputs and expected result.",
+    "number": "01"
+  },
+  {
+    "id": "architecture",
+    "title": "Android architecture and sandboxing",
+    "level": "Beginner",
+    "concept": "Android combines a Linux kernel, native libraries, runtime, framework services and apps. App identities normally separate private files and processes.",
+    "deeper": "Binder IPC, permissions and SELinux mediate crossings. Rooted or modified images change the assumptions of an assessment.",
+    "practice": "Label the boundaries between a notes app, its database, a sharing activity and a backend.",
+    "question": "Does an app permission grant root?",
+    "answer": "No. It authorizes specific operations under platform rules.",
+    "number": "02"
+  },
+  {
+    "id": "lab",
+    "title": "Android Studio emulator lab",
+    "level": "Beginner",
+    "concept": "Use a virtual device and a locally built training app with synthetic data. Record the image, API level, target SDK and app version.",
+    "deeper": "Snapshots make exercises repeatable. Hardware-backed keys, biometrics and vendor behavior may differ on a physical phone.",
+    "practice": "Create a baseline snapshot, install your own demo app and restore the snapshot after testing. No APK is supplied by this workbook.",
+    "question": "Does an emulator result apply to every device?",
+    "answer": "No. Confirm behavior on supported OS versions and hardware.",
+    "number": "03"
+  },
+  {
+    "id": "adb",
+    "title": "ADB and debugging trust",
+    "level": "Beginner",
+    "concept": "ADB connects SDK tools to a device or emulator authorized for debugging. Explicit target selection avoids inspecting the wrong device.",
+    "deeper": "USB authorization and wireless pairing establish trust. Revoke unused debugging trust after testing; available commands depend on the device build.",
+    "practice": "Follow the workbook to list targets, read the emulator API level and inspect only your training package.",
+    "question": "What does unauthorized in the device list mean?",
+    "answer": "The device has not granted this workstation debugging trust. Approve only on your own unlocked test device.",
+    "number": "04"
+  },
+  {
+    "id": "packages",
+    "title": "APK structure and signing",
+    "level": "Beginner",
+    "concept": "An APK includes a manifest, resources, DEX code and sometimes native libraries. Signing supports app identity and update integrity.",
+    "deeper": "Split APKs may spread code and resources across packages. Reconstructed code is an approximation of source and may omit important context.",
+    "practice": "Use APK Analyzer or JADX on your own build. Record package name, version, certificate digest and native libraries.",
+    "question": "Does a valid signature prove safety?",
+    "answer": "No. It establishes a signing relationship rather than harmless behavior.",
+    "number": "05"
+  },
+  {
+    "id": "permissions",
+    "title": "Manifest and permissions",
+    "level": "Intermediate",
+    "concept": "Compare declared permissions and exported components with the features users expect. Review the merged release manifest.",
+    "deeper": "Debuggable state, permission protection levels and component defaults affect exposure. Rules depend on platform version and target SDK.",
+    "practice": "Compare debug and release manifests; deny an optional permission and verify graceful behavior.",
+    "question": "Is every requested permission a vulnerability?",
+    "answer": "No. Assess necessity, runtime behavior, consent and impact.",
+    "number": "06"
+  },
+  {
+    "id": "storage",
+    "title": "Storage, logs and backups",
+    "level": "Intermediate",
+    "concept": "Private files, databases, shared storage, logs and backups have distinct exposure paths. Minimize retained sensitive data.",
+    "deeper": "A sandbox does not settle backup or compromised-device risks. Check account switching, logout cleanup and the difference between local deletion and server revocation.",
+    "practice": "Store a fake token in your debug app. Inspect permitted app files and filtered logs, then verify the documented cleanup policy.",
+    "question": "Does Base64 protect a token?",
+    "answer": "No. It is reversible encoding, not encryption or access control.",
+    "number": "07"
+  },
+  {
+    "id": "crypto",
+    "title": "Cryptography and Android Keystore",
+    "level": "Intermediate",
+    "concept": "Use established cryptographic APIs and managed keys. Android Keystore can restrict key use; hardware backing depends on the device and configuration.",
+    "deeper": "Review key purpose, authenticated encryption, nonce handling, rotation and invalidation. Test failure handling when a key becomes unavailable.",
+    "practice": "Trace one encrypted demo field from generation to decryption and document key storage and plaintext lifetime.",
+    "question": "Does Keystore prevent every misuse of decrypted data?",
+    "answer": "No. Application logic still controls plaintext and authorized operations.",
+    "number": "08"
+  },
+  {
+    "id": "ipc",
+    "title": "Exported components and IPC",
+    "level": "Intermediate",
+    "concept": "Activities, services, receivers and providers can expose operations to other apps. Each reachable operation needs suitable validation and authorization.",
+    "deeper": "Check caller identity, component selection, URI grants and query scope. Intent extras are inputs, not proof of trust. Review PendingIntent mutability.",
+    "practice": "Create a table of component, caller, permission, input and expected rejection. Exercise malformed inputs in your app test suite.",
+    "question": "Is exported=true always a defect?",
+    "answer": "No. Some components intentionally serve others; access checks and data handling determine risk.",
+    "number": "09"
+  },
+  {
+    "id": "links",
+    "title": "Deep links and verified App Links",
+    "level": "Intermediate",
+    "concept": "Deep links route URIs to app screens. Verified App Links associate supported web links with an app through domain verification.",
+    "deeper": "Routing is separate from resource authorization. Parse links carefully and validate unexpected fields, redirects and signed-out behavior.",
+    "practice": "Test a synthetic note link with an unknown identifier, missing session and unexpected query fields.",
+    "question": "Can a verified link replace authorization?",
+    "answer": "No. It does not grant access to the record named by the link.",
+    "number": "10"
+  },
+  {
+    "id": "webview",
+    "title": "WebView trust boundaries",
+    "level": "Intermediate",
+    "concept": "WebView embeds web content inside an app. JavaScript bridges can connect web input to native capabilities.",
+    "deeper": "Restrict origins, navigation and bridge methods. Review local-file access and mixed content; check redirects as well as the initial URL.",
+    "practice": "Draw allowed origins and bridge methods for a demo WebView. Verify that harmless unexpected navigation is rejected.",
+    "question": "Is validating only the first URL sufficient?",
+    "answer": "No. Later navigation can cross the intended boundary.",
+    "number": "11"
+  },
+  {
+    "id": "network",
+    "title": "TLS and proxy traffic inspection",
+    "level": "Intermediate",
+    "concept": "Use Burp Suite or mitmproxy with a deliberately configured debug app to inspect synthetic requests and responses.",
+    "deeper": "Certificate trust and pinning affect interception. A failed interception does not prove secure business logic. Keep debug CA trust out of release configuration.",
+    "practice": "Compare captured fields with the data-flow diagram. Remove the temporary proxy and test CA settings after the exercise.",
+    "question": "Should release certificate validation be disabled for testing?",
+    "answer": "No. Use scoped debug settings and verify release validation separately.",
+    "number": "12"
+  },
+  {
+    "id": "auth",
+    "title": "Authentication and backend authorization",
+    "level": "Advanced",
+    "concept": "The app is a client. The backend must enforce ownership and privileged actions independently of interface controls.",
+    "deeper": "Review token expiry, refresh rotation, logout revocation and account switching. Local biometric prompts do not replace server-side checks.",
+    "practice": "Using two synthetic accounts on your owned staging API, confirm that account B cannot read account A notes.",
+    "question": "Is hiding an administrator button an access control?",
+    "answer": "It is a UI choice; the server must reject unauthorized operations.",
+    "number": "13"
+  },
+  {
+    "id": "static",
+    "title": "Static analysis tools",
+    "level": "Advanced",
+    "concept": "JADX helps inspect reconstructed code, Apktool decodes resources and bytecode representation, and MobSF organizes automated review results.",
+    "deeper": "Obfuscation, native code and dynamic loading limit visibility. A scanner warning needs a reachable code path and demonstrated impact.",
+    "practice": "Review your training APK locally and validate one warning with code context, prerequisites, evidence and a proposed fix.",
+    "question": "Does a clean scan prove security?",
+    "answer": "No. Automated coverage is incomplete, especially for business logic.",
+    "number": "14"
+  },
+  {
+    "id": "dynamic",
+    "title": "Runtime observation and instrumentation",
+    "level": "Advanced",
+    "concept": "Android Studio debugger, profiler and Logcat reveal behavior for chosen inputs. Frida supports instrumentation of an authorized training process.",
+    "deeper": "Instrumentation can change timing, integrity signals and behavior. Capture an unmodified baseline before drawing conclusions from instrumented observations.",
+    "practice": "Place a breakpoint before saving a dummy note in your debug app. Observe validation and file selection, then compare with static analysis.",
+    "question": "Does one runtime path cover all behavior?",
+    "answer": "No. State, input and environment select different paths.",
+    "number": "15"
+  },
+  {
+    "id": "device",
+    "title": "Device hardening and incident indicators",
+    "level": "Advanced",
+    "concept": "Review patch state, screen lock, installation sources, debugging trust and powerful access such as accessibility or device administration.",
+    "deeper": "Boot integrity, SELinux and supported updates contribute to device security. Unlocking or rooting changes assumptions and may erase data; neither is required here.",
+    "practice": "On a spare owned device, inventory settings through the UI. Correlate unfamiliar access grants with installation history before drawing conclusions.",
+    "question": "Does battery drain alone prove spyware?",
+    "answer": "No. Correlate observations and preserve evidence before changes during an investigation.",
+    "number": "16"
+  },
+  {
+    "id": "privacy",
+    "title": "Privacy and SDK supply chains",
+    "level": "Advanced",
+    "concept": "Dependencies can add permissions, endpoints and data collection. Track SDK purpose, version, recipients and retention.",
+    "deeper": "Compare declared privacy expectations with synthetic test traffic. Protect signing keys and keep debug assets out of release artifacts.",
+    "practice": "Create an SDK inventory and compare it with the merged manifest and observed data categories.",
+    "question": "Does TLS make all collection appropriate?",
+    "answer": "No. Collection still needs a purpose, appropriate consent and retention controls.",
+    "number": "17"
+  },
+  {
+    "id": "capstone",
+    "title": "Assessment, reporting and regression",
+    "level": "Advanced",
+    "concept": "Combine manifest, storage, IPC, network and backend checks into an evidence-based assessment. Prioritize practical impact and prerequisites.",
+    "deeper": "Use applicable OWASP MASVS categories and current MASTG techniques. Record uncovered scenarios, tool limits and differences across OS versions.",
+    "practice": "Reproduce one issue in an owned demo app, fix it, retest the failure case and a valid-use case, then restore the emulator.",
+    "question": "What supports a remediation claim?",
+    "answer": "Recorded results on the corrected build with negative and valid-use tests and explicit coverage limits.",
+    "number": "18"
+  }
+]
