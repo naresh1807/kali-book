@@ -1,0 +1,222 @@
+[
+  {
+    "id": "mission",
+    "title": "Red teaming, penetration testing and purple teaming",
+    "number": "01",
+    "level": "Beginner",
+    "concept": "Red teaming evaluates an objective across people, process and technology. A penetration test often concentrates on vulnerabilities in a defined scope; purple teaming coordinates testing with defenders.",
+    "deeper": "These approaches overlap. Define the decision the exercise should inform before selecting techniques or tools.",
+    "practice": "Compare a web-app test, a simulated account-compromise exercise and a joint detection validation. Write a measurable objective for each.",
+    "question": "Is the number of compromised hosts a sufficient success metric?",
+    "answer": "No. Measure the agreed business objective and defensive outcomes, including evidence and limitations."
+  },
+  {
+    "id": "roe",
+    "title": "Rules of engagement and authorization",
+    "number": "02",
+    "level": "Beginner",
+    "concept": "Record permitted assets, identities, techniques, times, data handling, contacts and stop conditions before execution.",
+    "deeper": "Third-party services and shared infrastructure need separate scope decisions. A domain name can resolve to infrastructure the organization does not own.",
+    "practice": "Fill out the workbook engagement template for a localhost exercise. Include a stop contact and explicit excluded actions.",
+    "question": "Does discovering a new asset automatically add it to scope?",
+    "answer": "No. Validate ownership and obtain an updated scope decision."
+  },
+  {
+    "id": "lab",
+    "title": "Repeatable lab design",
+    "number": "03",
+    "level": "Beginner",
+    "concept": "Use disposable systems, synthetic identities and controlled networking. A baseline snapshot supports repeatable experiments.",
+    "deeper": "Shared folders, cloud credentials and host integrations can cross lab boundaries. A snapshot does not undo external side effects.",
+    "practice": "Draw a lab with an operator, one test service and a logging source. Identify every connection leaving that boundary.",
+    "question": "What needs recording before a test?",
+    "answer": "Build versions, starting state, credentials used, expected effects, evidence collection and rollback."
+  },
+  {
+    "id": "threat-model",
+    "title": "Threat-informed objectives",
+    "number": "04",
+    "level": "Beginner",
+    "concept": "Choose relevant adversary behaviors based on assets, exposure and business impact rather than copying an entire campaign.",
+    "deeper": "A realistic scenario can test a single boundary deeply. Historical adversary reports may omit details or reflect environments unlike yours.",
+    "practice": "Model a fictional notes service and define the consequence of a test user accessing another test user record.",
+    "question": "Does naming an adversary make an exercise realistic?",
+    "answer": "No. Relevance depends on behavior, prerequisites and environment."
+  },
+  {
+    "id": "attack",
+    "title": "ATT&CK and emulation planning",
+    "number": "05",
+    "level": "Beginner",
+    "concept": "Map the behavior being exercised to ATT&CK and identify telemetry needed to observe it. Use emulation plans as references, not automatic execution scripts.",
+    "deeper": "Technique labels describe behaviors, not permission to perform them or proof of detection coverage.",
+    "practice": "Build a three-column plan: behavior, required starting condition and expected defender evidence.",
+    "question": "Does a successful test prove the SOC can respond?",
+    "answer": "No. Collection, alerting, triage and response must each be verified."
+  },
+  {
+    "id": "recon",
+    "title": "Reconnaissance and asset validation",
+    "number": "06",
+    "level": "Beginner",
+    "concept": "Start with supplied inventories and authorized passive sources. Distinguish a lead from a verified in-scope asset.",
+    "deeper": "Certificates, DNS records and public code can be stale or shared. Minimize collection of personal or irrelevant information.",
+    "practice": "Compare a fictional inventory with three supplied hostnames and classify verified, uncertain and excluded assets.",
+    "question": "Can a search-engine result establish ownership?",
+    "answer": "No. Confirm ownership and scope through the engagement process."
+  },
+  {
+    "id": "discovery",
+    "title": "Bounded service discovery",
+    "number": "07",
+    "level": "Beginner",
+    "concept": "Discovery identifies reachable services from a specific test location. Bound ports, targets and rates to answer a concrete question.",
+    "deeper": "Open ports do not prove vulnerabilities; closed or filtered results depend on the path and sensor location.",
+    "practice": "Run the loopback Nmap exercise in the workbook and compare it with curl and server logs.",
+    "question": "Does one source location prove network-wide reachability?",
+    "answer": "No. Routing, filtering and identity can change access from other locations."
+  },
+  {
+    "id": "web",
+    "title": "Web and API assessment workflow",
+    "number": "08",
+    "level": "Intermediate",
+    "concept": "Trace inputs, authentication, authorization and data flow in an owned training application. Use two synthetic users to test ownership boundaries.",
+    "deeper": "A client-side restriction does not establish server enforcement. Separate session handling from object-level and function-level authorization.",
+    "practice": "Use Burp Proxy history to inspect a harmless request to the local fixture. For an owned staging app, document expected denial before testing a cross-account request.",
+    "question": "Does a successful HTTP response establish access to protected data?",
+    "answer": "No. Inspect response content and the server-side decision."
+  },
+  {
+    "id": "identity",
+    "title": "Identity and access-path modeling",
+    "number": "09",
+    "level": "Intermediate",
+    "concept": "Accounts, roles, groups and delegated rights form paths to sensitive actions. Model who can act as whom and under which prerequisites.",
+    "deeper": "An apparent graph path may be blocked by configuration, policy or missing privileges. Treat it as a hypothesis until validated.",
+    "practice": "Draw a fictional access graph with a test user, support role and service identity. Identify a least-privilege correction.",
+    "question": "Does a graph edge prove a complete compromise chain?",
+    "answer": "No. Validate each prerequisite and transition in the approved lab."
+  },
+  {
+    "id": "foothold",
+    "title": "Initial access and assumed-breach exercises",
+    "number": "10",
+    "level": "Intermediate",
+    "concept": "An assumed-breach exercise starts from an explicitly granted test identity or lab host to isolate downstream defensive questions.",
+    "deeper": "Document the artificial starting condition. Results from it do not prove an attacker could achieve initial access independently.",
+    "practice": "Create a tabletop comparing a test account with a standard-user lab session and list what each can legitimately do.",
+    "question": "Why state the assumed starting access?",
+    "answer": "It prevents overstating the demonstrated attack path and helps interpret control coverage."
+  },
+  {
+    "id": "privilege",
+    "title": "Privilege boundaries and misconfiguration",
+    "number": "11",
+    "level": "Intermediate",
+    "concept": "Privilege escalation concerns crossing an authorization boundary, often involving excessive rights or unsafe configuration.",
+    "deeper": "Finding a writable location or administrator role is not enough; explain the privileged action it could influence and its prerequisites.",
+    "practice": "Review a supplied fictional service configuration and propose a least-privilege repair without modifying a production host.",
+    "question": "What distinguishes a misconfiguration from a demonstrated impact?",
+    "answer": "Evidence that the relevant principal can reach the sensitive operation under the stated conditions."
+  },
+  {
+    "id": "movement",
+    "title": "Segmentation and lateral-access validation",
+    "number": "12",
+    "level": "Intermediate",
+    "concept": "Evaluate whether a test identity and source segment can reach only the services required by policy.",
+    "deeper": "Reachability, authentication and authorization are separate gates. Shared management infrastructure can alter the intended boundary.",
+    "practice": "Create an expected allow/deny matrix for two synthetic roles and three lab services. Record approved access checks and compare observed results.",
+    "question": "Does a reachable port imply successful lateral movement?",
+    "answer": "No. It establishes only one part of the path."
+  },
+  {
+    "id": "emulation-tools",
+    "title": "Atomic Red Team and Caldera concepts",
+    "number": "13",
+    "level": "Intermediate",
+    "concept": "Atomic Red Team organizes small behavior tests; Caldera supports orchestrated adversary emulation. Both require review of actual actions and effects.",
+    "deeper": "Tests and prerequisites may download files, change settings or leave artifacts. Automation can amplify a poorly scoped action.",
+    "practice": "Read one lab-relevant test definition without executing it. Inventory inputs, privileges, external dependencies, expected telemetry and cleanup steps.",
+    "question": "Is a tool cleanup command proof of full restoration?",
+    "answer": "No. Verify the baseline independently and account for external side effects."
+  },
+  {
+    "id": "communications",
+    "title": "Exercise infrastructure and communication controls",
+    "number": "14",
+    "level": "Intermediate",
+    "concept": "An exercise may need a management channel, evidence storage and controlled test endpoints. Define ownership and retention for each.",
+    "deeper": "A management channel introduces its own credentials and attack surface. Keep operator infrastructure access limited and auditable.",
+    "practice": "Design a local-only control diagram and document how all connections and credentials will be removed at exercise end.",
+    "question": "Does a familiar tool make its infrastructure secure automatically?",
+    "answer": "No. Configuration, patching, access control and monitoring still matter."
+  },
+  {
+    "id": "data",
+    "title": "Data-access and egress simulation",
+    "number": "15",
+    "level": "Advanced",
+    "concept": "Use synthetic canary records to demonstrate access or transfer objectives while minimizing collection. Agree on what constitutes sufficient proof.",
+    "deeper": "Reading a record, staging it and transferring it cross different boundaries. A marker exercise has narrower realism than handling real sensitive data.",
+    "practice": "Use a harmless marker file in the local HTTP fixture and correlate its retrieval with the server log. State that this is loopback transfer, not production egress testing.",
+    "question": "Should demonstrating access require copying a whole dataset?",
+    "answer": "No. Use the smallest approved evidence that supports the finding."
+  },
+  {
+    "id": "social",
+    "title": "Human and physical assessment planning",
+    "number": "16",
+    "level": "Advanced",
+    "concept": "Human and physical tests evaluate processes such as reporting, identity verification and visitor handling when separately authorized.",
+    "deeper": "Avoid collecting real passwords or unrelated personal information. Define participant protections, escalation and business-impact limits.",
+    "practice": "Run a tabletop of a fictional suspicious-message report. Measure routing and verification decisions without sending deceptive messages.",
+    "question": "Does a technical engagement automatically include phishing or physical entry?",
+    "answer": "No. These need explicit scope and coordination."
+  },
+  {
+    "id": "evidence",
+    "title": "Operator logs and reproducible evidence",
+    "number": "17",
+    "level": "Advanced",
+    "concept": "Record test identity, action, time, target, result and cleanup. Preserve raw observations separately from interpretation.",
+    "deeper": "Clock differences and tool transformations can distort timelines. Hashes support integrity but not the truth of an observation.",
+    "practice": "Create an operator record for the localhost scan and request. Correlate it with defender logs and note timezone conventions.",
+    "question": "What makes a screenshot insufficient by itself?",
+    "answer": "It may omit prerequisites, source data, timing or reproducible steps."
+  },
+  {
+    "id": "purple",
+    "title": "Purple-team validation and detection gaps",
+    "number": "18",
+    "level": "Advanced",
+    "concept": "Compare the operator action with sensor collection, parsing, analytic output, case handling and response. Locate the first failed stage.",
+    "deeper": "An unalerted test may reflect missing telemetry or a rule gap; it is not automatically a stealth success. Likewise a test alert may not represent broad coverage.",
+    "practice": "Use the SOC workbook to pair an action timeline with expected evidence and propose one measurable improvement.",
+    "question": "What should a coverage claim include?",
+    "answer": "The tested behavior, data source, rule version, environment, outcome and known limits."
+  },
+  {
+    "id": "report",
+    "title": "Reporting, cleanup and retesting",
+    "number": "19",
+    "level": "Advanced",
+    "concept": "Report the objective, path, evidence, business consequence and prioritized repairs. Reconcile all introduced artifacts and test access.",
+    "deeper": "Differentiate confirmed, conditional and untested paths. Retest after a fix and verify valid operations still work.",
+    "practice": "Write an executive paragraph and a technical finding for the local exercise. Document normal behavior rather than inventing a vulnerability.",
+    "question": "When is cleanup complete?",
+    "answer": "When artifacts, credentials and settings have been reconciled against the agreed baseline and owners accept remaining items."
+  },
+  {
+    "id": "capstone",
+    "title": "Red-team capstone and maturity planning",
+    "number": "20",
+    "level": "Advanced",
+    "concept": "Combine objective selection, rules of engagement, a bounded exercise, evidence and defender validation into a repeatable assessment.",
+    "deeper": "Increase realism gradually according to learning goals, environment readiness and operational risk. A training exercise is not a claim of production compromise.",
+    "practice": "Complete the supplied plan, perform the local observation exercise, correlate logs, record limitations and propose a follow-up purple-team test.",
+    "question": "What demonstrates a useful outcome?",
+    "answer": "A supported conclusion, clear defensive improvement, verified cleanup and an actionable retest plan."
+  }
+]
