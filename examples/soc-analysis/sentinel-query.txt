@@ -1,0 +1,14 @@
+datatable(EventTime:datetime, Account:string, Outcome:string)
+[
+ datetime(2026-01-01T09:54:59Z), "trainee-a", "failure",
+ datetime(2026-01-01T09:55:00Z), "trainee-a", "failure",
+ datetime(2026-01-01T09:57:00Z), "trainee-a", "failure",
+ datetime(2026-01-01T10:00:00Z), "trainee-a", "failure",
+ datetime(2026-01-01T09:59:00Z), "trainee-a", "success",
+ datetime(2026-01-01T09:58:00Z), "trainee-b", "failure",
+ datetime(2026-01-01T10:00:01Z), "trainee-a", "failure"
+]
+| where EventTime between (datetime(2026-01-01T09:55:00Z) .. datetime(2026-01-01T10:00:00Z))
+| where Outcome == "failure"
+| summarize Failures=count() by Account
+| where Failures >= 3

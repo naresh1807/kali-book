@@ -1,0 +1,7 @@
+{"ts": "2026-01-01T09:54:59Z", "account": "trainee-a", "outcome": "failure"}
+{"ts": "2026-01-01T09:55:00Z", "account": "trainee-a", "outcome": "failure"}
+{"ts": "2026-01-01T09:57:00Z", "account": "trainee-a", "outcome": "failure"}
+{"ts": "2026-01-01T10:00:00Z", "account": "trainee-a", "outcome": "failure"}
+{"ts": "2026-01-01T09:59:00Z", "account": "trainee-a", "outcome": "success"}
+{"ts": "2026-01-01T09:58:00Z", "account": "trainee-b", "outcome": "failure"}
+{"ts": "2026-01-01T10:00:01Z", "account": "trainee-a", "outcome": "failure"}

@@ -1,0 +1,10 @@
+| makeresults
+| eval rows=split("2026-01-01T09:54:59Z,trainee-a,failure;2026-01-01T09:55:00Z,trainee-a,failure;2026-01-01T09:57:00Z,trainee-a,failure;2026-01-01T10:00:00Z,trainee-a,failure;2026-01-01T09:59:00Z,trainee-a,success;2026-01-01T09:58:00Z,trainee-b,failure;2026-01-01T10:00:01Z,trainee-a,failure", ";")
+| mvexpand rows
+| eval parts=split(rows, ",")
+| eval ts=mvindex(parts,0), account=mvindex(parts,1), outcome=mvindex(parts,2)
+| eval _time=strptime(replace(ts,"Z$","+0000"),"%Y-%m-%dT%H:%M:%S%z")
+| where _time >= strptime("2026-01-01T09:55:00+0000","%Y-%m-%dT%H:%M:%S%z") AND _time <= strptime("2026-01-01T10:00:00+0000","%Y-%m-%dT%H:%M:%S%z")
+| search outcome="failure"
+| stats count AS failures BY account
+| where failures >= 3
