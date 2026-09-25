@@ -1,0 +1,432 @@
+[
+  {
+    "name": "Nmap",
+    "aliases": [
+      "nmap"
+    ],
+    "what": "A network discovery and service inspection tool.",
+    "work": "Checks reachable ports and probes service identity.",
+    "how": "Start the local Red Team fixture, then run nmap -sT -p 8765 --reason 127.0.0.1. -sT tests a TCP connection; -p limits the port. An open result establishes reachability, not a vulnerability.",
+    "view": "redteam",
+    "target": "redteam-workbook-8"
+  },
+  {
+    "name": "Burp Suite",
+    "aliases": [
+      "burp",
+      "burp suite",
+      "burpsuite"
+    ],
+    "what": "An HTTP proxy and application testing workspace.",
+    "work": "Inspects requests and responses and repeats controlled variations.",
+    "how": "Use its integrated browser to visit the local marker URL. Find the request in Proxy history and send it to Repeater. Compare a known path with a nonexistent path, changing one input at a time.",
+    "view": "redteam",
+    "target": "redteam-workbook-9"
+  },
+  {
+    "name": "OWASP ZAP",
+    "aliases": [
+      "zap",
+      "owasp zap"
+    ],
+    "what": "A web testing proxy with passive and active features.",
+    "work": "Records browser traffic and highlights observations for review.",
+    "how": "Use Manual Explore with the local fixture in Safe mode. Inspect History and response details. Automated Scan is a separate workflow that sends additional test traffic.",
+    "view": "redteam",
+    "target": "redteam-workbook-10"
+  },
+  {
+    "name": "curl",
+    "aliases": [
+      "curl",
+      "curl.exe"
+    ],
+    "what": "A command-line data-transfer client.",
+    "work": "Inspects HTTP status, headers and bodies.",
+    "how": "With the local fixture running, use curl --max-time 5 -i http://127.0.0.1:8765/marker.txt. -i includes headers; --max-time bounds the request. Windows PowerShell users may need curl.exe to avoid an alias.",
+    "view": "redteam",
+    "target": "redteam-workbook-7"
+  },
+  {
+    "name": "ffuf",
+    "aliases": [
+      "ffuf"
+    ],
+    "what": "A request-input comparison tool driven by a wordlist.",
+    "work": "Substitutes candidate paths or inputs and compares responses.",
+    "how": "Use the downloaded practice-paths.txt: ffuf -w practice-paths.txt -u http://127.0.0.1:8765/FUZZ -t 1 -rate 1 -maxtime 15 -mc all. Expect two known resources and one 404 on this fixture.",
+    "view": "redteam",
+    "target": "redteam-workbook-11"
+  },
+  {
+    "name": "ProjectDiscovery httpx",
+    "aliases": [
+      "httpx",
+      "projectdiscovery httpx"
+    ],
+    "what": "An HTTP probing toolkit, distinct from the Python HTTPX library.",
+    "work": "Summarizes endpoint status, content length and server observations.",
+    "how": "Check httpx -h to confirm the binary. Use httpx -u http://127.0.0.1:8765/marker.txt -sc -cl -server -rl 1 -threads 1 against the running fixture. Server headers are evidence to validate, not proof of a vulnerability.",
+    "view": "redteam",
+    "target": "redteam-workbook-12"
+  },
+  {
+    "name": "Metasploit Framework",
+    "aliases": [
+      "metasploit",
+      "msfconsole"
+    ],
+    "what": "A modular security assessment framework.",
+    "work": "Provides modules with different purposes and operational effects.",
+    "how": "In msfconsole select auxiliary/scanner/http/http_version, read info and show options, and set the local fixture host and port before run. Open the linked guide for the complete banner-check exercise.",
+    "view": "redteam",
+    "target": "redteam-workbook-13"
+  },
+  {
+    "name": "Wireshark / TShark",
+    "aliases": [
+      "wireshark",
+      "tshark"
+    ],
+    "what": "Graphical and command-line packet analyzers.",
+    "work": "Explain protocols and correlate observations with packet evidence.",
+    "how": "Open an authorized lab.pcap and use the dns display filter. Or run tshark -r lab.pcap -Y \"dns\" -T fields -e frame.number -e dns.qry.name. No capture is supplied; encryption and capture position limit visibility.",
+    "view": "soc",
+    "target": "soc-workbook-12"
+  },
+  {
+    "name": "BloodHound",
+    "aliases": [
+      "bloodhound"
+    ],
+    "what": "An identity relationship and access-path analysis tool.",
+    "work": "Helps investigate permission paths to sensitive resources.",
+    "how": "Import an approved lab dataset, inspect a test-user path and read each edge prerequisite. Validate effective rights before claiming the path can be executed. Collection is a separate scoped activity.",
+    "view": "redteam",
+    "target": "redteam-workbook-15"
+  },
+  {
+    "name": "Atomic Red Team",
+    "aliases": [
+      "atomic",
+      "atomic red team",
+      "invoke-atomictest"
+    ],
+    "what": "A library of small adversary-behavior tests.",
+    "work": "Helps validate whether selected behavior produces expected defensive evidence.",
+    "how": "In an existing reviewed lab with the module imported, use Invoke-AtomicTest T1082 -ShowDetails. Review commands, dependencies and cleanup before selecting execution; prerequisite operations can have side effects.",
+    "view": "redteam",
+    "target": "redteam-workbook-16"
+  },
+  {
+    "name": "MITRE Caldera",
+    "aliases": [
+      "caldera",
+      "mitre caldera"
+    ],
+    "what": "An adversary-emulation orchestration platform.",
+    "work": "Organizes abilities, agents, facts and operation plans.",
+    "how": "In a disposable lab, review each ability and its privileges, dependencies and cleanup before any operation. Restrict the target group and define stop controls. The linked guide explains plan review; it does not install agents.",
+    "view": "redteam",
+    "target": "redteam-workbook-17"
+  },
+  {
+    "name": "ATT&CK Navigator",
+    "aliases": [
+      "navigator",
+      "attack navigator",
+      "att&ck navigator"
+    ],
+    "what": "A visualization tool for ATT&CK technique layers.",
+    "work": "Communicates planned and tested behaviors using notes and a legend.",
+    "how": "Create a layer, select supported behaviors, record evidence and scope, then export and reopen its JSON. A colored technique does not establish complete detection coverage.",
+    "view": "redteam",
+    "target": "redteam-workbook-18"
+  },
+  {
+    "name": "Microsoft Sentinel",
+    "aliases": [
+      "sentinel",
+      "microsoft sentinel"
+    ],
+    "what": "A cloud security monitoring and investigation platform.",
+    "work": "Searches collected data and supports analytics and incident workflows.",
+    "how": "Use an authorized KQL workspace and paste the downloaded sentinel-query.txt. The synthetic example should return trainee-a with three failures. Real data requires verified tables, schemas and connectors.",
+    "view": "soc",
+    "target": "soc-workbook-7"
+  },
+  {
+    "name": "Splunk",
+    "aliases": [
+      "splunk",
+      "spl"
+    ],
+    "what": "A platform for searching and analyzing machine data.",
+    "work": "Filters events, aggregates observations and supports alerts.",
+    "how": "Paste splunk-query.txt into an authorized SPL search editor. Expect trainee-a with three failures from the synthetic data. Validate field extraction and time semantics before adapting it to an actual index.",
+    "view": "soc",
+    "target": "soc-workbook-8"
+  },
+  {
+    "name": "Elastic / Kibana",
+    "aliases": [
+      "elastic",
+      "kibana",
+      "elastic security"
+    ],
+    "what": "A search and analysis stack with event exploration features.",
+    "work": "Investigates indexed events and supports detection workflows.",
+    "how": "In Discover select an authorized data view and bounded time range. For ECS events try event.category: authentication and event.outcome: failure. Kibana KQL differs from Microsoft Kusto KQL.",
+    "view": "soc",
+    "target": "soc-workbook-9"
+  },
+  {
+    "name": "Wazuh",
+    "aliases": [
+      "wazuh",
+      "wazuh-logtest"
+    ],
+    "what": "An endpoint monitoring and security analytics platform.",
+    "work": "Decodes events and applies security rules.",
+    "how": "On an existing lab manager run sudo /var/ossec/bin/wazuh-logtest and paste the synthetic JSON from the linked guide. Inspect decoded fields; a decoder match does not prove the whole collection pipeline works.",
+    "view": "soc",
+    "target": "soc-workbook-10"
+  },
+  {
+    "name": "Sysmon",
+    "aliases": [
+      "sysmon"
+    ],
+    "what": "A configurable Windows system-monitoring service.",
+    "work": "Records selected endpoint activity for investigation.",
+    "how": "On an already configured lab host, inspect Microsoft-Windows-Sysmon/Operational in Event Viewer. Correlate process events with time and identity; available events depend on the configuration.",
+    "view": "soc",
+    "target": "soc-workbook-11"
+  },
+  {
+    "name": "Zeek",
+    "aliases": [
+      "zeek",
+      "zeek-cut"
+    ],
+    "what": "A network traffic analysis framework.",
+    "work": "Produces structured connection and protocol metadata.",
+    "how": "Supply an authorized lab.pcap, create a fresh output folder and run zeek -r ../lab.pcap from it. Use zeek-cut for default TSV logs; which logs appear depends on traffic and policy.",
+    "view": "soc",
+    "target": "soc-workbook-13"
+  },
+  {
+    "name": "Suricata",
+    "aliases": [
+      "suricata"
+    ],
+    "what": "A network detection engine.",
+    "work": "Inspects traffic and produces protocol events and rule-based alerts.",
+    "how": "Validate the lab configuration with suricata -T -c /etc/suricata/suricata.yaml, using your actual configuration path. Then follow the offline-PCAP exercise. No alerts may mean no matching rule rather than safe traffic.",
+    "view": "soc",
+    "target": "soc-workbook-14"
+  },
+  {
+    "name": "Sigma",
+    "aliases": [
+      "sigma",
+      "sigma-cli"
+    ],
+    "what": "A detection-rule format and tooling ecosystem.",
+    "work": "Describes detection logic for conversion to supported analytics backends.",
+    "how": "Read logsource, selection and condition. Inspect sigma --help and sigma plugin list, choose the correct backend and mapping pipeline, then validate generated queries with positive and negative fixtures.",
+    "view": "soc",
+    "target": "soc-workbook-15"
+  },
+  {
+    "name": "CyberChef",
+    "aliases": [
+      "cyberchef"
+    ],
+    "what": "A data-transformation workbench.",
+    "work": "Decodes and transforms artifacts without executing their contents.",
+    "how": "In an approved instance, paste U09DLVRFU1Q= and apply From Base64. Expect SOC-TEST. Save the recipe and explain the transformation; decoding alone does not establish malicious intent.",
+    "view": "soc",
+    "target": "soc-workbook-16"
+  },
+  {
+    "name": "jq",
+    "aliases": [
+      "jq"
+    ],
+    "what": "A command-line JSON processor.",
+    "work": "Selects fields, filters records and aggregates structured data.",
+    "how": "In the extracted SOC folder run jq -s . auth-events.jsonl to view records as an array. The linked workbook shows the bounded failure-count aggregation and explains its stages.",
+    "view": "soc",
+    "target": "soc-workbook-6"
+  },
+  {
+    "name": "YARA",
+    "aliases": [
+      "yara"
+    ],
+    "what": "A pattern-matching engine for file and memory content.",
+    "work": "Applies explicit rules to identify patterns for investigation.",
+    "how": "Use the inert malware-analysis fixtures and training-rule.yara.txt from the download. Compare positive and negative controls as described in the workbook. A rule match is not a malware verdict.",
+    "view": "audit",
+    "target": "malware-detection"
+  },
+  {
+    "name": "Shodan",
+    "aliases": [
+      "shodan"
+    ],
+    "what": "A search service for indexed internet-facing service observations.",
+    "work": "Helps investigate exposure using banners and timestamps.",
+    "how": "Begin with your owned public asset inventory and a narrow search. Check freshness and ownership before treating a banner as current. Account capabilities vary; indexed searches differ from on-demand scans.",
+    "view": "shodan",
+    "target": null
+  },
+  {
+    "name": "Gobuster",
+    "aliases": [
+      "gobuster"
+    ],
+    "what": "A discovery tool with web-path and other modes.",
+    "work": "Compares candidate resources against a scoped service.",
+    "how": "Read gobuster dir --help for your version, use a tiny training wordlist and an owned fixture, and establish a missing-path baseline. Validate responses before interpreting discoveries.",
+    "view": "webtools",
+    "target": null
+  },
+  {
+    "name": "DirBuster",
+    "aliases": [
+      "dirbuster"
+    ],
+    "what": "A graphical web content-discovery tool.",
+    "work": "Requests candidate paths from a wordlist.",
+    "how": "Use an owned training URL, a short wordlist and limited concurrency. Compare known and missing resources before a broader assessment. A response status alone is not a vulnerability.",
+    "view": "webtools",
+    "target": null
+  },
+  {
+    "name": "Wappalyzer",
+    "aliases": [
+      "wappalyzer"
+    ],
+    "what": "A website technology identification tool.",
+    "work": "Infers technologies from observable page and response features.",
+    "how": "Inspect your training site using the approved extension or tool, then compare results with known implementation details. Fingerprints can be absent or misleading and do not prove vulnerability.",
+    "view": "webtools",
+    "target": null
+  },
+  {
+    "name": "Subfinder",
+    "aliases": [
+      "subfinder"
+    ],
+    "what": "A subdomain discovery tool using passive sources.",
+    "work": "Collects domain-name leads for inventory validation.",
+    "how": "Review subfinder -h and provider requirements, then query an approved domain. Validate discovered names and ownership; results may be stale or point to shared infrastructure.",
+    "view": "webtools",
+    "target": null
+  },
+  {
+    "name": "Nuclei",
+    "aliases": [
+      "nuclei"
+    ],
+    "what": "A template-based assessment engine.",
+    "work": "Runs explicitly selected checks described by templates.",
+    "how": "Read and validate the local training template from the advanced-web workbook, then use its bounded target and rate settings. Templates differ in effects and matches need confirmation.",
+    "view": "advweb",
+    "target": null
+  },
+  {
+    "name": "Android Debug Bridge",
+    "aliases": [
+      "adb",
+      "android debug bridge"
+    ],
+    "what": "The Android SDK interface for authorized debugging.",
+    "work": "Inspects and manages an authorized emulator or test device.",
+    "how": "Run adb devices -l, select your emulator serial and follow the linked package-inspection exercise. An unauthorized status means debugging trust has not been granted.",
+    "view": "android",
+    "target": "android-adb"
+  },
+  {
+    "name": "JADX",
+    "aliases": [
+      "jadx",
+      "jadx-gui"
+    ],
+    "what": "An Android bytecode decompiler and code viewer.",
+    "work": "Helps inspect APK code and form static-analysis hypotheses.",
+    "how": "Open your own training.apk with jadx-gui, review its manifest and trace a small code path. Decompiled output may differ from source; confirm behavior in a lab.",
+    "view": "android",
+    "target": "android-static"
+  },
+  {
+    "name": "Apktool",
+    "aliases": [
+      "apktool"
+    ],
+    "what": "An Android resource and bytecode representation tool.",
+    "work": "Decodes APK contents for inspection.",
+    "how": "Run apktool d training.apk -o decoded-training with your owned APK and a new output directory. Preserve the original; decoding alone does not establish a reachable weakness.",
+    "view": "android",
+    "target": "android-static"
+  },
+  {
+    "name": "MobSF",
+    "aliases": [
+      "mobsf",
+      "mobile security framework"
+    ],
+    "what": "A mobile application analysis framework.",
+    "work": "Organizes automated observations about an app.",
+    "how": "Analyze an owned training APK in an approved local deployment. Review each warning for code context, reachability and impact. Do not upload private builds to an unapproved service.",
+    "view": "android",
+    "target": "android-static"
+  },
+  {
+    "name": "Frida",
+    "aliases": [
+      "frida"
+    ],
+    "what": "A runtime instrumentation toolkit.",
+    "work": "Observes or changes behavior inside an instrumented process.",
+    "how": "Start with a permitted debug training app and an unmodified baseline. Observe one harmless method and record inputs, outputs and instrumentation changes. Modified behavior is not automatically evidence of an original flaw.",
+    "view": "android",
+    "target": "android-runtime-deep"
+  },
+  {
+    "name": "Ghidra",
+    "aliases": [
+      "ghidra"
+    ],
+    "what": "A binary reverse-engineering framework.",
+    "work": "Supports native-code disassembly and decompilation.",
+    "how": "Import a benign owned library, confirm architecture and trace a known function. Decompiled code is approximate; correlate with source or controlled runtime evidence.",
+    "view": "android",
+    "target": "android-native-jni"
+  },
+  {
+    "name": "Volatility",
+    "aliases": [
+      "volatility",
+      "volatility3"
+    ],
+    "what": "A memory-forensics framework.",
+    "work": "Extracts supported operating-system artifacts from memory images.",
+    "how": "Use an authorized image and compatible symbols, determine its OS context and select a supported plugin. Preserve the original and acquisition notes; missing artifacts have interpretation limits.",
+    "view": "audit",
+    "target": "malware-memory"
+  },
+  {
+    "name": "TheHive",
+    "aliases": [
+      "thehive"
+    ],
+    "what": "A security case-management platform.",
+    "work": "Organizes evidence, investigation tasks and decisions.",
+    "how": "Create a synthetic case in an approved lab, attach SOC fixture observations and assign follow-up tasks. Record confidence and alternatives; leave outbound response integrations disabled for practice.",
+    "view": "soc",
+    "target": "soc-workbook-17"
+  }
+]

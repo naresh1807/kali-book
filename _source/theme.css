@@ -79,3 +79,5 @@
 .redteam-guide{padding:24px;margin:18px 0;border:1px solid #36506b;border-radius:14px;background:#102033;color:#e8f0fa}.redteam-guide h4{margin-bottom:6px}.redteam-guide p{line-height:1.7}.redteam-guide pre{overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;padding:16px;border-left:3px solid #38bdf8}html[data-theme="light"] .redteam-guide{background:#fff;color:#172b40;border-color:#bacbd9}@media print{.redteam-guide{background:white;color:black;break-inside:avoid}}
 
 .redteam-track-heading{display:none}body[data-book-view="redteam"] .redteam-track-heading{display:block;margin:24px 0}body[data-book-view="redteam"] .chapter>.chapterhead,body[data-book-view="redteam"] .chapter>.chapter-nav{display:none}
+
+#tool-search-results{margin:20px 0}.tool-profile{padding:24px;margin:16px 0;border:2px solid #38bdf8;border-radius:14px;background:#102033;color:#e8f0fa}.tool-profile p{line-height:1.7;overflow-wrap:anywhere}.tool-profile h4{margin:18px 0 6px}.tool-profile .btn{margin:4px}html[data-theme="light"] .tool-profile{background:#fff;color:#172b40}@media print{.tool-profile{background:white;color:black}}
