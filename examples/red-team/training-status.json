@@ -1,0 +1,11 @@
+{
+  "environment": "training",
+  "authentication": "not implemented",
+  "records": [
+    {
+      "id": "note-a",
+      "owner": "trainee-a",
+      "text": "Synthetic public note"
+    }
+  ]
+}

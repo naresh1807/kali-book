@@ -321,3 +321,116 @@ Cleanup: stop the Python server with Ctrl+C, exit consoles, restore manual proxy
 Practice: write a one-paragraph technical finding and a one-paragraph executive explanation. Include a retest criterion and a valid-use check for any proposed remediation.
 
 Validation note: product commands are manual exercises and have not been executed against those tools here. The website checks navigation and packaged fixtures; it does not install tools or run an engagement.
+
+
+## 20. Worked example: Baseline, negative control and restored baseline
+
+Question: can the tool reliably distinguish a known file from a missing file? Start the section 2 loopback server. Run the following in a second terminal; use curl.exe in Windows PowerShell.
+
+```sh
+curl --max-time 5 -sS -o baseline.txt -w "%{http_code}\n" http://127.0.0.1:8765/marker.txt
+curl --max-time 5 -sS -o negative.txt -w "%{http_code}\n" http://127.0.0.1:8765/missing-training-file.txt
+curl --max-time 5 -sS -o restored.txt -w "%{http_code}\n" http://127.0.0.1:8765/marker.txt
+```
+
+Expected: 200, 404, 200. -o writes response bodies to new files; choose filenames that do not contain existing work. -w prints the response status. -sS hides progress while retaining errors. Compare baseline.txt and restored.txt: the bodies should match if the fixture did not change.
+
+Interpretation: a repeatable baseline makes the changed path a more credible explanation of the differing response. This is normal server behavior, not a vulnerability. A timeout or connection error is not equivalent to 404. Cleanup: retain only required evidence and stop the fixture after all exercises.
+
+
+## 21. Worked example: HEAD versus GET in curl and Burp
+
+Question: does the request method change what the server sends? Use the same marker path for both requests.
+
+```sh
+curl --max-time 5 -I http://127.0.0.1:8765/marker.txt
+curl --max-time 5 -i http://127.0.0.1:8765/marker.txt
+```
+
+Expected: HEAD returns metadata without the marker body; GET returns metadata and the marker. Content-Length can describe the GET body even when HEAD sends no body. Do not interpret that as data unexpectedly returned by HEAD.
+
+In Burp Repeater, send a baseline GET, change only the method to HEAD, send again, then restore GET. Record status, headers and actual body separately. If an unrelated application treats methods differently, investigate the underlying authorization rather than inferring a bypass from metadata alone.
+
+Cleanup: no fixture change occurs. Close the lab browser and restore manually changed proxy settings when finished.
+
+
+## 22. Worked example: Three-path ffuf exercise and false-positive analysis
+
+Question: which entries in a short known list exist? Use practice-paths.txt from this download.
+
+```sh
+ffuf -w practice-paths.txt -u http://127.0.0.1:8765/FUZZ -t 1 -rate 1 -maxtime 15 -mc all
+```
+
+Expected on the supplied fixture: marker.txt is 200, training-status.json is 200, and missing-training-file.txt is 404. Correlate each with the server access log and inspect its body with curl. The JSON record is deliberately public training data; no authentication or real customer data exists here.
+
+Worked reasoning: a 200 response shows a returned resource, not an access-control failure. On a different app, a soft-404 might return 200 for every path, so compare negative-control content before interpreting discoveries. Do not increase concurrency or add recursive discovery merely because the tool supports it.
+
+Cleanup: the tool does not modify fixture files. Record the exact three inputs and observed statuses, then stop the server after all exercises.
+
+
+## 23. Worked example: Query strings: input acceptance versus meaningful processing
+
+Question: does adding a parameter mean the server acted on it? Compare these requests in curl or Burp Repeater.
+
+```sh
+curl --max-time 5 -i "http://127.0.0.1:8765/marker.txt?mode=preview"
+curl --max-time 5 -i "http://127.0.0.1:8765/marker.txt?mode=unknown"
+```
+
+Expected for Python SimpleHTTPRequestHandler: both return the same marker because file lookup does not implement this application parameter. The query can still appear in the access log. A 200 response therefore does not prove a feature exists or that the parameter was validated.
+
+Practice: annotate your evidence with the server implementation and compare bodies, not just status codes. Do not call this an authorization bypass; the fixture has no mode-based access restriction. For a real owned test app, define the intended parameter behavior before varying it.
+
+Cleanup: these requests change no persistent application state; no session was created.
+
+
+## 24. Worked example: Correlate Nmap, curl and defender evidence
+
+Question: what claim does each observation support? Start with the bounded port check, then retrieve the marker.
+
+```sh
+nmap -sT -p 8765 --reason 127.0.0.1
+curl --max-time 5 -i http://127.0.0.1:8765/marker.txt
+```
+
+Build a three-row evidence table in your notes. Nmap supports TCP reachability from this source. curl supports receipt of the specific HTTP response. The server log supports observation of the request by this process. The initial connect scan may not generate a normal HTTP request log entry because it need not send an HTTP request.
+
+Advanced question: where would an EDR, proxy or SIEM see these actions? Mark collection untested unless you actually configured and checked that sensor. An absent SIEM alert is not evidence of stealth when no ingestion was set up.
+
+Cleanup: stop the fixture; preserve timestamps with timezone context and distinguish operator time from sensor time.
+
+
+## 25. Worked example: Two-user authorization test plan for an owned application
+
+This is a worked planning example, not an executable test against the static fixture. Prerequisites: your own staging app, two synthetic accounts and a resettable test dataset. The supplied JSON is public and cannot test access control.
+
+Create a private test note as account A. Establish that A can read it and B can read B own note. In an authorized Burp test session for B, request the A test-note identifier once using the app normal request format. Avoid collecting any unrelated records.
+
+Expected: B receives the application documented denial, often 403 or a deliberately indistinguishable 404, with no A note content. A 200 containing a generic error is not necessarily unauthorized access; inspect content and server authorization evidence.
+
+If the A note is returned, record the two account roles, resource ownership, minimal request and sanitized response. Suggested remediation: enforce ownership on the backend, then retest both denied cross-account access and permitted own-account access. Cleanup: remove only your synthetic records and test sessions through the app normal controls.
+
+
+## 26. Worked example: Identity-path tabletop and remediation retest
+
+Use this fictional relationship chain for a BloodHound-style reasoning exercise: trainee-a belongs to Support-Test; Support-Test can reset the password of service-test; service-test has access to a synthetic reporting resource. No dataset or collector is required for this tabletop.
+
+For each edge, write the source of evidence and prerequisite: group membership, effective delegated permission, account state, and actual resource authorization. A drawn path does not prove that policy permits every operation. Do not attempt password resets merely to demonstrate the diagram.
+
+Propose removing an unnecessary reset delegation while preserving required support tasks. In a separately prepared lab, compare effective permissions and a refreshed graph after the approved change, then check legitimate support access. An old graph may still show the removed edge.
+
+Output: one conditional risk statement and one retest plan with an owner. Cleanup: no account or permission is changed by this tabletop.
+
+
+## 27. Worked example: Purple-team result and report: a complete worked example
+
+Objective: confirm visibility of a harmless local marker request. Starting condition: an operator on the same machine as the loopback Python server. Action: one GET for marker.txt.
+
+Observed: client receives 200 and the known marker; the server records the requested path and status. Conclusion: the fixture is reachable from loopback and the process logged the request. Unproven: external reachability, enterprise egress controls, SOC detection, account compromise or access to sensitive information.
+
+A useful next step is an approved lab pipeline that ingests the server event and routes a training case to the SOC. Success criteria should include correct fields, timestamps, case owner and a documented analyst decision, not merely rule firing.
+
+Cleanup evidence: the server process was stopped; a subsequent request cannot retrieve the marker from that process. If another process owns the port, stop testing and identify it. Record any generated response files and their retention decision.
+
+Deliverables: operator timeline, sensor evidence, explicit limitations and an assigned follow-up. This example demonstrates accurate reporting of a normal observation rather than inventing a vulnerability.
