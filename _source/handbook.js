@@ -1,26 +1,27 @@
 'use strict';
 const navItems=[...document.querySelectorAll('[data-view]')];
 const chapters=[...document.querySelectorAll('.chapter')];
-const cards=[...document.querySelectorAll('.card, .concept-depth, .anatomy-study, .protocol-guide, .layer-guide, .iot-guide, .topology-guide, .session-guide, .api-guide, .web-deep-guide, .network-deep-guide, .forensic-guide, .remote-guide, .attack-study, .security-guide, .malware-guide, .android-guide')];
+const cards=[...document.querySelectorAll('.card, .concept-depth, .anatomy-study, .protocol-guide, .layer-guide, .iot-guide, .topology-guide, .session-guide, .api-guide, .web-deep-guide, .network-deep-guide, .forensic-guide, .remote-guide, .attack-study, .security-guide, .malware-guide, .android-guide, .soc-guide')];
 const panels=[...document.querySelectorAll('.bookpanel')];
 const search=document.getElementById('search');
 const result=document.getElementById('result');
-let view=location.hash==='#android-security'?'android':'guide';
+const trackHashes={android:'#android-security',soc:'#soc-lessons'};
+let view=Object.keys(trackHashes).find(k=>trackHashes[k]===location.hash)||'guide';
 const index=new Map(cards.map(c=>[c,c.textContent.toLowerCase()]));
 function render(){
  const q=search.value.trim().toLowerCase();
  document.body.dataset.bookView=q?'search':view;
- const isReference=q.length>0||view==='android'||view==='all'||chapters.some(s=>s.dataset.chapter===view);
+ const isReference=q.length>0||view==='soc'||view==='android'||view==='all'||chapters.some(s=>s.dataset.chapter===view);
  panels.forEach(p=>{p.hidden=!(isReference?p.id==='reference':p.id===view)});
  let count=0;
- cards.forEach(c=>{const match=(q.length>0||view==='all'||(view==='android'&&c.classList.contains('android-guide'))||c.dataset.chapter===view)&&index.get(c).includes(q);c.hidden=!match;if(match)count++});
- chapters.forEach(s=>s.hidden=![...s.querySelectorAll('.card, .concept-depth, .anatomy-study, .protocol-guide, .layer-guide, .iot-guide, .topology-guide, .session-guide, .api-guide, .web-deep-guide, .network-deep-guide, .forensic-guide, .remote-guide, .attack-study, .security-guide, .malware-guide, .android-guide')].some(c=>!c.hidden));
+ cards.forEach(c=>{const match=(q.length>0||view==='all'||(view==='soc'&&c.classList.contains('soc-guide'))||(view==='android'&&c.classList.contains('android-guide'))||c.dataset.chapter===view)&&index.get(c).includes(q);c.hidden=!match;if(match)count++});
+ chapters.forEach(s=>s.hidden=![...s.querySelectorAll('.card, .concept-depth, .anatomy-study, .protocol-guide, .layer-guide, .iot-guide, .topology-guide, .session-guide, .api-guide, .web-deep-guide, .network-deep-guide, .forensic-guide, .remote-guide, .attack-study, .security-guide, .malware-guide, .android-guide, .soc-guide')].some(c=>!c.hidden));
  navItems.forEach(n=>{if(!q&&n.dataset.view===view)n.setAttribute('aria-current','page');else n.removeAttribute('aria-current')});
  document.getElementById('empty').hidden=!isReference||count>0;
  result.textContent=isReference?`${count} of ${cards.length} study entries${q?' · searching all chapters':''}`:'Offline handbook · choose a chapter or start a guided lab';
  document.getElementById('clear').hidden=!q;
 }
-function selectView(next){view=next;if(next==='android')history.replaceState(null,'','#android-security');else if(location.hash==='#android-security')history.replaceState(null,'',location.pathname+location.search);search.value='';render();window.scrollTo({top:0,behavior:'auto'})}
+function selectView(next){view=next;if(trackHashes[next])history.replaceState(null,'',trackHashes[next]);else if(Object.values(trackHashes).includes(location.hash))history.replaceState(null,'',location.pathname+location.search);search.value='';render();window.scrollTo({top:0,behavior:'auto'})}
 navItems.forEach(b=>b.addEventListener('click',()=>selectView(b.dataset.view)));
 search.addEventListener('input',render);
 document.getElementById('clear').addEventListener('click',()=>{search.value='';render();search.focus()});
@@ -38,4 +39,4 @@ document.querySelectorAll('[data-lab]').forEach(button=>button.addEventListener(
 
 document.querySelectorAll("[data-study-target]").forEach(button=>button.addEventListener("click",()=>{const target=document.getElementById(button.dataset.studyTarget);if(target){target.setAttribute("tabindex","-1");target.focus({preventScroll:true});target.scrollIntoView({behavior:"auto",block:"start"});}}));
 
-window.addEventListener("hashchange",()=>{if(location.hash==="#android-security")selectView("android")});
+window.addEventListener("hashchange",()=>{const next=Object.keys(trackHashes).find(k=>trackHashes[k]===location.hash);if(next)selectView(next)});
